@@ -17,6 +17,13 @@ Web application to:
 - to give data champions a means to identify datasets that need to be described
   with more metadata
 
+Useful javacript libaries
+-------------------------
+
+- `Moment.js <http://momentjs.com/>`_ - Parse, validate, manipulate, and display dates and times in JavaScript.
+- `axios <https://github.com/axios/axios>`_ - Promise based HTTP client for the browser and node.js
+
+
 Red routes
 ----------
 
