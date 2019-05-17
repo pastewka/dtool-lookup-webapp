@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Dashboard />
+    <Dashboard :lookup_url="lookup_url" />
   </div>
 </template>
 
@@ -9,6 +9,11 @@ import Dashboard from "./components/Dashboard.vue";
 
 export default {
   name: "app",
+  data: function() {
+    return {
+      lookup_url: "http://dtool-lookup-server-dev.ciscloud"
+    };
+  },
   components: {
     Dashboard
   }
