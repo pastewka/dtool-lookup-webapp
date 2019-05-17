@@ -5,6 +5,7 @@
     <div v-else>
       <p>Number of datasets: {{ num_datasets }}</p>
       <p>Users: {{ users }}</p>
+      <p>Base URIs: {{ base_uris }}</p>
     </div>
   </div>
 </template>
@@ -37,6 +38,9 @@ export default {
       return Array.from(
         new Set(this.datasets.map(ds => ds["creator_username"]))
       );
+    },
+    base_uris: function() {
+      return Array.from(new Set(this.datasets.map(ds => ds["base_uri"])));
     }
   },
   mounted() {
