@@ -1,8 +1,11 @@
 <template>
   <div class="dashboard">
     <h2>Dashboard</h2>
-    <p v-if="loading">Number of datasets: loading...</p>
-    <p v-else>Number of datasets: {{ num_datasets }}</p>
+    <div v-if="loading">Loading...</div>
+    <div v-else>
+      <p>Number of datasets: {{ num_datasets }}</p>
+      <p>Users: {{ users }}</p>
+    </div>
   </div>
 </template>
 
@@ -29,6 +32,11 @@ export default {
     },
     num_datasets: function() {
       return this.datasets.length;
+    },
+    users: function() {
+      return Array.from(
+        new Set(this.datasets.map(ds => ds["creator_username"]))
+      );
     }
   },
   mounted() {
