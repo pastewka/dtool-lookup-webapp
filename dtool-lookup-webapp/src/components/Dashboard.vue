@@ -5,6 +5,7 @@
     <div v-else>
       <p>Number of datasets: {{ num_datasets }}</p>
       <p>Users: {{ users }}</p>
+      <p>User stats: {{ user_stats }}</p>
       <p>Base URIs: {{ base_uris }}</p>
     </div>
   </div>
@@ -38,6 +39,17 @@ export default {
       return Array.from(
         new Set(this.datasets.map(ds => ds["creator_username"]))
       );
+    },
+    user_stats: function() {
+      var stats = {};
+      var i = 0;
+      for (i = 0; i < this.users.length; i++) {
+        stats[this.users[i]] = 0;
+      }
+      for (i = 0; i < this.datasets.length; i++) {
+        stats[this.datasets[i]["creator_username"]] += 1;
+      }
+      return stats;
     },
     base_uris: function() {
       return Array.from(new Set(this.datasets.map(ds => ds["base_uri"])));
