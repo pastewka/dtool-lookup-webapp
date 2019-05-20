@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Dashboard :lookup_url="lookup_url" />
-    <Search :lookup_url="lookup_url" />
+    <Dashboard :lookup_url="lookup_url" :auth_str="auth_str" />
+    <Search :lookup_url="lookup_url" :auth_str="auth_str" />
   </div>
 </template>
 
@@ -13,7 +13,10 @@ export default {
   name: "app",
   data: function() {
     return {
-      lookup_url: "http://dtool-lookup-server-dev.ciscloud"
+      lookup_url: "http://dtool-lookup-server-dev.ciscloud",
+      auth_str: "Bearer ".concat(
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjYjI0Y2QxZC1iY2I2LTRlMjYtYTBkMy04MDJiODMyNDcyZTAiLCJmcmVzaCI6ZmFsc2UsImlhdCI6MTU1NzQzNTUzOSwidHlwZSI6ImFjY2VzcyIsIm5iZiI6MTU1NzQzNTUzOSwiaWRlbnRpdHkiOiJvbHNzb250In0.gs6D0l_cTBwh-uuFfGCuBpuy61Svy66sKnbSvtCNxmaOSvGHMAPjQSCFPBjGUEcvbTO_SKbS7QiQRRXQL1NzS2ocz9lfONbmGfz_J1hlViSFypzkUxPttgJwTHwJPkSsx6YzwlFpJObDNyaLQXK76vt2pZircuukPOYBEp-htmb77JPt8Cf_93I9zRznwTDgykb4BR0mJTHIPKxl6ATG58pNM5zg3isnfC40tmkicztaKLxvktYnIh7lt-vO71KmWXfuRXlrxDF2hwMnRrsv9LswwenxgJWwxEkYiZIagGAM7LRfel_uwYPnOGXQQ7y_-8rqkZf7Gmlq5j7B4-GCjg"
+      )
     };
   },
   components: {
