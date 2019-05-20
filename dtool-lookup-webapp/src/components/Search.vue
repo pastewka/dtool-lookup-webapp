@@ -1,6 +1,7 @@
 <template>
   <div class="search">
     <h2>Search</h2>
+    <input type="text" v-model="query_str" v-on:keyup.enter="search" />
     <section v-if="errored">
       <p>
         Aplogies, we're not able to retrieve this informaiton at the moment,
@@ -8,9 +9,17 @@
       </p>
     </section>
     <section v-else>
-      <div v-if="loading">Loading...</div>
+      <div v-if="loading"></div>
       <div v-else>
         <table>
+          <caption>
+            {{
+              num_datasets
+            }}
+            hits for "{{
+              query_str
+            }}"
+          </caption>
           <thead>
             <tr>
               <th>Name</th>
@@ -35,6 +44,7 @@
 
 <script>
 var moment = require("moment");
+
 export default {
   name: "Search",
   props: {
@@ -46,32 +56,37 @@ export default {
       moment: moment,
       datasets: null,
       loading: true,
-      errored: false
+      errored: false,
+      query_str: ""
     };
   },
   computed: {
     source: function() {
       return this.lookup_url + "/dataset/search";
+    },
+    num_datasets: function() {
+      return this.datasets.length;
     }
   },
-  mounted() {
-    this.$http
-      .post(
-        this.source,
-        {},
-        {
+  methods: {
+    get_query: function() {
+      return { $text: { $search: this.query_str } };
+    },
+    search: function() {
+      this.$http
+        .post(this.source, this.get_query(), {
           headers: {
             Authorization: this.auth_str,
             "Content-Type": "application/json"
           }
-        }
-      )
-      .then(response => (this.datasets = response.data))
-      .catch(error => {
-        console.log(error);
-        this.errored = true;
-      })
-      .finally(() => (this.loading = false));
+        })
+        .then(response => (this.datasets = response.data))
+        .catch(error => {
+          console.log(error);
+          this.errored = true;
+        })
+        .finally(() => (this.loading = false));
+    }
   }
 };
 </script>
