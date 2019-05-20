@@ -7,6 +7,7 @@
       <p>Users: {{ users }}</p>
       <p>User stats: {{ user_stats }}</p>
       <p>Base URIs: {{ base_uris }}</p>
+      <p>Base URI stats: {{ base_uri_stats }}</p>
     </div>
   </div>
 </template>
@@ -53,6 +54,17 @@ export default {
     },
     base_uris: function() {
       return Array.from(new Set(this.datasets.map(ds => ds["base_uri"])));
+    },
+    base_uri_stats: function() {
+      var stats = {};
+      var i = 0;
+      for (i = 0; i < this.base_uris.length; i++) {
+        stats[this.base_uris[i]] = 0;
+      }
+      for (i = 0; i < this.datasets.length; i++) {
+        stats[this.datasets[i]["base_uri"]] += 1;
+      }
+      return stats;
     }
   },
   mounted() {
