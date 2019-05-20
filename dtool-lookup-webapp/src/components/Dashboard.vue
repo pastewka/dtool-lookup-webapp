@@ -10,18 +10,78 @@
     <section v-else>
       <div v-if="loading">Loading...</div>
       <div v-else>
-        <p>Number of datasets: {{ num_datasets }}</p>
-        <p>Users: {{ users }}</p>
-        <p>User stats: {{ user_stats }}</p>
-        <p>Base URIs: {{ base_uris }}</p>
-        <p>Base URI stats: {{ base_uri_stats }}</p>
-        <p>Recent datasets: {{ recent_datasets }}</p>
+        <div class="container">
+          <div class="recent-datasets">
+            <table>
+              <caption>
+                Recent datasets
+              </caption>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Creator</th>
+                  <th>Created at</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="dataset in recent_datasets" v-bind:key="dataset.uri">
+                  <td>{{ dataset.name }}</td>
+                  <td>{{ dataset.creator_username }}</td>
+                  <td>
+                    {{ moment.unix(dataset.created_at).format("YYYY-MM-DD") }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="user-stats">
+            <table>
+              <caption>
+                Datasets per user
+              </caption>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Number of datasets</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="key in Object.keys(user_stats)" v-bind:key="key">
+                  <td>{{ key }}</td>
+                  <td class="number">{{ user_stats[key] }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="base-uri-stats">
+            <table>
+              <caption>
+                Datasets per base URI
+              </caption>
+              <thead>
+                <tr>
+                  <th>Base URI</th>
+                  <th>Number of datasets</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="key in Object.keys(base_uri_stats)" v-bind:key="key">
+                  <td>{{ key }}</td>
+                  <td class="number">{{ base_uri_stats[key] }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </section>
   </div>
 </template>
 
 <script>
+var moment = require("moment");
 const AuthStr = "Bearer ".concat(
   "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjYjI0Y2QxZC1iY2I2LTRlMjYtYTBkMy04MDJiODMyNDcyZTAiLCJmcmVzaCI6ZmFsc2UsImlhdCI6MTU1NzQzNTUzOSwidHlwZSI6ImFjY2VzcyIsIm5iZiI6MTU1NzQzNTUzOSwiaWRlbnRpdHkiOiJvbHNzb250In0.gs6D0l_cTBwh-uuFfGCuBpuy61Svy66sKnbSvtCNxmaOSvGHMAPjQSCFPBjGUEcvbTO_SKbS7QiQRRXQL1NzS2ocz9lfONbmGfz_J1hlViSFypzkUxPttgJwTHwJPkSsx6YzwlFpJObDNyaLQXK76vt2pZircuukPOYBEp-htmb77JPt8Cf_93I9zRznwTDgykb4BR0mJTHIPKxl6ATG58pNM5zg3isnfC40tmkicztaKLxvktYnIh7lt-vO71KmWXfuRXlrxDF2hwMnRrsv9LswwenxgJWwxEkYiZIagGAM7LRfel_uwYPnOGXQQ7y_-8rqkZf7Gmlq5j7B4-GCjg"
 );
@@ -32,6 +92,7 @@ export default {
   },
   data: function() {
     return {
+      moment: moment,
       datasets: null,
       loading: true,
       errored: false,
@@ -81,7 +142,7 @@ export default {
         .sort(function(a, b) {
           return b.frozen_at - a.frozen_at;
         })
-        .slice(0, 2);
+        .slice(0, 3);
     }
   },
   mounted() {
@@ -97,4 +158,34 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.recent-datasets {
+  grid-area: recent-datasets;
+}
+.user-stats {
+  grid-area: user-stats;
+}
+.base-uri-stats {
+  grid-area: base-uri-stats;
+}
+.container {
+  display: grid;
+  grid-column-gap: 10px;
+  grid-row-gap: 15px;
+  grid-template-areas:
+    "recent-datasets recent-datasets"
+    "user-stats base-uri-stats";
+}
+table caption {
+  font-size: 1.2em;
+}
+* {
+  text-align: left;
+}
+td {
+  padding-right: 5px;
+}
+td.number {
+  text-align: right;
+}
+</style>
