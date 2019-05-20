@@ -1,15 +1,23 @@
 <template>
   <div class="dashboard">
     <h2>Dashboard</h2>
-    <div v-if="loading">Loading...</div>
-    <div v-else>
-      <p>Number of datasets: {{ num_datasets }}</p>
-      <p>Users: {{ users }}</p>
-      <p>User stats: {{ user_stats }}</p>
-      <p>Base URIs: {{ base_uris }}</p>
-      <p>Base URI stats: {{ base_uri_stats }}</p>
-      <p>Recent datasets: {{ recent_datasets }}</p>
-    </div>
+    <section v-if="errored">
+      <p>
+        Aplogies, we're not able to retrieve this informaiton at the moment,
+        please try again later.
+      </p>
+    </section>
+    <section v-else>
+      <div v-if="loading">Loading...</div>
+      <div v-else>
+        <p>Number of datasets: {{ num_datasets }}</p>
+        <p>Users: {{ users }}</p>
+        <p>User stats: {{ user_stats }}</p>
+        <p>Base URIs: {{ base_uris }}</p>
+        <p>Base URI stats: {{ base_uri_stats }}</p>
+        <p>Recent datasets: {{ recent_datasets }}</p>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -73,7 +81,7 @@ export default {
         .sort(function(a, b) {
           return b.frozen_at - a.frozen_at;
         })
-        .slice(0, 10);
+        .slice(0, 2);
     }
   },
   mounted() {
