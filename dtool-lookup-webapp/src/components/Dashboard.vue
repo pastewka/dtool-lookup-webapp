@@ -8,6 +8,7 @@
       <p>User stats: {{ user_stats }}</p>
       <p>Base URIs: {{ base_uris }}</p>
       <p>Base URI stats: {{ base_uri_stats }}</p>
+      <p>Recent datasets: {{ recent_datasets }}</p>
     </div>
   </div>
 </template>
@@ -65,6 +66,14 @@ export default {
         stats[this.datasets[i]["base_uri"]] += 1;
       }
       return stats;
+    },
+    recent_datasets: function() {
+      return this.datasets
+        .concat() // Take a copy to avoid triggering no-side-effects-in-computed-properties.
+        .sort(function(a, b) {
+          return b.frozen_at - a.frozen_at;
+        })
+        .slice(0, 10);
     }
   },
   mounted() {
