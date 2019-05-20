@@ -1,11 +1,13 @@
 <template>
   <div id="app">
     <Dashboard :lookup_url="lookup_url" />
+    <Search :lookup_url="lookup_url" />
   </div>
 </template>
 
 <script>
 import Dashboard from "./components/Dashboard.vue";
+import Search from "./components/Search.vue";
 
 export default {
   name: "app",
@@ -15,7 +17,8 @@ export default {
     };
   },
   components: {
-    Dashboard
+    Dashboard,
+    Search
   }
 };
 </script>
