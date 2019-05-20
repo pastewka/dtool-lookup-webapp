@@ -2,12 +2,14 @@
   <div id="app">
     <Dashboard :lookup_url="lookup_url" :auth_str="auth_str" />
     <Search :lookup_url="lookup_url" :auth_str="auth_str" />
+    <Dataset :lookup_url="lookup_url" :auth_str="auth_str" />
   </div>
 </template>
 
 <script>
 import Dashboard from "./components/Dashboard.vue";
 import Search from "./components/Search.vue";
+import Dataset from "./components/Dataset.vue";
 
 export default {
   name: "app",
@@ -21,7 +23,8 @@ export default {
   },
   components: {
     Dashboard,
-    Search
+    Search,
+    Dataset
   }
 };
 </script>

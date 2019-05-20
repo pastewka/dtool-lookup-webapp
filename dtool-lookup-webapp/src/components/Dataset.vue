@@ -1,7 +1,7 @@
 <template>
-  <div class="search">
-    <h2>Search</h2>
-    <input type="text" v-model="query_str" v-on:keyup.enter="search" />
+  <div class="dataset">
+    <h2>Dataset</h2>
+    <input type="text" v-model="dataset_uri" v-on:keyup.enter="search" />
     <section v-if="errored">
       <p>
         Aplogies, we're not able to retrieve this informaiton at the moment,
@@ -11,34 +11,7 @@
     <section v-else>
       <div v-if="loading"></div>
       <div v-else>
-        <table>
-          <caption>
-            {{
-              num_datasets
-            }}
-            hits for "{{
-              query_str
-            }}"
-          </caption>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Creator</th>
-              <th>Created at</th>
-              <th>URI</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="dataset in datasets" v-bind:key="dataset.uri">
-              <td>{{ dataset.name }}</td>
-              <td>{{ dataset.creator_username }}</td>
-              <td>
-                {{ moment(dataset.created_at).format("YYYY-MM-DD") }}
-              </td>
-              <td>{{ dataset.uri }}</td>
-            </tr>
-          </tbody>
-        </table>
+        {{ datasets }}
       </div>
     </section>
   </div>
@@ -48,7 +21,7 @@
 var moment = require("moment");
 
 export default {
-  name: "Search",
+  name: "Dataset",
   props: {
     lookup_url: String,
     auth_str: String
@@ -59,7 +32,7 @@ export default {
       datasets: null,
       loading: true,
       errored: false,
-      query_str: ""
+      dataset_uri: ""
     };
   },
   computed: {
@@ -72,7 +45,7 @@ export default {
   },
   methods: {
     get_query: function() {
-      return { $text: { $search: this.query_str } };
+      return { uri: this.dataset_uri };
     },
     search: function() {
       this.$http
