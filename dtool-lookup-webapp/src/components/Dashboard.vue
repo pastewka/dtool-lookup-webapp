@@ -11,7 +11,7 @@
       <div v-if="loading">Loading...</div>
       <div v-else>
         <div class="container">
-          <div class="recent-datasets">
+          <!-- <div class="recent-datasets">
             <table>
               <caption>
                 Recent datasets
@@ -33,7 +33,7 @@
                 </tr>
               </tbody>
             </table>
-          </div>
+          </div> -->
 
           <div class="user-stats">
             <table>
