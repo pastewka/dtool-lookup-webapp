@@ -29,7 +29,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="dataset in datasets" v-bind:key="dataset.uri">
+            <tr
+              v-for="(dataset, index) in datasets"
+              v-bind:key="dataset.uri"
+              @mouseover="updateCurrentDatasetIndex(index)"
+            >
               <td>{{ dataset.name }}</td>
               <td>{{ dataset.creator_username }}</td>
               <td>
@@ -39,12 +43,15 @@
             </tr>
           </tbody>
         </table>
+        <DatasetInfo :dataset="current_dataset" />
       </div>
     </section>
   </div>
 </template>
 
 <script>
+import DatasetInfo from "./DatasetInfo.vue";
+
 var moment = require("moment");
 
 export default {
@@ -59,8 +66,12 @@ export default {
       datasets: null,
       loading: true,
       errored: false,
-      query_str: ""
+      query_str: "",
+      current_dataset_index: 0
     };
+  },
+  components: {
+    DatasetInfo
   },
   computed: {
     source: function() {
@@ -68,6 +79,9 @@ export default {
     },
     num_datasets: function() {
       return this.datasets.length;
+    },
+    current_dataset: function() {
+      return this.datasets[this.current_dataset_index];
     }
   },
   methods: {
@@ -88,6 +102,9 @@ export default {
           this.errored = true;
         })
         .finally(() => (this.loading = false));
+    },
+    updateCurrentDatasetIndex(index) {
+      this.current_dataset_index = index;
     }
   }
 };
