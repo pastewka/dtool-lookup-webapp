@@ -156,23 +156,7 @@ export default {
 </script>
 
 <style>
-.recent-datasets {
-  grid-area: recent-datasets;
-}
-.user-stats {
-  grid-area: user-stats;
-}
-.base-uri-stats {
-  grid-area: base-uri-stats;
-}
-.container {
-  display: grid;
-  grid-column-gap: 10px;
-  grid-row-gap: 15px;
-  grid-template-areas:
-    "recent-datasets recent-datasets"
-    "user-stats base-uri-stats";
-}
+
 table caption {
   font-size: 1.2em;
 }
