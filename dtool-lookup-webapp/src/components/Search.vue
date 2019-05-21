@@ -25,7 +25,6 @@
               <th>Name</th>
               <th>Creator</th>
               <th>Created at</th>
-              <th>URI</th>
             </tr>
           </thead>
           <tbody>
@@ -39,7 +38,6 @@
               <td>
                 {{ moment(dataset.created_at).format("YYYY-MM-DD") }}
               </td>
-              <td>{{ dataset.uri }}</td>
             </tr>
           </tbody>
         </table>
