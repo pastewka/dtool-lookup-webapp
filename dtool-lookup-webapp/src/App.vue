@@ -1,6 +1,10 @@
 <template>
   <div id="app">
     <TextSearch @start-search="searchDatasets" />
+    <DatasetTable
+      :datasetHits="datasetHits"
+      @update-selected-dataset="updateCurrentDatasetIndex"
+    />
   </div>
 </template>
 
@@ -8,6 +12,7 @@
 // import Dashboard from "./components/Dashboard.vue";
 // import Search from "./components/Search.vue";
 import TextSearch from "./components/TextSearch.vue";
+import DatasetTable from "./components/DatasetTable.vue";
 
 export default {
   name: "app",
@@ -60,7 +65,8 @@ export default {
     }
   },
   components: {
-    TextSearch
+    TextSearch,
+    DatasetTable
     // Dashboard,
     // Search
   }
