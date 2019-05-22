@@ -10,8 +10,7 @@
     <section v-else>
       <div v-if="loading">Loading...</div>
       <div v-else>
-        <div class="container">
-          <!-- <div class="recent-datasets">
+        <!-- <div class="recent-datasets">
             <table>
               <caption>
                 Recent datasets
@@ -35,45 +34,32 @@
             </table>
           </div> -->
 
-          <div class="user-stats">
-            <table>
-              <caption>
-                Datasets per user
-              </caption>
-              <thead>
-                <tr>
-                  <th>User</th>
-                  <th>Number of datasets</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="key in Object.keys(user_stats)" v-bind:key="key">
-                  <td>{{ key }}</td>
-                  <td class="number">{{ user_stats[key] }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <div class="user-stats">
+          <table>
+            <caption>
+              Datasets per user
+            </caption>
+            <tbody>
+              <tr v-for="key in Object.keys(user_stats)" v-bind:key="key">
+                <td>{{ key }}</td>
+                <td class="number">{{ user_stats[key] }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-          <div class="base-uri-stats">
-            <table>
-              <caption>
-                Datasets per base URI
-              </caption>
-              <thead>
-                <tr>
-                  <th>Base URI</th>
-                  <th>Number of datasets</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="key in Object.keys(base_uri_stats)" v-bind:key="key">
-                  <td>{{ key }}</td>
-                  <td class="number">{{ base_uri_stats[key] }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <div class="base-uri-stats">
+          <table>
+            <caption>
+              Datasets per base URI
+            </caption>
+            <tbody>
+              <tr v-for="key in Object.keys(base_uri_stats)" v-bind:key="key">
+                <td>{{ key }}</td>
+                <td class="number">{{ base_uri_stats[key] }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
@@ -156,7 +142,6 @@ export default {
 </script>
 
 <style>
-
 table caption {
   font-size: 1.2em;
 }
