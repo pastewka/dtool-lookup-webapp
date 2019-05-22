@@ -11,37 +11,43 @@
     <section v-else>
       <div v-if="loading"></div>
       <div v-else>
-        <table>
-          <caption>
-            {{
-              num_datasets
-            }}
-            hits for "{{
-              query_str
-            }}"
-          </caption>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Creator</th>
-              <th>Created at</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(dataset, index) in datasets"
-              v-bind:key="dataset.uri"
-              @mouseover="updateCurrentDatasetIndex(index)"
-            >
-              <td>{{ dataset.name }}</td>
-              <td>{{ dataset.creator_username }}</td>
-              <td>
-                {{ moment(dataset.created_at).format("YYYY-MM-DD") }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <DatasetInfo :dataset="current_dataset" />
+        <div class="pure-g">
+          <div class="pure-u-1-2">
+            <table class="pure-table-striped">
+              <caption>
+                {{
+                  num_datasets
+                }}
+                hits for "{{
+                  query_str
+                }}"
+              </caption>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Creator</th>
+                  <th>Created at</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(dataset, index) in datasets"
+                  v-bind:key="dataset.uri"
+                  @mouseover="updateCurrentDatasetIndex(index)"
+                >
+                  <td>{{ dataset.name }}</td>
+                  <td>{{ dataset.creator_username }}</td>
+                  <td>
+                    {{ moment(dataset.created_at).format("YYYY-MM-DD") }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pure-u-1-2">
+            <DatasetInfo :dataset="current_dataset" />
+          </div>
+        </div>
       </div>
     </section>
   </div>

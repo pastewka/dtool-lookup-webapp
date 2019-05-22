@@ -1,7 +1,11 @@
 <template>
-  <div id="app">
-    <Dashboard :lookup_url="lookup_url" :auth_str="auth_str" />
-    <Search :lookup_url="lookup_url" :auth_str="auth_str" />
+  <div id="app" class="pure-g">
+    <Dashboard
+      :lookup_url="lookup_url"
+      :auth_str="auth_str"
+      class="pure-u-1-5"
+    />
+    <Search :lookup_url="lookup_url" :auth_str="auth_str" class="pure-u-4-5" />
   </div>
 </template>
 
@@ -27,12 +31,23 @@ export default {
 </script>
 
 <style>
-#app {
+/* #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+} */
+
+html,
+button,
+input,
+select,
+textarea,
+.pure-g [class*="pure-u"] {
+  /* Set your content font stack here: */
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-size: 10pt;
 }
 </style>
