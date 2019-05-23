@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-light bg-light">
+    <nav class="navbar navbar-default navbar-dark bg-dark sticky-top">
       <span class="navbar-brand mb-0 h1">dtool</span>
       <TextSearch @start-search="searchDatasets" />
     </nav>
