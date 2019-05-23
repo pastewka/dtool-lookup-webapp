@@ -1,5 +1,5 @@
 <template>
-  <div class="datasetInfo">
+  <div>
     <h2>Dataset Info</h2>
     <table>
       <tr>
@@ -36,13 +36,19 @@ var yaml = require("json2yaml");
 export default {
   name: "DatasetInfo",
   props: {
-    dataset: Object
+    datasetHits: Array,
+    currentDatasetIndex: Number
   },
   data: function() {
     return {
       moment: moment,
       yaml: yaml
     };
+  },
+  computed: {
+    dataset: function() {
+      return this.datasetHits[this.currentDatasetIndex];
+    }
   }
 };
 </script>

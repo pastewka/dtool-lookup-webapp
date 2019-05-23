@@ -5,6 +5,10 @@
       :datasetHits="datasetHits"
       @update-selected-dataset="updateCurrentDatasetIndex"
     />
+    <DatasetInfo
+      :datasetHits="datasetHits"
+      :currentDatasetIndex="currentDatasetIndex"
+    />
   </div>
 </template>
 
@@ -13,6 +17,7 @@
 // import Search from "./components/Search.vue";
 import TextSearch from "./components/TextSearch.vue";
 import DatasetTable from "./components/DatasetTable.vue";
+import DatasetInfo from "./components/DatasetInfo.vue";
 
 export default {
   name: "app",
@@ -66,7 +71,8 @@ export default {
   },
   components: {
     TextSearch,
-    DatasetTable
+    DatasetTable,
+    DatasetInfo
     // Dashboard,
     // Search
   }
