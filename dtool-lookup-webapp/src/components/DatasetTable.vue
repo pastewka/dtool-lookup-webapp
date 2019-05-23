@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h2>Datasets</h2>
     <table>
       <thead>
         <tr>

@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <input type="text" v-model="textQuery" v-on:keyup.enter="startSearch" />
-  </div>
+  <input type="text" v-model="textQuery" v-on:keyup.enter="startSearch" />
 </template>
 
 <script>

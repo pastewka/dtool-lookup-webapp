@@ -1,14 +1,26 @@
 <template>
   <div id="app">
-    <TextSearch @start-search="searchDatasets" />
-    <DatasetTable
-      :datasetHits="datasetHits"
-      @update-selected-dataset="updateCurrentDatasetIndex"
-    />
-    <DatasetInfo
-      :datasetHits="datasetHits"
-      :currentDatasetIndex="currentDatasetIndex"
-    />
+    <nav class="navbar navbar-light bg-light">
+      <span class="navbar-brand mb-0 h1">dtool</span>
+      <TextSearch @start-search="searchDatasets" />
+    </nav>
+
+    <div class="">
+      <div class="row row-height">
+        <div class="col-md-6 left">
+          <DatasetTable
+            :datasetHits="datasetHits"
+            @update-selected-dataset="updateCurrentDatasetIndex"
+          />
+        </div>
+        <div class="col-md-6 right">
+          <DatasetInfo
+            :datasetHits="datasetHits"
+            :currentDatasetIndex="currentDatasetIndex"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -80,12 +92,29 @@ export default {
 </script>
 
 <style>
-#app {
+/* #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+} */
+
+/*Set the row height to the viewport*/
+.row-height {
+  height: 100vh;
+}
+
+/*Set up the columns with a 100% height, body color and overflow scroll*/
+
+.left {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.right {
+  height: 100%;
+  overflow-y: scroll;
 }
 </style>
