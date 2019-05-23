@@ -1,5 +1,5 @@
 <template>
-  <div class="text-search">
+  <div>
     <input type="text" v-model="textQuery" v-on:keyup.enter="startSearch" />
   </div>
 </template>
