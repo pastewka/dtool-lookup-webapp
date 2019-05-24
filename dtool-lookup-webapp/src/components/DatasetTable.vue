@@ -11,6 +11,7 @@
       <tbody>
         <tr
           v-for="(dataset, index) in datasetHits"
+          v-bind:class="{ 'table-info': selected === index }"
           v-bind:key="dataset.uri"
           @click="updateSelectedDataset(index)"
         >
@@ -32,11 +33,13 @@ export default {
   },
   data: function() {
     return {
-      moment: moment
+      moment: moment,
+      selected: 0
     };
   },
   methods: {
     updateSelectedDataset: function(index) {
+      this.selected = index;
       this.$emit("update-selected-dataset", index);
     }
   }
