@@ -1,15 +1,7 @@
 <template>
   <div>
-    <h2>Dataset Info</h2>
+    <h2>{{ dataset.name }}</h2>
     <table>
-      <tr>
-        <th>Name</th>
-        <td>{{ dataset.name }}</td>
-      </tr>
-      <tr>
-        <th>URI</th>
-        <td>{{ dataset.uri }}</td>
-      </tr>
       <tr>
         <th>Creator</th>
         <td>{{ dataset.creator_username }}</td>
@@ -17,6 +9,10 @@
       <tr>
         <th>Created at</th>
         <td>{{ moment(dataset.created_at).format("YYYY-MM-DD") }}</td>
+      </tr>
+      <tr>
+        <th>URI</th>
+        <td>{{ dataset.uri }}</td>
       </tr>
       <tr>
         <th colspan="2">README</th>
