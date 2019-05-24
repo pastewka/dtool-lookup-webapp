@@ -13,7 +13,7 @@
         <tr
           v-for="(dataset, index) in datasetHits"
           v-bind:key="dataset.uri"
-          @mouseover="updateSelectedDataset(index)"
+          @click="updateSelectedDataset(index)"
         >
           <td>{{ dataset.name }}</td>
           <td>{{ dataset.creator_username }}</td>
