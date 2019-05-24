@@ -1,8 +1,7 @@
 <template>
   <div>
-    <h2>Datasets</h2>
-    <table>
-      <thead>
+    <table class="table table-striped">
+      <thead class="thead">
         <tr>
           <th>Name</th>
           <th>Creator</th>
