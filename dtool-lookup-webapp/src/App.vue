@@ -7,7 +7,10 @@
 
     <div class="">
       <div class="row row-height">
-        <div class="col-md-6 left">
+        <div class="col-md-2 left">
+          <SummaryInfo :auth_str="auth_str" :lookup_url="lookup_url" />
+        </div>
+        <div class="col-md-4 left">
           <DatasetTable
             :datasetHits="datasetHits"
             @update-selected-dataset="updateCurrentDatasetIndex"
@@ -25,8 +28,7 @@
 </template>
 
 <script>
-// import Dashboard from "./components/Dashboard.vue";
-// import Search from "./components/Search.vue";
+import SummaryInfo from "./components/SummaryInfo.vue";
 import TextSearch from "./components/TextSearch.vue";
 import DatasetTable from "./components/DatasetTable.vue";
 import DatasetInfo from "./components/DatasetInfo.vue";
@@ -82,11 +84,10 @@ export default {
     }
   },
   components: {
+    SummaryInfo,
     TextSearch,
     DatasetTable,
     DatasetInfo
-    // Dashboard,
-    // Search
   }
 };
 </script>
