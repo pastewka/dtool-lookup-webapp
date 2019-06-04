@@ -1,28 +1,18 @@
 <template>
-  <div>
-    <h2>{{ dataset.name }}</h2>
-    <table>
-      <tr>
-        <th>Creator</th>
-        <td>{{ dataset.creator_username }}</td>
-      </tr>
-      <tr>
-        <th>Created at</th>
-        <td>{{ moment(dataset.created_at).format("YYYY-MM-DD") }}</td>
-      </tr>
-      <tr>
-        <th>URI</th>
-        <td>{{ dataset.uri }}</td>
-      </tr>
-      <tr>
-        <th colspan="2">README</th>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <pre>{{ yaml.stringify(dataset.readme) }}</pre>
-        </td>
-      </tr>
-    </table>
+  <div class="card">
+    <div class="card-header">
+      <div class="d-flex justify-content-between">
+        <h3>{{ dataset.name }}</h3>
+        <small>
+          Created by <em>{{ dataset.creator_username }}</em> at
+          <em>{{ moment(dataset.created_at).format("YYYY-MM-DD") }}</em>
+        </small>
+      </div>
+      <small>{{ dataset.uri }}</small>
+    </div>
+    <div class="card-body">
+      <pre>{{ yaml.stringify(dataset.readme) }}</pre>
+    </div>
   </div>
 </template>
 
