@@ -1,26 +1,24 @@
 <template>
   <div>
-    <table class="table table-striped">
-      <thead class="thead">
-        <tr>
-          <th>Name</th>
-          <th>Creator</th>
-          <th>Created at</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="(dataset, index) in datasetHits"
-          v-bind:class="{ 'table-info': selected === index }"
-          v-bind:key="dataset.uri"
-          @click="updateSelectedDataset(index)"
-        >
-          <td>{{ dataset.name }}</td>
-          <td>{{ dataset.creator_username }}</td>
-          <td>{{ moment(dataset.created_at).format("YYYY-MM-DD") }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <ul class="list-group">
+      <li
+        class="list-group-item"
+        v-for="(dataset, index) in datasetHits"
+        v-bind:class="{ active: selected === index }"
+        v-bind:key="dataset.uri"
+        @click="updateSelectedDataset(index)"
+      >
+        <div class="d-flex  justify-content-between">
+          <h6 class="mb-1">{{ dataset.name }}</h6>
+          <small>{{ moment(dataset.created_at).format("YYYY-MM-DD") }}</small>
+        </div>
+
+        <div class="d-flex  justify-content-between">
+          <small>{{ dataset.creator_username }}</small>
+          <small>{{ dataset.uuid }}</small>
+        </div>
+      </li>
+    </ul>
   </div>
 </template>
 
