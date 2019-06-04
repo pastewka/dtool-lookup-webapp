@@ -3,7 +3,7 @@
     <ul class="list-group">
       <li class="list-group-item">
         All
-        <span class="badge badge-pill">{{
+        <span class="badge badge-pill badge-primary">{{
           summary_info["number_of_datasets"]
         }}</span>
       </li>
@@ -13,7 +13,7 @@
         v-bind:key="base_uri"
       >
         {{ base_uri }}
-        <span class="badge badge-pill">{{
+        <span class="badge badge-pill badge-secondary">{{
           summary_info["datasets_per_base_uri"][base_uri]
         }}</span>
       </li>
@@ -23,7 +23,7 @@
         v-bind:key="creator"
       >
         {{ creator }}
-        <span class="badge badge-pill">{{
+        <span class="badge badge-pill badge-secondary">{{
           summary_info["datasets_per_creator"][creator]
         }}</span>
       </li>
