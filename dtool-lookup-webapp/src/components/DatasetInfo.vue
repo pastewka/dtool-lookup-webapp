@@ -11,7 +11,21 @@
       <small>{{ dataset.uri }}</small>
     </div>
     <div class="card-body">
+      <h5>README</h5>
       <pre>{{ yaml.stringify(dataset.readme) }}</pre>
+    </div>
+
+    <div class="card-footer">
+      <h5>Items</h5>
+      <ul class="list-group">
+        <li
+          class="list-group-item"
+          v-for="item in dataset.manifest.items"
+          v-bind:key="item"
+        >
+          {{ item.relpath }}
+        </li>
+      </ul>
     </div>
   </div>
 </template>
