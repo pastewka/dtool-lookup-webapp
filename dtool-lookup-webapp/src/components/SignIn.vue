@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <h5>Please sign in</h5>
-    <form v-on:submit.stop.prevent="signIn">
+  <div class="sign-in-div">
+    <form class="form-signin" v-on:submit.stop.prevent="signIn">
+      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
       <div class="form-goroup">
         <label for="token">JSON Web Token</label>
         <input
@@ -37,4 +37,24 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.sign-in-div {
+  height: 100%;
+}
+
+.sign-in-div {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+</style>
