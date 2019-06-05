@@ -5,7 +5,7 @@
       <TextSearch @start-search="searchDatasets" />
     </nav>
 
-    <div class="">
+    <div v-if="token" class="">
       <div class="row row-height">
         <div class="col-md-2 left">
           <SummaryInfo :auth_str="auth_str" :lookup_url="lookup_url" />
@@ -24,10 +24,14 @@
         </div>
       </div>
     </div>
+    <div v-else>
+      <SignIn @sign-in="setToken" />
+    </div>
   </div>
 </template>
 
 <script>
+import SignIn from "./components/SignIn.vue";
 import SummaryInfo from "./components/SummaryInfo.vue";
 import TextSearch from "./components/TextSearch.vue";
 import DatasetTable from "./components/DatasetTable.vue";
@@ -42,14 +46,15 @@ export default {
       searchLoading: true,
       searchErrored: false,
       lookup_url: "http://dtool-lookup-server-dev.ciscloud",
-      auth_str: "Bearer ".concat(
-        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjYjI0Y2QxZC1iY2I2LTRlMjYtYTBkMy04MDJiODMyNDcyZTAiLCJmcmVzaCI6ZmFsc2UsImlhdCI6MTU1NzQzNTUzOSwidHlwZSI6ImFjY2VzcyIsIm5iZiI6MTU1NzQzNTUzOSwiaWRlbnRpdHkiOiJvbHNzb250In0.gs6D0l_cTBwh-uuFfGCuBpuy61Svy66sKnbSvtCNxmaOSvGHMAPjQSCFPBjGUEcvbTO_SKbS7QiQRRXQL1NzS2ocz9lfONbmGfz_J1hlViSFypzkUxPttgJwTHwJPkSsx6YzwlFpJObDNyaLQXK76vt2pZircuukPOYBEp-htmb77JPt8Cf_93I9zRznwTDgykb4BR0mJTHIPKxl6ATG58pNM5zg3isnfC40tmkicztaKLxvktYnIh7lt-vO71KmWXfuRXlrxDF2hwMnRrsv9LswwenxgJWwxEkYiZIagGAM7LRfel_uwYPnOGXQQ7y_-8rqkZf7Gmlq5j7B4-GCjg"
-      )
+      token: null
     };
   },
   computed: {
     searchURL: function() {
       return this.lookup_url + "/dataset/search";
+    },
+    auth_str: function() {
+      return "Bearer ".concat(this.token);
     }
   },
   methods: {
@@ -62,6 +67,9 @@ export default {
       } else {
         return { $text: { $search: textQuery } };
       }
+    },
+    setToken: function(token) {
+      this.token = token;
     },
     searchDatasets: function(textQuery) {
       console.log("Running search");
@@ -84,6 +92,7 @@ export default {
     }
   },
   components: {
+    SignIn,
     SummaryInfo,
     TextSearch,
     DatasetTable,
