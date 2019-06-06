@@ -61,6 +61,9 @@ export default {
       if (this.$store.state.free_text) {
         query.free_text = this.$store.state.free_text;
       }
+      if (this.$store.state.creator_username) {
+        query.creator_usernames = [this.$store.state.creator_username];
+      }
       return query;
     }
   },
