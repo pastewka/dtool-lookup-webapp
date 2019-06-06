@@ -15,7 +15,12 @@
           />
         </div>
         <div class="col-md-4 left">
-          <DatasetTable :datasetHits="datasetHits" />
+          <div v-if="searchLoading" class="spinner-border text-primary">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div v-else>
+            <DatasetTable :datasetHits="datasetHits" />
+          </div>
         </div>
         <div class="col-md-6 right">
           <DatasetInfo :datasetHits="datasetHits" />
