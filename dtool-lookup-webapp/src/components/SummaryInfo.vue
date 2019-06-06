@@ -9,7 +9,7 @@
       </div>
       <div v-else>
         <ul class="list-group">
-          <li class="list-group-item">
+          <li class="list-group-item" @click="clear_all_filters()">
             All
             <span class="badge badge-pill badge-primary">{{
               summary_info["number_of_datasets"]
@@ -19,6 +19,8 @@
             class="list-group-item"
             v-for="base_uri in summary_info['base_uris']"
             v-bind:key="base_uri"
+            @click="update_base_uri(base_uri)"
+            v-bind:class="{ active: active_base_uri == base_uri }"
           >
             {{ base_uri }}
             <span class="badge badge-pill badge-secondary">{{
@@ -55,7 +57,8 @@ export default {
       summary_info: null,
       loading: true,
       errored: false,
-      active_creator: null
+      active_creator: null,
+      active_base_uri: null
     };
   },
   computed: {
@@ -65,8 +68,6 @@ export default {
   },
   methods: {
     update_creator_username: function(creator) {
-      console.log(creator);
-      console.log(this.$store.state.creator_username);
       if (this.$store.state.creator_username === creator) {
         this.$store.commit("update_creator_username", null);
         this.active_creator = null;
@@ -74,6 +75,22 @@ export default {
         this.$store.commit("update_creator_username", creator);
         this.active_creator = creator;
       }
+      this.$emit("start-search");
+    },
+    update_base_uri: function(base_uri) {
+      if (this.$store.state.base_uri === base_uri) {
+        this.$store.commit("update_base_uri", null);
+        this.active_base_uri = null;
+      } else {
+        this.$store.commit("update_base_uri", base_uri);
+        this.active_base_uri = base_uri;
+      }
+      this.$emit("start-search");
+    },
+    clear_all_filters: function() {
+      this.$store.commit("clear_all");
+      this.active_creator = null;
+      this.active_base_uri = null;
       this.$emit("start-search");
     }
   },
