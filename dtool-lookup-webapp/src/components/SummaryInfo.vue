@@ -27,8 +27,10 @@
           </li>
           <li
             class="list-group-item"
-            v-for="creator in summary_info['creator_usernames']"
-            v-bind:key="creator"
+            v-for="(creator, index) in summary_info['creator_usernames']"
+            v-bind:key="index"
+            @click="update_creator_username(creator)"
+            v-bind:class="{ active: active_creator == creator }"
           >
             {{ creator }}
             <span class="badge badge-pill badge-secondary">{{
@@ -52,12 +54,27 @@ export default {
     return {
       summary_info: null,
       loading: true,
-      errored: false
+      errored: false,
+      active_creator: null
     };
   },
   computed: {
     source: function() {
       return this.lookup_url + "/dataset/summary";
+    }
+  },
+  methods: {
+    update_creator_username: function(creator) {
+      console.log(creator);
+      console.log(this.$store.state.creator_username);
+      if (this.$store.state.creator_username === creator) {
+        this.$store.commit("update_creator_username", null);
+        this.active_creator = null;
+      } else {
+        this.$store.commit("update_creator_username", creator);
+        this.active_creator = creator;
+      }
+      this.$emit("start-search");
     }
   },
   mounted() {

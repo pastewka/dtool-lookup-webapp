@@ -8,7 +8,11 @@
     <div v-if="token" class="">
       <div class="row row-height">
         <div class="col-md-2 left">
-          <SummaryInfo :auth_str="auth_str" :lookup_url="lookup_url" />
+          <SummaryInfo
+            :auth_str="auth_str"
+            :lookup_url="lookup_url"
+            @start-search="searchDatasets"
+          />
         </div>
         <div class="col-md-4 left">
           <DatasetTable
