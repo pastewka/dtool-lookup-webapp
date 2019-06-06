@@ -29,7 +29,7 @@
       </div>
     </div>
     <div v-else>
-      <SignIn @sign-in="setToken" />
+      <SignIn @sign-in="setTokenAndSearch" />
     </div>
   </div>
 </template>
@@ -78,8 +78,9 @@ export default {
     updateCurrentDatasetIndex: function(index) {
       this.currentDatasetIndex = index;
     },
-    setToken: function(token) {
+    setTokenAndSearch: function(token) {
       this.token = token;
+      //this.searchDatasets();
     },
     searchDatasets: function() {
       console.log("Running search");
