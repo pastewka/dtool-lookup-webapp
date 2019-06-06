@@ -65,7 +65,7 @@ export default {
       if (textQuery === "") {
         return {};
       } else {
-        return { $text: { $search: textQuery } };
+        return { free_text: textQuery };
       }
     },
     setToken: function(token) {
