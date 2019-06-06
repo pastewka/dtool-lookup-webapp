@@ -55,29 +55,29 @@ export default {
     },
     auth_str: function() {
       return "Bearer ".concat(this.token);
+    },
+    searchQuery: function() {
+      var query = {};
+      if (this.$store.state.free_text) {
+        query.free_text = this.$store.state.free_text;
+      }
+      return query;
     }
   },
   methods: {
     updateCurrentDatasetIndex: function(index) {
       this.currentDatasetIndex = index;
     },
-    getQuery: function(textQuery) {
-      if (textQuery === "") {
-        return {};
-      } else {
-        return { free_text: textQuery };
-      }
-    },
     setToken: function(token) {
       this.token = token;
     },
-    searchDatasets: function(textQuery) {
+    searchDatasets: function() {
       console.log("Running search");
-      console.log(textQuery);
+      console.log(this.searchQuery);
       this.searchLoading = true;
       this.searchErrored = false;
       this.$http
-        .post(this.searchURL, this.getQuery(textQuery), {
+        .post(this.searchURL, this.searchQuery, {
           headers: {
             Authorization: this.auth_str,
             "Content-Type": "application/json"
