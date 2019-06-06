@@ -36,8 +36,7 @@ var yaml = require("json2yaml");
 export default {
   name: "DatasetInfo",
   props: {
-    datasetHits: Array,
-    currentDatasetIndex: Number
+    datasetHits: Array
   },
   data: function() {
     return {
@@ -47,7 +46,7 @@ export default {
   },
   computed: {
     dataset: function() {
-      return this.datasetHits[this.currentDatasetIndex];
+      return this.datasetHits[this.$store.state.current_dataset_index];
     }
   }
 };

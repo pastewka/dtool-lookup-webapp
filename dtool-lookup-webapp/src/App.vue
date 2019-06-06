@@ -15,16 +15,10 @@
           />
         </div>
         <div class="col-md-4 left">
-          <DatasetTable
-            :datasetHits="datasetHits"
-            @update-selected-dataset="updateCurrentDatasetIndex"
-          />
+          <DatasetTable :datasetHits="datasetHits" />
         </div>
         <div class="col-md-6 right">
-          <DatasetInfo
-            :datasetHits="datasetHits"
-            :currentDatasetIndex="currentDatasetIndex"
-          />
+          <DatasetInfo :datasetHits="datasetHits" />
         </div>
       </div>
     </div>
@@ -45,7 +39,6 @@ export default {
   name: "app",
   data: function() {
     return {
-      currentDatasetIndex: 0,
       datasetHits: [],
       searchLoading: true,
       searchErrored: false,
@@ -75,16 +68,14 @@ export default {
     }
   },
   methods: {
-    updateCurrentDatasetIndex: function(index) {
-      this.currentDatasetIndex = index;
-    },
     setTokenAndSearch: function(token) {
       this.token = token;
-      //this.searchDatasets();
+      this.searchDatasets();
     },
     searchDatasets: function() {
       console.log("Running search");
       console.log(this.searchQuery);
+      this.$store.commit("update_current_dataset_index", 0);
       this.searchLoading = true;
       this.searchErrored = false;
       this.$http

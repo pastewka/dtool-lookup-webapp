@@ -31,14 +31,17 @@ export default {
   },
   data: function() {
     return {
-      moment: moment,
-      selected: 0
+      moment: moment
     };
+  },
+  computed: {
+    selected: function() {
+      return this.$store.state.current_dataset_index;
+    }
   },
   methods: {
     updateSelectedDataset: function(index) {
-      this.selected = index;
-      this.$emit("update-selected-dataset", index);
+      this.$store.commit("update_current_dataset_index", index);
     }
   }
 };
