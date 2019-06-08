@@ -8,38 +8,44 @@
         <p>Unable to load summary information please return later.</p>
       </div>
       <div v-else>
-        <ul class="list-group">
-          <li class="list-group-item" @click="clear_all_filters()">
+        <div class="list-group">
+          <a
+            href=""
+            class="list-group-item list-group-item-action"
+            @click.prevent="clear_all_filters()"
+          >
             All
             <span class="badge badge-pill badge-primary">{{
               summary_info["number_of_datasets"]
             }}</span>
-          </li>
-          <li
-            class="list-group-item"
+          </a>
+          <a
+            href=""
+            class="list-group-item list-group-item-action"
             v-for="base_uri in summary_info['base_uris']"
             v-bind:key="base_uri"
-            @click="update_base_uri(base_uri)"
+            @click.prevent="update_base_uri(base_uri)"
             v-bind:class="{ active: active_base_uri == base_uri }"
           >
             {{ base_uri }}
             <span class="badge badge-pill badge-secondary">{{
               summary_info["datasets_per_base_uri"][base_uri]
             }}</span>
-          </li>
-          <li
-            class="list-group-item"
+          </a>
+          <a
+            href=""
+            class="list-group-item list-group-item-action"
             v-for="(creator, index) in summary_info['creator_usernames']"
             v-bind:key="index"
-            @click="update_creator_username(creator)"
+            @click.prevent="update_creator_username(creator)"
             v-bind:class="{ active: active_creator == creator }"
           >
             {{ creator }}
             <span class="badge badge-pill badge-secondary">{{
               summary_info["datasets_per_creator"][creator]
             }}</span>
-          </li>
-        </ul>
+          </a>
+        </div>
       </div>
     </div>
   </div>
