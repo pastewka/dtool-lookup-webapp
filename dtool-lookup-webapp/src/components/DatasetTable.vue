@@ -1,12 +1,13 @@
 <template>
   <div>
-    <ul class="list-group">
-      <li
-        class="list-group-item"
+    <div class="list-group">
+      <a
+        href=""
+        class="list-group-item list-group-item-action"
         v-for="(dataset, index) in datasetHits"
         v-bind:class="{ active: selected === index }"
         v-bind:key="dataset.uri"
-        @click="updateSelectedDataset(index)"
+        @click.prevent="updateSelectedDataset(index)"
       >
         <div class="d-flex  justify-content-between">
           <h6 class="mb-1">{{ dataset.name }}</h6>
@@ -17,8 +18,8 @@
           <small>{{ dataset.creator_username }}</small>
           <small>{{ dataset.uuid }}</small>
         </div>
-      </li>
-    </ul>
+      </a>
+    </div>
   </div>
 </template>
 
