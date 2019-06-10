@@ -9,6 +9,11 @@
         </small>
       </div>
       <small>{{ dataset.uri }}</small>
+      <div>
+        <button type="button" v-clipboard:copy="copy_command">
+          Copy
+        </button>
+      </div>
     </div>
     <div class="card-body">
       <h5>README</h5>
@@ -47,6 +52,9 @@ export default {
   computed: {
     dataset: function() {
       return this.datasetHits[this.$store.state.current_dataset_index];
+    },
+    copy_command: function() {
+      return "dtool cp " + this.dataset.uri + " .";
     }
   }
 };
