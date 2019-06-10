@@ -25,8 +25,8 @@
                   size="sm"
                   variant="outline-secondary"
                   v-clipboard:copy="copy_command"
-                  >cp</b-button
-                >
+                  ><span class="oi oi-clipboard"></span
+                ></b-button>
               </b-input-group-append>
             </b-input-group>
           </b-dropdown-form>
@@ -71,8 +71,8 @@
                       size="sm"
                       variant="outline-secondary"
                       v-clipboard:copy="fetch_command"
-                      >cp</b-button
-                    >
+                      ><span class="oi oi-clipboard"></span
+                    ></b-button>
                   </b-input-group-append>
                 </b-input-group>
               </b-dropdown-form>
