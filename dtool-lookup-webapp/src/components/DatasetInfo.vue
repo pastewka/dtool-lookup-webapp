@@ -8,11 +8,27 @@
           <em>{{ moment(dataset.created_at).format("YYYY-MM-DD") }}</em>
         </small>
       </div>
-      <small>{{ dataset.uri }}</small>
-      <div>
-        <button type="button" v-clipboard:copy="copy_command">
-          Copy
-        </button>
+      <div class="d-flex justify-content-between">
+        <small>{{ dataset.uri }}</small>
+        <b-dropdown right text="Copy" size="sm">
+          <b-dropdown-text
+            >The command below copies the dataset to the working
+            directory</b-dropdown-text
+          >
+          <b-dropdown-form style="width: 300px;">
+            <b-input-group>
+              <b-form-input v-model="copy_command" size="sm"></b-form-input>
+              <b-input-group-append>
+                <b-button
+                  size="sm"
+                  variant="outline-secondary"
+                  v-clipboard:copy="copy_command"
+                  >cp</b-button
+                >
+              </b-input-group-append>
+            </b-input-group>
+          </b-dropdown-form>
+        </b-dropdown>
       </div>
     </div>
     <div class="card-body">
