@@ -5,7 +5,9 @@
         <h3>{{ dataset.name }}</h3>
         <small>
           Created by <em>{{ dataset.creator_username }}</em> at
-          <em>{{ moment(dataset.created_at).format("YYYY-MM-DD") }}</em>
+          <em>{{ moment(dataset.created_at).format("YYYY-MM-DD") }}</em
+          >&nbsp;
+          <strong>{{ filesize(total_size_in_bytes) }}</strong>
         </small>
       </div>
       <div class="d-flex justify-content-between">
@@ -102,6 +104,13 @@ export default {
   computed: {
     dataset: function() {
       return this.datasetHits[this.$store.state.current_dataset_index];
+    },
+    total_size_in_bytes: function() {
+      var total = 0;
+      Object.values(this.dataset.manifest.items).forEach(item => {
+        total = total + item.size_in_bytes;
+      });
+      return total;
     },
     copy_command: function() {
       return "dtool cp " + this.dataset.uri + " .";
