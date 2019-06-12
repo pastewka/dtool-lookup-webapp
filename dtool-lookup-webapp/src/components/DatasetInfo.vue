@@ -25,7 +25,7 @@
                   size="sm"
                   variant="outline-secondary"
                   v-clipboard:copy="copy_command"
-                  ><span class="oi oi-clipboard"></span
+                  ><span class="octicon octicon-clippy"></span
                 ></b-button>
               </b-input-group-append>
             </b-input-group>
@@ -71,7 +71,7 @@
                       size="sm"
                       variant="outline-secondary"
                       v-clipboard:copy="fetch_command"
-                      ><span class="oi oi-clipboard"></span
+                      ><span class="octicon octicon-clippy"></span
                     ></b-button>
                   </b-input-group-append>
                 </b-input-group>
