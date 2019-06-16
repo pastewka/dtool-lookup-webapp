@@ -1,20 +1,44 @@
 <template>
   <div class="sign-in-div">
-    <form class="form-signin" v-on:submit.stop.prevent="signIn">
+    <form class="form-signin" v-on:submit.stop.prevent="getToken">
       <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-      <div class="form-goroup">
-        <label for="token">JSON Web Token</label>
+      <div v-if="signInFailed" class="alert alert-danger" role="alert">
+        Invalid username or password
+      </div>
+      <div class="form-group">
+        <label for="username" class="sr-only">Username</label>
         <input
+          v-model="username"
           type="text"
+          id="username"
           class="form-control"
-          id="token"
-          aria-describedby="emailHelp"
-          v-model="token"
+          placeholder="Username"
+          required
+          autofocus
+          :disabled="signInLoading"
         />
-        <small id="tokenHelp" class="form-text text-muted"
-          >Replace by username and password later...</small
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input
+          v-model="password"
+          type="password"
+          id="inputPassword"
+          class="form-control"
+          placeholder="Password"
+          required
+          :disabled="signInLoading"
+        />
+        <button
+          class="btn btn-lg btn-primary btn-block"
+          type="submit"
+          :disabled="signInLoading"
         >
-        <button type="submit" class="btn btn-primary">Submit</button>
+          Sign in
+        </button>
+      </div>
+      <div class="d-flex justify-content-center">
+        <div v-if="signInLoading" class="spinner-border text-primary">
+          <span class="sr-only">Authenticating...</span>
+        </div>
       </div>
     </form>
   </div>
@@ -25,13 +49,45 @@ export default {
   name: "SignIn",
   data: function() {
     return {
-      token:
-        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjYjI0Y2QxZC1iY2I2LTRlMjYtYTBkMy04MDJiODMyNDcyZTAiLCJmcmVzaCI6ZmFsc2UsImlhdCI6MTU1NzQzNTUzOSwidHlwZSI6ImFjY2VzcyIsIm5iZiI6MTU1NzQzNTUzOSwiaWRlbnRpdHkiOiJvbHNzb250In0.gs6D0l_cTBwh-uuFfGCuBpuy61Svy66sKnbSvtCNxmaOSvGHMAPjQSCFPBjGUEcvbTO_SKbS7QiQRRXQL1NzS2ocz9lfONbmGfz_J1hlViSFypzkUxPttgJwTHwJPkSsx6YzwlFpJObDNyaLQXK76vt2pZircuukPOYBEp-htmb77JPt8Cf_93I9zRznwTDgykb4BR0mJTHIPKxl6ATG58pNM5zg3isnfC40tmkicztaKLxvktYnIh7lt-vO71KmWXfuRXlrxDF2hwMnRrsv9LswwenxgJWwxEkYiZIagGAM7LRfel_uwYPnOGXQQ7y_-8rqkZf7Gmlq5j7B4-GCjg"
+      username: null,
+      password: null,
+      signInFailed: false,
+      signInInfo: null,
+      signInLoading: false,
+      signInErrored: false,
+      tokenGeneratorURL: "http://localhost:5000/token"
     };
   },
+  computed: {
+    loginCredentials: function() {
+      return { username: this.username, password: this.password };
+    }
+  },
   methods: {
-    signIn: function() {
-      this.$emit("sign-in", this.token);
+    signIn: function(token) {
+      this.$emit("sign-in", token);
+    },
+    getToken: function() {
+      this.signInLoading = true;
+      this.$http
+        .post(this.tokenGeneratorURL, this.loginCredentials, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(response => {
+          this.signInInfo = response.data;
+          if ("token" in this.signInInfo) {
+            this.signIn(this.signInInfo.token);
+          } else {
+            this.signInFailed = true;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          this.signInErrored = true;
+        })
+        .finally(() => (this.signInLoading = false));
     }
   }
 };
@@ -56,5 +112,29 @@ export default {
   max-width: 330px;
   padding: 15px;
   margin: auto;
+}
+
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 </style>
