@@ -55,7 +55,7 @@ export default {
       signInInfo: null,
       signInLoading: false,
       signInErrored: false,
-      tokenGeneratorURL: "http://localhost:5000/token"
+      tokenGeneratorURL: "https://token-generator.informatics.jic.ac.uk/token"
     };
   },
   computed: {

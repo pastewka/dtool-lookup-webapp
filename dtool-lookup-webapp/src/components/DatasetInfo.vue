@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div v-if="num_datasets > 0" class="card">
     <div class="card-header">
       <div class="d-flex justify-content-between">
         <h3>{{ dataset.name }}</h3>
@@ -104,6 +104,9 @@ export default {
   computed: {
     dataset: function() {
       return this.datasetHits[this.$store.state.current_dataset_index];
+    },
+    num_datasets: function() {
+      return this.datasetHits.length;
     },
     total_size_in_bytes: function() {
       var total = 0;

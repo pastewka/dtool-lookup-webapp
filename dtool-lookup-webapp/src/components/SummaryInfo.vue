@@ -5,7 +5,12 @@
     </div>
     <div v-else>
       <div v-if="errored">
-        <p>Unable to load summary information please return later.</p>
+        <div class="container">
+          <p>Unable to load summary information please try again.</p>
+          <a href="" class="btn btn-secondary" @click.prevent="load_summary()"
+            >Try again</a
+          >
+        </div>
       </div>
       <div v-else>
         <div class="list-group">
@@ -98,17 +103,23 @@ export default {
       this.active_creator = null;
       this.active_base_uri = null;
       this.$emit("start-search");
+    },
+    load_summary: function() {
+      console.log("Loading summary info");
+      this.errored = false;
+      this.loading = true;
+      this.$http
+        .get(this.source, { headers: { Authorization: this.auth_str } })
+        .then(response => (this.summary_info = response.data))
+        .catch(error => {
+          console.log(error);
+          this.errored = true;
+        })
+        .finally(() => (this.loading = false));
     }
   },
   mounted() {
-    this.$http
-      .get(this.source, { headers: { Authorization: this.auth_str } })
-      .then(response => (this.summary_info = response.data))
-      .catch(error => {
-        console.log(error);
-        this.errored = true;
-      })
-      .finally(() => (this.loading = false));
+    this.load_summary();
   }
 };
 </script>

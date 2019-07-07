@@ -19,7 +19,18 @@
             <span class="sr-only">Loading...</span>
           </div>
           <div v-else>
-            <DatasetTable :datasetHits="datasetHits" />
+            <div v-if="searchErrored">
+              <p>Unable to load datasets please try again.</p>
+              <a
+                href=""
+                class="btn btn-secondary"
+                @click.prevent="searchDatasets()"
+                >Try again</a
+              >
+            </div>
+            <div v-else>
+              <DatasetTable :datasetHits="datasetHits" />
+            </div>
           </div>
         </div>
         <div class="col-md-6 right">
@@ -47,7 +58,7 @@ export default {
       datasetHits: [],
       searchLoading: true,
       searchErrored: false,
-      lookup_url: "http://dtool-lookup-server-dev.ciscloud",
+      lookup_url: "https://dtool-lookup-server.informatics.jic.ac.uk",
       token: null
     };
   },
