@@ -104,6 +104,7 @@ export default {
         .then(response => (this.datasetHits = response.data))
         .catch(error => {
           console.log(error);
+          console.log(error.response);
           this.searchErrored = true;
         })
         .finally(() => (this.searchLoading = false));
