@@ -1,0 +1,14 @@
+---
+
+- name: provision dtool-lookup-webapp
+  hosts: all
+
+  vars_files:
+    - vars.yml
+
+  roles:
+
+    - epel
+    - nginx 
+    - firewalld
+    - dtool_lookup_webapp

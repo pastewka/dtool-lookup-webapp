@@ -1,0 +1,6 @@
+---
+
+- name: unarchive static website content to /usr/share/nginx
+  unarchive:
+    src: dtool_lookup_webapp.tar.gz
+    dest: "{{ NGINX_CONTNET_DIR }}"
