@@ -20,10 +20,12 @@
             @click.prevent="clear_all_filters()"
           >
             <div class="d-flex  justify-content-between">
-              <small>All</small>
-              <span class="badge badge-pill badge-primary">{{
-                summary_info["number_of_datasets"]
-              }}</span>
+              <small>All</small
+              ><small>
+                <span class="badge badge-pill badge-primary">{{
+                  summary_info["number_of_datasets"]
+                }}</span>
+              </small>
             </div>
           </a>
           <a
@@ -35,10 +37,13 @@
             v-bind:class="{ active: active_base_uri == base_uri }"
           >
             <div class="d-flex  justify-content-between">
-              <small> {{ base_uri }}</small>
-              <span class="badge badge-pill badge-secondary">{{
-                summary_info["datasets_per_base_uri"][base_uri]
-              }}</span>
+              <small
+                ><div class="text-break">{{ base_uri }}</div></small
+              ><small>
+                <span class="badge badge-pill badge-secondary">{{
+                  summary_info["datasets_per_base_uri"][base_uri]
+                }}</span>
+              </small>
             </div>
           </a>
           <a
@@ -50,10 +55,12 @@
             v-bind:class="{ active: active_creator == creator }"
           >
             <div class="d-flex  justify-content-between">
-              <small>{{ creator }}</small>
-              <span class="badge badge-pill badge-secondary">{{
-                summary_info["datasets_per_creator"][creator]
-              }}</span>
+              <small>{{ creator }}</small
+              ><small>
+                <span class="badge badge-pill badge-secondary">{{
+                  summary_info["datasets_per_creator"][creator]
+                }}</span>
+              </small>
             </div>
           </a>
         </div>
