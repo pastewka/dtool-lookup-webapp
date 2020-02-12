@@ -19,10 +19,12 @@
             class="list-group-item list-group-item-action"
             @click.prevent="clear_all_filters()"
           >
-            All
-            <span class="badge badge-pill badge-primary">{{
-              summary_info["number_of_datasets"]
-            }}</span>
+            <div class="d-flex  justify-content-between">
+              <small>All</small>
+              <span class="badge badge-pill badge-primary">{{
+                summary_info["number_of_datasets"]
+              }}</span>
+            </div>
           </a>
           <a
             href=""
@@ -32,10 +34,12 @@
             @click.prevent="update_base_uri(base_uri)"
             v-bind:class="{ active: active_base_uri == base_uri }"
           >
-            {{ base_uri }}
-            <span class="badge badge-pill badge-secondary">{{
-              summary_info["datasets_per_base_uri"][base_uri]
-            }}</span>
+            <div class="d-flex  justify-content-between">
+              <small> {{ base_uri }}</small>
+              <span class="badge badge-pill badge-secondary">{{
+                summary_info["datasets_per_base_uri"][base_uri]
+              }}</span>
+            </div>
           </a>
           <a
             href=""
@@ -45,10 +49,12 @@
             @click.prevent="update_creator_username(creator)"
             v-bind:class="{ active: active_creator == creator }"
           >
-            {{ creator }}
-            <span class="badge badge-pill badge-secondary">{{
-              summary_info["datasets_per_creator"][creator]
-            }}</span>
+            <div class="d-flex  justify-content-between">
+              <small>{{ creator }}</small>
+              <span class="badge badge-pill badge-secondary">{{
+                summary_info["datasets_per_creator"][creator]
+              }}</span>
+            </div>
           </a>
         </div>
       </div>
