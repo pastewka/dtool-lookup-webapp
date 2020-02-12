@@ -1,5 +1,5 @@
 <template>
-  <div v-if="num_datasets > 0" class="card">
+  <div v-if="numDatasets > 0" class="card">
     <div class="card-header">
       <div class="d-flex justify-content-between">
         <h3>{{ dataset.name }}</h3>
@@ -7,7 +7,11 @@
           Created by <em>{{ dataset.creator_username }}</em> at
           <em>{{ moment(dataset.created_at).format("YYYY-MM-DD") }}</em
           >&nbsp;
-          <strong>{{ filesize(total_size_in_bytes) }}</strong>
+          <span class="badge badge-pill badge-info">{{ numItems }} items</span
+          >&nbsp;
+          <span class="badge badge-pill badge-info">{{
+            filesize(total_size_in_bytes)
+          }}</span>
         </small>
       </div>
       <div class="d-flex justify-content-between">
@@ -39,7 +43,9 @@
     </div>
 
     <div class="card-footer">
-      <h5>Items</h5>
+      <h5>
+        Items <small>({{ numItems }})</small>
+      </h5>
       <ul class="list-group">
         <li
           class="list-group-item"
@@ -105,8 +111,11 @@ export default {
     dataset: function() {
       return this.datasetHits[this.$store.state.current_dataset_index];
     },
-    num_datasets: function() {
+    numDatasets: function() {
       return this.datasetHits.length;
+    },
+    numItems: function() {
+      return Object.values(this.dataset.manifest.items).length;
     },
     total_size_in_bytes: function() {
       var total = 0;
