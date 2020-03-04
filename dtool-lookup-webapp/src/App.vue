@@ -29,11 +29,15 @@
               >
             </div>
             <div v-else>
-              <DatasetTable :datasetHits="datasetHits" />
+              <DatasetTable
+                :datasetHits="datasetHits"
+                @update-manifest="updateManifest"
+              />
             </div>
           </div>
         </div>
         <div class="col-md-6 right">
+          <Manifest />
           <DatasetInfo :datasetHits="datasetHits" />
         </div>
       </div>
@@ -50,6 +54,7 @@ import SummaryInfo from "./components/SummaryInfo.vue";
 import TextSearch from "./components/TextSearch.vue";
 import DatasetTable from "./components/DatasetTable.vue";
 import DatasetInfo from "./components/DatasetInfo.vue";
+import Manifest from "./components/Manifest.vue";
 
 export default {
   name: "app",
@@ -58,6 +63,8 @@ export default {
       datasetHits: [],
       searchLoading: true,
       searchErrored: false,
+      manifestLoading: false,
+      manifestErrored: false,
       lookup_url: "https://dtool-lookup-server.informatics.jic.ac.uk",
       token: null
     };
@@ -65,6 +72,9 @@ export default {
   computed: {
     searchURL: function() {
       return this.lookup_url + "/dataset/search";
+    },
+    manifestURL: function() {
+      return this.lookup_url + "/dataset/manifest";
     },
     auth_str: function() {
       return "Bearer ".concat(this.token);
@@ -81,6 +91,15 @@ export default {
         query.base_uris = [this.$store.state.base_uri];
       }
       return query;
+    },
+    manifestQuery: function() {
+      if (this.datasetHits.length > 0) {
+        return {
+          uri: this.datasetHits[this.$store.state.current_dataset_index].uri
+        };
+      } else {
+        return { uri: null };
+      }
     }
   },
   methods: {
@@ -108,6 +127,28 @@ export default {
           this.searchErrored = true;
         })
         .finally(() => (this.searchLoading = false));
+    },
+    updateManifest: function() {
+      console.log("Loading manifest");
+      console.log(this.manifestQuery);
+      this.manifestLoading = true;
+      this.manifestErrored = false;
+      this.$http
+        .post(this.manifestURL, this.manifestQuery, {
+          headers: {
+            Authorization: this.auth_str,
+            "Content-Type": "application/json"
+          }
+        })
+        .then(response => {
+          this.$store.commit("update_current_dataset_manifest", response.data);
+        })
+        .catch(error => {
+          console.log(error);
+          console.log(error.response);
+          this.manifestErrored = true;
+        })
+        .finally(() => (this.manifestLoading = false));
     }
   },
   components: {
@@ -115,7 +156,8 @@ export default {
     SummaryInfo,
     TextSearch,
     DatasetTable,
-    DatasetInfo
+    DatasetInfo,
+    Manifest
   }
 };
 </script>
