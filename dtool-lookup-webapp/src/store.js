@@ -9,6 +9,7 @@ export default new Vuex.Store({
     creator_username: null,
     base_uri: null,
     current_dataset_index: 0,
+    current_dataset: null,
     current_dataset_manifest: null
   },
   mutations: {
@@ -24,6 +25,10 @@ export default new Vuex.Store({
     update_current_dataset_index(state, index) {
       console.log("Store: update current dataset index");
       state.current_dataset_index = index;
+    },
+    update_current_dataset(state, dataset) {
+      console.log("Store: update current dataset");
+      state.current_dataset = dataset;
     },
     update_current_dataset_manifest(state, manifest) {
       console.log("Store: update current dataset manifest");
