@@ -32,11 +32,13 @@
               <DatasetTable
                 :datasetHits="datasetHits"
                 @update-manifest="updateManifest"
+                @update-readme="updateReadme"
               />
             </div>
           </div>
         </div>
         <div class="col-md-6 right">
+          <Readme />
           <Manifest />
           <DatasetInfo :datasetHits="datasetHits" />
         </div>
@@ -55,6 +57,7 @@ import TextSearch from "./components/TextSearch.vue";
 import DatasetTable from "./components/DatasetTable.vue";
 import DatasetInfo from "./components/DatasetInfo.vue";
 import Manifest from "./components/Manifest.vue";
+import Readme from "./components/Readme.vue";
 
 export default {
   name: "app",
@@ -65,6 +68,8 @@ export default {
       searchErrored: false,
       manifestLoading: false,
       manifestErrored: false,
+      readmeLoading: false,
+      readmeErrored: false,
       lookup_url: "https://dtool-lookup-server.informatics.jic.ac.uk",
       token: null
     };
@@ -75,6 +80,9 @@ export default {
     },
     manifestURL: function() {
       return this.lookup_url + "/dataset/manifest";
+    },
+    readmeURL: function() {
+      return this.lookup_url + "/dataset/readme";
     },
     auth_str: function() {
       return "Bearer ".concat(this.token);
@@ -92,7 +100,7 @@ export default {
       }
       return query;
     },
-    manifestQuery: function() {
+    uriQuery: function() {
       if (this.datasetHits.length > 0) {
         return {
           uri: this.datasetHits[this.$store.state.current_dataset_index].uri
@@ -130,11 +138,11 @@ export default {
     },
     updateManifest: function() {
       console.log("Loading manifest");
-      console.log(this.manifestQuery);
+      console.log(this.uriQuery);
       this.manifestLoading = true;
       this.manifestErrored = false;
       this.$http
-        .post(this.manifestURL, this.manifestQuery, {
+        .post(this.manifestURL, this.uriQuery, {
           headers: {
             Authorization: this.auth_str,
             "Content-Type": "application/json"
@@ -149,6 +157,28 @@ export default {
           this.manifestErrored = true;
         })
         .finally(() => (this.manifestLoading = false));
+    },
+    updateReadme: function() {
+      console.log("Loading readme");
+      console.log(this.uriQuery);
+      this.readmeLoading = true;
+      this.readmeErrored = false;
+      this.$http
+        .post(this.readmeURL, this.uriQuery, {
+          headers: {
+            Authorization: this.auth_str,
+            "Content-Type": "application/json"
+          }
+        })
+        .then(response => {
+          this.$store.commit("update_current_dataset_readme", response.data);
+        })
+        .catch(error => {
+          console.log(error);
+          console.log(error.response);
+          this.readmeErrored = true;
+        })
+        .finally(() => (this.readmeLoading = false));
     }
   },
   components: {
@@ -157,7 +187,8 @@ export default {
     TextSearch,
     DatasetTable,
     DatasetInfo,
-    Manifest
+    Manifest,
+    Readme
   }
 };
 </script>

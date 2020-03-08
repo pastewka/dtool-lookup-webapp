@@ -10,7 +10,8 @@ export default new Vuex.Store({
     base_uri: null,
     current_dataset_index: 0,
     current_dataset: null,
-    current_dataset_manifest: null
+    current_dataset_manifest: null,
+    current_dataset_readme: null
   },
   mutations: {
     update_free_text(state, free_text) {
@@ -33,6 +34,10 @@ export default new Vuex.Store({
     update_current_dataset_manifest(state, manifest) {
       console.log("Store: update current dataset manifest");
       state.current_dataset_manifest = manifest;
+    },
+    update_current_dataset_readme(state, readme) {
+      console.log("Store: update current dataset readme");
+      state.current_dataset_readme = readme;
     },
     clear_all(state) {
       state.free_text = null;

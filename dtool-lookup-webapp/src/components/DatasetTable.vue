@@ -45,6 +45,7 @@ export default {
       this.$store.commit("update_current_dataset_index", index);
       this.$store.commit("update_current_dataset", this.datasetHits[index]);
       this.$emit("update-manifest");
+      this.$emit("update-readme");
     }
   }
 };
