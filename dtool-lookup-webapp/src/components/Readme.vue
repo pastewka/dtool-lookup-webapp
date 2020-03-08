@@ -1,12 +1,24 @@
 <template>
   <div>
-    <h1>Readme Component</h1>
+    <h3>Readme</h3>
+    <pre>{{ yaml.stringify(readme) }}</pre>
   </div>
 </template>
 
 <script>
+var yaml = require("json2yaml");
 export default {
-  name: "Readme"
+  name: "Readme",
+  data: function() {
+    return {
+      yaml: yaml
+    };
+  },
+  computed: {
+    readme: function() {
+      return this.$store.state.current_dataset_readme;
+    }
+  }
 };
 </script>
 
