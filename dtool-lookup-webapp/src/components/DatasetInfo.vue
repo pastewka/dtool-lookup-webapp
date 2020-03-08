@@ -109,19 +109,22 @@ export default {
   },
   computed: {
     dataset: function() {
-      return this.datasetHits[this.$store.state.current_dataset_index];
+      return this.$store.state.current_dataset;
     },
     numDatasets: function() {
       return this.datasetHits.length;
     },
     numItems: function() {
-      return Object.values(this.dataset.manifest.items).length;
+      return Object.values(this.$store.state.current_dataset_manifest.items)
+        .length;
     },
     total_size_in_bytes: function() {
       var total = 0;
-      Object.values(this.dataset.manifest.items).forEach(item => {
-        total = total + item.size_in_bytes;
-      });
+      Object.values(this.$store.state.current_dataset_manifest.items).forEach(
+        item => {
+          total = total + item.size_in_bytes;
+        }
+      );
       return total;
     },
     copy_command: function() {
