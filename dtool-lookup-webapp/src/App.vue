@@ -39,7 +39,7 @@
         <div class="col-md-6 right">
           <div class="card">
             <div class="card-header">
-              <div v-if="manifestLoading" class="spinner-border text-primary">
+              <div v-if="manifestLoading" class="text-primary">
                 <span class="sr-only">Loading...</span>
               </div>
               <div v-else>
@@ -60,7 +60,7 @@
 
             <div class="card-body">
               <div>
-                <div v-if="readmeLoading" class="spinner-border text-primary">
+                <div v-if="readmeLoading" class="text-primary">
                   <span class="sr-only">Loading...</span>
                 </div>
                 <div v-else>
@@ -81,7 +81,7 @@
             </div>
 
             <div class="card-footer">
-              <div v-if="manifestLoading" class="spinner-border text-primary">
+              <div v-if="manifestLoading" class="text-primary">
                 <span class="sr-only">Loading...</span>
               </div>
               <div v-else>
