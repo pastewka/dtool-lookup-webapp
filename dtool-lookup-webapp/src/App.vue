@@ -38,6 +38,7 @@
           </div>
         </div>
         <div class="col-md-6 right">
+          <DatasetSummary />
           <Readme />
           <Manifest />
           <DatasetInfo :datasetHits="datasetHits" />
@@ -58,6 +59,7 @@ import DatasetTable from "./components/DatasetTable.vue";
 import DatasetInfo from "./components/DatasetInfo.vue";
 import Manifest from "./components/Manifest.vue";
 import Readme from "./components/Readme.vue";
+import DatasetSummary from "./components/DatasetSummary.vue";
 
 export default {
   name: "app",
@@ -188,7 +190,8 @@ export default {
     DatasetTable,
     DatasetInfo,
     Manifest,
-    Readme
+    Readme,
+    DatasetSummary
   }
 };
 </script>
