@@ -37,63 +37,69 @@
           </div>
         </div>
         <div class="col-md-6 right">
-          <div v-if="manifestLoading" class="spinner-border text-primary">
-            <span class="sr-only">Loading...</span>
-          </div>
-          <div v-else>
-            <div v-if="manifestErrored">
-              <p>Unable to load manifest please try again.</p>
-              <a
-                href=""
-                class="btn btn-secondary"
-                @click.prevent="updateManifest()"
-                >Try again</a
-              >
-            </div>
-            <div v-else>
-              <DatasetSummary />
-            </div>
-          </div>
-
-          <div>
-            <div v-if="readmeLoading" class="spinner-border text-primary">
-              <span class="sr-only">Loading...</span>
-            </div>
-            <div v-else>
-              <div v-if="readmeErrored">
-                <p>Unable to load readme please try again.</p>
-                <a
-                  href=""
-                  class="btn btn-secondary"
-                  @click.prevent="updateReadme()"
-                  >Try again</a
-                >
+          <div class="card">
+            <div class="card-header">
+              <div v-if="manifestLoading" class="spinner-border text-primary">
+                <span class="sr-only">Loading...</span>
               </div>
               <div v-else>
-                <Readme />
+                <div v-if="manifestErrored">
+                  <p>Unable to load manifest please try again.</p>
+                  <a
+                    href=""
+                    class="btn btn-secondary"
+                    @click.prevent="updateManifest()"
+                    >Try again</a
+                  >
+                </div>
+                <div v-else>
+                  <DatasetSummary />
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <div>
+                <div v-if="readmeLoading" class="spinner-border text-primary">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <div v-else>
+                  <div v-if="readmeErrored">
+                    <p>Unable to load readme please try again.</p>
+                    <a
+                      href=""
+                      class="btn btn-secondary"
+                      @click.prevent="updateReadme()"
+                      >Try again</a
+                    >
+                  </div>
+                  <div v-else>
+                    <Readme />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <div v-if="manifestLoading" class="spinner-border text-primary">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <div v-else>
+                <div v-if="manifestErrored">
+                  <p>Unable to load manifest please try again.</p>
+                  <a
+                    href=""
+                    class="btn btn-secondary"
+                    @click.prevent="updateManifest()"
+                    >Try again</a
+                  >
+                </div>
+                <div v-else>
+                  <Manifest />
+                </div>
               </div>
             </div>
           </div>
-
-          <div v-if="manifestLoading" class="spinner-border text-primary">
-            <span class="sr-only">Loading...</span>
-          </div>
-          <div v-else>
-            <div v-if="manifestErrored">
-              <p>Unable to load manifest please try again.</p>
-              <a
-                href=""
-                class="btn btn-secondary"
-                @click.prevent="updateManifest()"
-                >Try again</a
-              >
-            </div>
-            <div v-else>
-              <Manifest />
-            </div>
-          </div>
-
-          <DatasetInfo :datasetHits="datasetHits" />
         </div>
       </div>
     </div>
@@ -108,7 +114,6 @@ import SignIn from "./components/SignIn.vue";
 import SummaryInfo from "./components/SummaryInfo.vue";
 import TextSearch from "./components/TextSearch.vue";
 import DatasetTable from "./components/DatasetTable.vue";
-import DatasetInfo from "./components/DatasetInfo.vue";
 import Manifest from "./components/Manifest.vue";
 import Readme from "./components/Readme.vue";
 import DatasetSummary from "./components/DatasetSummary.vue";
@@ -244,7 +249,6 @@ export default {
     SummaryInfo,
     TextSearch,
     DatasetTable,
-    DatasetInfo,
     Manifest,
     Readme,
     DatasetSummary

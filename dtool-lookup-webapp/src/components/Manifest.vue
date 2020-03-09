@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>Manifest</h1>
     <h5>
       Items <small>({{ numItems }})</small>
     </h5>
