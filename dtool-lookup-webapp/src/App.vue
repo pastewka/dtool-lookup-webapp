@@ -31,16 +31,68 @@
             <div v-else>
               <DatasetTable
                 :datasetHits="datasetHits"
-                @update-manifest="updateManifest"
-                @update-readme="updateReadme"
+                @update-dataset="updateDataset"
               />
             </div>
           </div>
         </div>
         <div class="col-md-6 right">
-          <DatasetSummary />
-          <Readme />
-          <Manifest />
+          <div v-if="manifestLoading" class="spinner-border text-primary">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div v-else>
+            <div v-if="manifestErrored">
+              <p>Unable to load manifest please try again.</p>
+              <a
+                href=""
+                class="btn btn-secondary"
+                @click.prevent="updateManifest()"
+                >Try again</a
+              >
+            </div>
+            <div v-else>
+              <DatasetSummary />
+            </div>
+          </div>
+
+          <div>
+            <div v-if="readmeLoading" class="spinner-border text-primary">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <div v-else>
+              <div v-if="readmeErrored">
+                <p>Unable to load readme please try again.</p>
+                <a
+                  href=""
+                  class="btn btn-secondary"
+                  @click.prevent="updateReadme()"
+                  >Try again</a
+                >
+              </div>
+              <div v-else>
+                <Readme />
+              </div>
+            </div>
+          </div>
+
+          <div v-if="manifestLoading" class="spinner-border text-primary">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div v-else>
+            <div v-if="manifestErrored">
+              <p>Unable to load manifest please try again.</p>
+              <a
+                href=""
+                class="btn btn-secondary"
+                @click.prevent="updateManifest()"
+                >Try again</a
+              >
+            </div>
+            <div v-else>
+              <Manifest />
+            </div>
+          </div>
+
           <DatasetInfo :datasetHits="datasetHits" />
         </div>
       </div>
@@ -137,6 +189,10 @@ export default {
           this.searchErrored = true;
         })
         .finally(() => (this.searchLoading = false));
+    },
+    updateDataset: function() {
+      this.updateManifest();
+      this.updateReadme();
     },
     updateManifest: function() {
       console.log("Loading manifest");
