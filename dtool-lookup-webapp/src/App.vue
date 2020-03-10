@@ -36,7 +36,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6 right">
+        <div v-if="datasetLoaded" class="col-md-6 right">
           <div class="card">
             <div class="card-header">
               <div v-if="manifestLoading" class="text-primary">
@@ -134,6 +134,12 @@ export default {
     };
   },
   computed: {
+    datasetLoaded: function() {
+      return this.$store.state.current_dataset;
+    },
+    current_dataset: function() {
+      return this.datasetHits[this.$store.state.current_dataset_index];
+    },
     searchURL: function() {
       return this.lookup_url + "/dataset/search";
     },
@@ -178,6 +184,10 @@ export default {
       console.log("Running search");
       console.log(this.searchQuery);
       this.$store.commit("update_current_dataset_index", 0);
+      this.$store.commit("update_current_dataset", null);
+      this.$store.commit("update_current_dataset_manifest", null);
+      this.$store.commit("update_current_dataset_readme", null);
+      this.updateDataset();
       this.searchLoading = true;
       this.searchErrored = false;
       this.$http
@@ -187,13 +197,19 @@ export default {
             "Content-Type": "application/json"
           }
         })
-        .then(response => (this.datasetHits = response.data))
+        .then(response => {
+          this.datasetHits = response.data;
+          this.$store.commit("update_current_dataset", this.current_dataset);
+          this.updateDataset();
+        })
         .catch(error => {
           console.log(error);
           console.log(error.response);
           this.searchErrored = true;
         })
-        .finally(() => (this.searchLoading = false));
+        .finally(() => {
+          this.searchLoading = false;
+        });
     },
     updateDataset: function() {
       this.updateManifest();
