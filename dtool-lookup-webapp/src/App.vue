@@ -77,6 +77,24 @@
                     <Readme />
                   </div>
                 </div>
+
+                <div v-if="annotationsLoading" class="text-primary">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <div v-else>
+                  <div v-if="annotationsErrored">
+                    <p>Unable to load annotations please try again.</p>
+                    <a
+                      href=""
+                      class="btn btn-secondary"
+                      @click.prevent="updateAnnotations()"
+                      >Try again</a
+                    >
+                  </div>
+                  <div v-else>
+                    <Annotations />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -116,6 +134,7 @@ import TextSearch from "./components/TextSearch.vue";
 import DatasetTable from "./components/DatasetTable.vue";
 import Manifest from "./components/Manifest.vue";
 import Readme from "./components/Readme.vue";
+import Annotations from "./components/Annotations.vue";
 import DatasetSummary from "./components/DatasetSummary.vue";
 
 export default {
@@ -129,6 +148,8 @@ export default {
       manifestErrored: false,
       readmeLoading: false,
       readmeErrored: false,
+      annotationsLoading: false,
+      annotationsErrored: false,
       lookup_url: "https://dtool-lookup-server.informatics.jic.ac.uk",
       token: null
     };
@@ -148,6 +169,9 @@ export default {
     },
     readmeURL: function() {
       return this.lookup_url + "/dataset/readme";
+    },
+    annotationsURL: function() {
+      return this.lookup_url + "/dataset/annotations";
     },
     auth_str: function() {
       return "Bearer ".concat(this.token);
@@ -214,6 +238,7 @@ export default {
     updateDataset: function() {
       this.updateManifest();
       this.updateReadme();
+      this.updateAnnotations();
     },
     updateManifest: function() {
       console.log("Loading manifest");
@@ -258,6 +283,31 @@ export default {
           this.readmeErrored = true;
         })
         .finally(() => (this.readmeLoading = false));
+    },
+    updateAnnotations: function() {
+      console.log("Loading annotations");
+      console.log(this.uriQuery);
+      this.annotationsLoading = true;
+      this.annotationsErrored = false;
+      this.$http
+        .post(this.annotationsURL, this.uriQuery, {
+          headers: {
+            Authorization: this.auth_str,
+            "Content-Type": "application/json"
+          }
+        })
+        .then(response => {
+          this.$store.commit(
+            "update_current_dataset_annotations",
+            response.data
+          );
+        })
+        .catch(error => {
+          console.log(error);
+          console.log(error.response);
+          this.annotationsErrored = true;
+        })
+        .finally(() => (this.annotationsLoading = false));
     }
   },
   components: {
@@ -267,6 +317,7 @@ export default {
     DatasetTable,
     Manifest,
     Readme,
+    Annotations,
     DatasetSummary
   }
 };
