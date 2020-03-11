@@ -26,11 +26,18 @@ Removed
 Fixed
 ^^^^^
 
-- Fixed defect in drop down to copy the "fetch item" command 
-
 
 Security
 ^^^^^^^^
+
+
+[0.2.1] - 2020-03-11
+--------------------
+
+Fixed
+^^^^^
+
+- Fixed defect in drop down to copy the "fetch item" command 
 
 
 [0.2.0] - 2020-03-10
