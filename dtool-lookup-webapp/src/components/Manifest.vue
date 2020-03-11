@@ -49,7 +49,8 @@ export default {
   name: "Manifest",
   data: function() {
     return {
-      filesize: filesize
+      filesize: filesize,
+      fetch_identifier: null
     };
   },
   computed: {
@@ -70,6 +71,7 @@ export default {
   },
   methods: {
     update_fetch_identifier(identifier) {
+      console.log("update_fetch_identifer: " + identifier);
       this.fetch_identifier = identifier;
     }
   }

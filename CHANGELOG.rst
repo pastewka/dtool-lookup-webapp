@@ -26,6 +26,8 @@ Removed
 Fixed
 ^^^^^
 
+- Fixed defect in drop down to copy the "fetch item" command 
+
 
 Security
 ^^^^^^^^
