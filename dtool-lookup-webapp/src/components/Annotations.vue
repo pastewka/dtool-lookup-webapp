@@ -2,9 +2,14 @@
   <div>
     <div v-if="num_annotations > 0">
       <h3>Annotations</h3>
-      <div v-for="(value, name, index) in annotations" v-bind:key="index">
-        {{ name }}: {{ value }}
-      </div>
+      <table class="table table-striped table-sm">
+        <tbody>
+          <tr v-for="(value, name, index) in annotations" v-bind:key="index">
+            <th>{{ name }}</th>
+            <td>{{ value }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
