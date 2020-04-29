@@ -25,23 +25,23 @@ export default new Vuex.Store({
       state.base_uri = base_uri;
     },
     update_current_dataset_index(state, index) {
-      console.log("Store: update current dataset index");
+      //console.log("Store: update current dataset index");
       state.current_dataset_index = index;
     },
     update_current_dataset(state, dataset) {
-      console.log("Store: update current dataset");
+      //console.log("Store: update current dataset");
       state.current_dataset = dataset;
     },
     update_current_dataset_manifest(state, manifest) {
-      console.log("Store: update current dataset manifest");
+      //console.log("Store: update current dataset manifest");
       state.current_dataset_manifest = manifest;
     },
     update_current_dataset_readme(state, readme) {
-      console.log("Store: update current dataset readme");
+      //console.log("Store: update current dataset readme");
       state.current_dataset_readme = readme;
     },
     update_current_dataset_annotations(state, annotations) {
-      console.log("Store: update current dataset annotations");
+      //console.log("Store: update current dataset annotations");
       state.current_dataset_annotations = annotations;
     },
     clear_all(state) {
