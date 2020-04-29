@@ -55,7 +55,7 @@ export default {
       signInInfo: null,
       signInLoading: false,
       signInErrored: false,
-      tokenGeneratorURL: "http://jlh.vm.uni-freiburg.de.vm.uni-freiburg.de:5001/token"
+      tokenGeneratorURL: "https://jlh.vm.uni-freiburg.de.vm.uni-freiburg.de:5001/token"
     };
   },
   computed: {

@@ -150,7 +150,7 @@ export default {
       readmeErrored: false,
       annotationsLoading: false,
       annotationsErrored: false,
-      lookup_url: "http://jlh.vm.uni-freiburg.de.vm.uni-freiburg.de:5000",
+      lookup_url: "https://jlh.vm.uni-freiburg.de.vm.uni-freiburg.de:5000",
       token: null
     };
   },
