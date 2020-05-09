@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="d-flex justify-content-between">
-      <h3>{{ dataset.name }}</h3>
-      <small>
+    <div class="d-flex justify-content-between flex-row">
+      <h3 class="p-1">{{ dataset.name }}</h3>
+      <small class="p-1">
         Created by <em>{{ dataset.creator_username }}</em> at
         <em>{{ moment(dataset.created_at).format("YYYY-MM-DD") }}</em
         >&nbsp;
@@ -13,21 +13,65 @@
         }}</span>
       </small>
     </div>
-    <div class="d-flex justify-content-between">
-      <small>{{ dataset.uri }}</small>
-      <b-dropdown right text="Copy" size="sm">
+    <div class="d-flex align-items-start justify-content-between flex-row">
+      <small class="p-1">{{ dataset.uri }}</small>
+      <b-dropdown right text="Copy" size="sm" class="p-1">
         <b-dropdown-text
           >The command below copies the dataset to the working
           directory</b-dropdown-text
         >
         <b-dropdown-form style="width: 300px;">
           <b-input-group>
-            <b-form-input v-model="copy_command" size="sm"></b-form-input>
+            <b-form-input
+              readonly
+              v-model="copy_command"
+              size="sm"
+            ></b-form-input>
             <b-input-group-append>
               <b-button
                 size="sm"
                 variant="outline-secondary"
                 v-clipboard:copy="copy_command"
+                ><span class="octicon octicon-clippy"></span
+              ></b-button>
+            </b-input-group-append>
+          </b-input-group>
+        </b-dropdown-form>
+      </b-dropdown>
+    </div>
+    <div class="d-flex flex-sm-row align-items-start justify-content-between">
+      <div v-if="dataset.tags.length > 0" class="p-1">
+        <template v-for="(tag, index) in dataset.tags">
+          <span class="badge badge-pill badge-info" v-bind:key="index">{{
+            tag
+          }}</span
+          >{{ "&nbsp;" }}
+        </template>
+      </div>
+      <div v-else class="alert alert-info p-2" role="alert">
+        Use tags to organise your datasets!
+      </div>
+
+      <b-dropdown right text="Tag" size="sm" class="p-1">
+        <b-dropdown-text
+          >The command below adds a tag to the dataset</b-dropdown-text
+        >
+        <b-dropdown-form style="width: 400px;">
+          <b-input-group prepend="Tag" size="sm">
+            <b-form-input v-model="tag_name" size="sm"></b-form-input>
+          </b-input-group>
+
+          <b-input-group>
+            <b-form-input
+              readonly
+              v-model="tag_command"
+              size="sm"
+            ></b-form-input>
+            <b-input-group-append>
+              <b-button
+                size="sm"
+                variant="outline-secondary"
+                v-clipboard:tag="tag_command"
                 ><span class="octicon octicon-clippy"></span
               ></b-button>
             </b-input-group-append>
@@ -46,7 +90,8 @@ export default {
   data: function() {
     return {
       filesize: filesize,
-      moment: moment
+      moment: moment,
+      tag_name: null
     };
   },
   computed: {
@@ -68,6 +113,9 @@ export default {
     },
     copy_command: function() {
       return "dtool cp " + this.dataset.uri + " .";
+    },
+    tag_command: function() {
+      return "dtool tag set " + this.dataset.uri + " " + this.tag_name;
     }
   }
 };
