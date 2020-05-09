@@ -11,6 +11,11 @@
       >
         <div class="d-flex  justify-content-between">
           <h6 class="mb-1">{{ dataset.name }}</h6>
+
+          <div v-for="(tag, index) in dataset.tags" v-bind:key="index">
+            <span class="badge badge-pill badge-info">{{ tag }}</span>
+          </div>
+
           <small>{{ moment(dataset.created_at).format("YYYY-MM-DD") }}</small>
         </div>
 
