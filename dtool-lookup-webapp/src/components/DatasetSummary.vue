@@ -15,7 +15,7 @@
     </div>
     <div class="d-flex align-items-start justify-content-between flex-row">
       <small class="p-1">{{ dataset.uri }}</small>
-      <b-dropdown right text="Copy" size="sm" class="p-1">
+      <b-dropdown right text="Copy" size="sm" class="p-0">
         <b-dropdown-text
           >The command below copies the dataset to the working
           directory</b-dropdown-text
@@ -40,7 +40,7 @@
       </b-dropdown>
     </div>
     <div class="d-flex flex-sm-row align-items-start justify-content-between">
-      <div v-if="dataset.tags.length > 0" class="p-1">
+      <div v-if="dataset.tags.length > 0" class="p-0">
         <template v-for="(tag, index) in dataset.tags">
           <span class="badge badge-pill badge-info" v-bind:key="index">{{
             tag
@@ -48,11 +48,11 @@
           >{{ "&nbsp;" }}
         </template>
       </div>
-      <div v-else class="alert alert-info p-2" role="alert">
+      <div v-else class="alert alert-info p-1" role="alert">
         Use tags to organise your datasets!
       </div>
 
-      <b-dropdown right text="Tag" size="sm" class="p-1">
+      <b-dropdown right text="Tag" size="sm" class="pt-1">
         <b-dropdown-text
           >The command below adds a tag to the dataset</b-dropdown-text
         >

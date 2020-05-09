@@ -9,19 +9,27 @@
         v-bind:key="dataset.uri"
         @click.prevent="updateSelectedDataset(index)"
       >
-        <div class="d-flex  justify-content-between">
-          <h6 class="mb-1">{{ dataset.name }}</h6>
-
-          <div v-for="(tag, index) in dataset.tags" v-bind:key="index">
-            <span class="badge badge-pill badge-info">{{ tag }}</span>
-          </div>
-
-          <small>{{ moment(dataset.created_at).format("YYYY-MM-DD") }}</small>
+        <div class="d-flex flex-row justify-content-between">
+          <h6 class="p-0">{{ dataset.name }}</h6>
+          <small class="p-0">{{
+            moment(dataset.created_at).format("YYYY-MM-DD")
+          }}</small>
         </div>
 
-        <div class="d-flex  justify-content-between">
-          <small>{{ dataset.creator_username }}</small>
-          <small>{{ dataset.uuid }}</small>
+        <div class="d-flex flex-row justify-content-between">
+          <small class="p-0">{{ dataset.creator_username }}</small>
+          <small class="p-0">{{ dataset.uuid }}</small>
+        </div>
+
+        <div class="d-flex flex-row">
+          <div class="p-0">
+            <template v-for="(tag, index) in dataset.tags">
+              <span class="badge badge-pill badge-info" v-bind:key="index">{{
+                tag
+              }}</span
+              >{{ "&nbsp;" }}
+            </template>
+          </div>
         </div>
       </a>
     </div>
