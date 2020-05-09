@@ -25,7 +25,11 @@
             >
             <b-dropdown-form style="width: 300px;">
               <b-input-group>
-                <b-form-input v-model="fetch_command" size="sm"></b-form-input>
+                <b-form-input
+                  readonly
+                  v-model="fetch_command"
+                  size="sm"
+                ></b-form-input>
                 <b-input-group-append>
                   <b-button
                     size="sm"
