@@ -8,6 +8,7 @@ export default new Vuex.Store({
     free_text: null,
     creator_username: null,
     base_uri: null,
+    tags: [],
     current_dataset_index: 0,
     current_dataset: null,
     current_dataset_manifest: null,
@@ -23,6 +24,10 @@ export default new Vuex.Store({
     },
     update_base_uri(state, base_uri) {
       state.base_uri = base_uri;
+    },
+    update_tags(state, tags) {
+      console.log("Store: update tags to: " + tags);
+      state.tags = tags;
     },
     update_current_dataset_index(state, index) {
       console.log("Store: update current dataset index");
@@ -48,6 +53,7 @@ export default new Vuex.Store({
       state.free_text = null;
       state.creator_username = null;
       state.base_uri = null;
+      state.tags = [];
     }
   },
   actions: {}

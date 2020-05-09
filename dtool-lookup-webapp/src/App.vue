@@ -187,6 +187,9 @@ export default {
       if (this.$store.state.base_uri) {
         query.base_uris = [this.$store.state.base_uri];
       }
+      if (this.$store.state.tags) {
+        query.tags = this.$store.state.tags;
+      }
       return query;
     },
     uriQuery: function() {

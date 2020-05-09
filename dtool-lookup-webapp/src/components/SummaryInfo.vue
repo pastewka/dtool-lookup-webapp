@@ -13,6 +13,10 @@
         </div>
       </div>
       <div v-else>
+        <TagFilter
+          :tag_info="summary_info.tags"
+          @start-search="searchDatasets"
+        />
         <div class="list-group">
           <a
             href=""
@@ -70,6 +74,7 @@
 </template>
 
 <script>
+import TagFilter from "./TagFilter.vue";
 export default {
   name: "SummaryInfo",
   props: {
@@ -82,7 +87,8 @@ export default {
       loading: true,
       errored: false,
       active_creator: null,
-      active_base_uri: null
+      active_base_uri: null,
+      tags_info: null
     };
   },
   computed: {
@@ -130,10 +136,16 @@ export default {
           this.errored = true;
         })
         .finally(() => (this.loading = false));
+    },
+    searchDatasets: function() {
+      this.$emit("start-search");
     }
   },
   mounted() {
     this.load_summary();
+  },
+  components: {
+    TagFilter
   }
 };
 </script>
