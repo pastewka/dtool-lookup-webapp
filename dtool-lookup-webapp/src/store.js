@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     free_text: null,
-    creator_username: null,
+    creator_usernames: [],
     base_uris: [],
     tags: [],
     current_dataset_index: 0,
@@ -19,8 +19,9 @@ export default new Vuex.Store({
     update_free_text(state, free_text) {
       state.free_text = free_text;
     },
-    update_creator_username(state, creator_username) {
-      state.creator_username = creator_username;
+    update_creator_usernames(state, creator_usernames) {
+      console.log("Store: update creator usernames to: " + creator_usernames);
+      state.creator_usernames = creator_usernames;
     },
     update_base_uris(state, base_uris) {
       console.log("Store: update base URIs to: " + base_uris);
@@ -52,7 +53,7 @@ export default new Vuex.Store({
     },
     clear_all(state) {
       state.free_text = null;
-      state.creator_username = null;
+      state.creator_usernames = [];
       state.tags = [];
       state.base_uris = [];
     }

@@ -181,8 +181,8 @@ export default {
       if (this.$store.state.free_text) {
         query.free_text = this.$store.state.free_text;
       }
-      if (this.$store.state.creator_username) {
-        query.creator_usernames = [this.$store.state.creator_username];
+      if (this.$store.state.creator_usernames.length > 0) {
+        query.creator_usernames = this.$store.state.creator_usernames;
       }
       if (this.$store.state.base_uris.length > 0) {
         query.base_uris = this.$store.state.base_uris;

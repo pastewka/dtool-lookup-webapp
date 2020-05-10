@@ -1,49 +1,67 @@
 <template>
-  <div>
-    <h3>Creator username filter</h3>
-    <div class="list-group">
-      <a
-        href=""
-        class="list-group-item list-group-item-action"
-        v-for="(creator, index) in summary_info['creator_usernames']"
-        v-bind:key="index"
-        @click.prevent="update_creator_username(creator)"
-        v-bind:class="{ active: active_creator == creator }"
-      >
-        <div class="d-flex  justify-content-between">
-          <small>{{ creator }}</small
-          ><small>
-            <span class="badge badge-pill badge-secondary">{{
-              summary_info["datasets_per_creator"][creator]
-            }}</span>
-          </small>
-        </div>
-      </a>
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title">Creators</h5>
+    </div>
+    <div class="card-body p-0">
+      <div class="list-group">
+        <li
+          href=""
+          class="list-group-item list-group-item-action"
+          v-for="(creator, index) in summary_info['creator_usernames']"
+          v-bind:key="index"
+          @click="toggleSelect(creator)"
+        >
+          <div class="d-flex  justify-content-between">
+            <small>
+              <input
+                type="checkbox"
+                v-bind:id="index + '-creator-checkbox'"
+                v-model="selectedCreators"
+                v-bind:value="creator"
+              />
+              <label v-bind:for="index + '-creator-checkbox'" @click.prevent>{{
+                creator
+              }}</label>
+            </small>
+
+            <small>
+              <span class="badge badge-pill badge-secondary">{{
+                summary_info["datasets_per_creator"][creator]
+              }}</span>
+            </small>
+          </div>
+        </li>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "BaseUriFilter",
+  name: "CreatorUsernameFilter",
   props: {
     summary_info: Object
   },
   data: function() {
     return {
-      active_creator: null
+      selectedCreators: []
     };
   },
   methods: {
-    update_creator_username: function(creator) {
-      if (this.$store.state.creator_username === creator) {
-        this.$store.commit("update_creator_username", null);
-        this.active_creator = null;
+    toggleSelect: function(creator) {
+      if (this.selectedCreators.includes(creator)) {
+        console.log("Unset creator username");
+        // Remove item from array.
+        this.selectedCreators.splice(this.selectedCreators.indexOf(creator), 1);
+        this.$store.commit("update_creator_usernames", this.selectedCreators);
+        this.$emit("start-search");
       } else {
-        this.$store.commit("update_creator_username", creator);
-        this.active_creator = creator;
+        console.log("Set base URI");
+        this.selectedCreators.push(creator);
+        this.$store.commit("update_creator_usernames", this.selectedCreators);
+        this.$emit("start-search");
       }
-      this.$emit("start-search");
     }
   }
 };
