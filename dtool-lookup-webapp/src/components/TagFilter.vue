@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3>Tags</h3>
-    <template v-for="(tag, index) in tag_info">
+    <template v-for="(tag, index) in summary_info.tags">
       <input
         type="checkbox"
         v-bind:id="tag + '-tag-checkbox'"
@@ -22,7 +22,7 @@
 export default {
   name: "TagFilter",
   props: {
-    tag_info: Array
+    summary_info: Object
   },
   data: function() {
     return {

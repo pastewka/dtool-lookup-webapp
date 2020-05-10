@@ -14,7 +14,7 @@
       </div>
       <div v-else>
         <TagFilter
-          :tag_info="summary_info.tags"
+          :summary_info="summary_info"
           @start-search="searchDatasets"
         />
 
@@ -46,10 +46,7 @@ export default {
     return {
       summary_info: null,
       loading: true,
-      errored: false,
-      active_creator: null,
-      active_base_uri: null,
-      tags_info: null
+      errored: false
     };
   },
   computed: {
