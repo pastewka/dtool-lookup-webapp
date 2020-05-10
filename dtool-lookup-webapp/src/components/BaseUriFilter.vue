@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <h5 class="card-title">Base URIs</h5>
+      <h5 class="card-title">Locations</h5>
     </div>
     <div class="card-body p-0">
       <div class="list-group">
@@ -45,25 +45,10 @@ export default {
   },
   data: function() {
     return {
-      active_base_uri: null,
       selectedBaseURIs: []
     };
   },
   methods: {
-    clear_base_uri_filters: function() {
-      this.active_base_uri = null;
-      this.$emit("start-search");
-    },
-    update_base_uri: function(base_uri) {
-      if (this.$store.state.base_uri === base_uri) {
-        this.$store.commit("update_base_uri", null);
-        this.active_base_uri = null;
-      } else {
-        this.$store.commit("update_base_uri", base_uri);
-        this.active_base_uri = base_uri;
-      }
-      this.$emit("start-search");
-    },
     toggleSelect: function(base_uri) {
       if (this.selectedBaseURIs.includes(base_uri)) {
         console.log("Unset base URI");
