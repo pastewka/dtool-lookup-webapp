@@ -27,6 +27,10 @@
                 @click.prevent="searchDatasets()"
                 >Try again</a
               >
+              <p>Or try logging out and in again.</p>
+              <a href="" class="btn btn-secondary" @click.prevent="logout()"
+                >Logout</a
+              >
             </div>
             <div v-else>
               <DatasetTable
@@ -51,6 +55,10 @@
                     @click.prevent="updateManifest()"
                     >Try again</a
                   >
+                  <p>Or try logging out and in again.</p>
+                  <a href="" class="btn btn-secondary" @click.prevent="logout()"
+                    >Logout</a
+                  >
                 </div>
                 <div v-else>
                   <DatasetSummary />
@@ -72,6 +80,13 @@
                       @click.prevent="updateReadme()"
                       >Try again</a
                     >
+                    <p>Or try logging out and in again.</p>
+                    <a
+                      href=""
+                      class="btn btn-secondary"
+                      @click.prevent="logout()"
+                      >Logout</a
+                    >
                   </div>
                   <div v-else>
                     <Readme />
@@ -89,6 +104,13 @@
                       class="btn btn-secondary"
                       @click.prevent="updateAnnotations()"
                       >Try again</a
+                    >
+                    <p>Or try logging out and in again.</p>
+                    <a
+                      href=""
+                      class="btn btn-secondary"
+                      @click.prevent="logout()"
+                      >Logout</a
                     >
                   </div>
                   <div v-else>
@@ -110,6 +132,10 @@
                     class="btn btn-secondary"
                     @click.prevent="updateManifest()"
                     >Try again</a
+                  >
+                  <p>Or try logging out and in again.</p>
+                  <a href="" class="btn btn-secondary" @click.prevent="logout()"
+                    >Logout</a
                   >
                 </div>
                 <div v-else>
@@ -312,6 +338,9 @@ export default {
           this.annotationsErrored = true;
         })
         .finally(() => (this.annotationsLoading = false));
+    },
+    logout: function() {
+      this.token = "";
     }
   },
   components: {
