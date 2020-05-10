@@ -20,7 +20,9 @@
                 v-model="selectedTags"
                 v-bind:value="tag"
               />
-              <label v-bind:for="tag + '-tag-checkbox'">{{ tag }}</label>
+              <label v-bind:for="tag + '-tag-checkbox'" @click.prevent>{{
+                tag
+              }}</label>
             </small>
 
             <small>
