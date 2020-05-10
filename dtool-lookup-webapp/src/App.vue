@@ -184,8 +184,8 @@ export default {
       if (this.$store.state.creator_username) {
         query.creator_usernames = [this.$store.state.creator_username];
       }
-      if (this.$store.state.base_uri) {
-        query.base_uris = [this.$store.state.base_uri];
+      if (this.$store.state.base_uris.length > 0) {
+        query.base_uris = this.$store.state.base_uris;
       }
       if (this.$store.state.tags) {
         query.tags = this.$store.state.tags;
