@@ -46,16 +46,11 @@ export default {
   },
   data: function() {
     return {
-      selectedTags: []
+      active_base_uri: null
     };
   },
   methods: {
-    startSearch: function() {
-      this.$store.commit("update_tags", this.selectedTags);
-      this.$emit("start-search");
-    },
     clear_base_uri_filters: function() {
-      this.$store.commit("clear_all");
       this.active_base_uri = null;
       this.$emit("start-search");
     },
