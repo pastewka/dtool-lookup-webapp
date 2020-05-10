@@ -1,32 +1,36 @@
 <template>
-  <div>
-    <h3>Tags</h3>
-    <div class="list-group">
-      <li
-        href=""
-        class="list-group-item list-group-item-action"
-        v-for="(tag, index) in summary_info['tags']"
-        v-bind:key="index"
-        @click="toggleSelect(tag)"
-      >
-        <div class="d-flex  justify-content-between">
-          <small>
-            <input
-              type="checkbox"
-              v-bind:id="tag + '-tag-checkbox'"
-              v-model="selectedTags"
-              v-bind:value="tag"
-            />
-            <label v-bind:for="tag + '-tag-checkbox'">{{ tag }}</label>
-          </small>
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title">Tags</h5>
+    </div>
+    <div class="card-body p-0">
+      <div class="list-group">
+        <li
+          href=""
+          class="list-group-item list-group-item-action"
+          v-for="(tag, index) in summary_info['tags']"
+          v-bind:key="index"
+          @click="toggleSelect(tag)"
+        >
+          <div class="d-flex  justify-content-between">
+            <small>
+              <input
+                type="checkbox"
+                v-bind:id="tag + '-tag-checkbox'"
+                v-model="selectedTags"
+                v-bind:value="tag"
+              />
+              <label v-bind:for="tag + '-tag-checkbox'">{{ tag }}</label>
+            </small>
 
-          <small>
-            <span class="badge badge-pill badge-secondary">{{
-              summary_info["datasets_per_tag"][tag]
-            }}</span>
-          </small>
-        </div>
-      </li>
+            <small>
+              <span class="badge badge-pill badge-secondary">{{
+                summary_info["datasets_per_tag"][tag]
+              }}</span>
+            </small>
+          </div>
+        </li>
+      </div>
     </div>
   </div>
 </template>
