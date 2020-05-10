@@ -1,20 +1,33 @@
 <template>
   <div>
     <h3>Tags</h3>
-    <template v-for="(tag, index) in summary_info.tags">
-      <input
-        type="checkbox"
-        v-bind:id="tag + '-tag-checkbox'"
-        v-model="selectedTags"
-        v-bind:value="tag"
-        v-bind:key="index + '-checkbox'"
-        @change="startSearch"
-      />
-      <label v-bind:for="tag + '-tag-checkbox'" v-bind:key="index + '-label'">{{
-        tag
-      }}</label>
-      <br v-bind:key="index + '-br'" />
-    </template>
+    <div class="list-group">
+      <li
+        href=""
+        class="list-group-item list-group-item-action"
+        v-for="(tag, index) in summary_info['tags']"
+        v-bind:key="index"
+        @click="toggleSelect(tag)"
+      >
+        <div class="d-flex  justify-content-between">
+          <small>
+            <input
+              type="checkbox"
+              v-bind:id="tag + '-tag-checkbox'"
+              v-model="selectedTags"
+              v-bind:value="tag"
+            />
+            <label v-bind:for="tag + '-tag-checkbox'">{{ tag }}</label>
+          </small>
+
+          <small>
+            <span class="badge badge-pill badge-secondary">{{
+              summary_info["datasets_per_tag"][tag]
+            }}</span>
+          </small>
+        </div>
+      </li>
+    </div>
   </div>
 </template>
 
@@ -33,6 +46,18 @@ export default {
     startSearch: function() {
       this.$store.commit("update_tags", this.selectedTags);
       this.$emit("start-search");
+    },
+    toggleSelect: function(tag) {
+      if (this.selectedTags.includes(tag)) {
+        console.log("Unset tag?");
+        // Remove item from array.
+        this.selectedTags.splice(this.selectedTags.indexOf(tag), 1);
+        this.startSearch();
+      } else {
+        console.log("Set tag?");
+        this.selectedTags.push(tag);
+        this.startSearch();
+      }
     }
   }
 };
