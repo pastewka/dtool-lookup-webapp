@@ -17,7 +17,7 @@
               <input
                 type="checkbox"
                 v-bind:id="index + '-baseURI-checkbox'"
-                v-model="selectedBaseURIs"
+                v-model="canonicalSelectedBaseURIs"
                 v-bind:value="base_uri"
               />
               <label v-bind:for="index + '-baseURI-checkbox'" @click.prevent>{{
@@ -47,6 +47,11 @@ export default {
     return {
       selectedBaseURIs: []
     };
+  },
+  computed: {
+    canonicalSelectedBaseURIs: function() {
+      return this.$store.state.base_uris;
+    }
   },
   methods: {
     toggleSelect: function(base_uri) {

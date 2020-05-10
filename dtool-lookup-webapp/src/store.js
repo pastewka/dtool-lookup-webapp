@@ -13,7 +13,8 @@ export default new Vuex.Store({
     current_dataset: null,
     current_dataset_manifest: null,
     current_dataset_readme: null,
-    current_dataset_annotations: null
+    current_dataset_annotations: null,
+    num_filtered: 0
   },
   mutations: {
     update_free_text(state, free_text) {
@@ -50,6 +51,9 @@ export default new Vuex.Store({
     update_current_dataset_annotations(state, annotations) {
       console.log("Store: update current dataset annotations");
       state.current_dataset_annotations = annotations;
+    },
+    update_num_filtered(state, num_filtered) {
+      state.num_filtered = num_filtered;
     },
     clear_all(state) {
       state.free_text = null;

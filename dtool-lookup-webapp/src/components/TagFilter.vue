@@ -17,7 +17,7 @@
               <input
                 type="checkbox"
                 v-bind:id="tag + '-tag-checkbox'"
-                v-model="selectedTags"
+                v-model="canonicalSelectedTags"
                 v-bind:value="tag"
               />
               <label v-bind:for="tag + '-tag-checkbox'" @click.prevent>{{
@@ -47,6 +47,11 @@ export default {
     return {
       selectedTags: []
     };
+  },
+  computed: {
+    canonicalSelectedTags: function() {
+      return this.$store.state.tags;
+    }
   },
   methods: {
     startSearch: function() {

@@ -187,7 +187,7 @@ export default {
       if (this.$store.state.base_uris.length > 0) {
         query.base_uris = this.$store.state.base_uris;
       }
-      if (this.$store.state.tags) {
+      if (this.$store.state.tags.length > 0) {
         query.tags = this.$store.state.tags;
       }
       return query;
@@ -227,6 +227,7 @@ export default {
         .then(response => {
           this.datasetHits = response.data;
           this.$store.commit("update_current_dataset", this.current_dataset);
+          this.$store.commit("update_num_filtered", this.datasetHits.length);
           this.updateDataset();
         })
         .catch(error => {

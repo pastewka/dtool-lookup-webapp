@@ -13,6 +13,11 @@
         </div>
       </div>
       <div v-else>
+        <NumDatasets
+          :summary_info="summary_info"
+          @start-search="searchDatasets"
+        />
+
         <TagFilter
           :summary_info="summary_info"
           @start-search="searchDatasets"
@@ -33,6 +38,7 @@
 </template>
 
 <script>
+import NumDatasets from "./NumDatasets.vue";
 import TagFilter from "./TagFilter.vue";
 import BaseUriFilter from "./BaseUriFilter.vue";
 import CreatorUsernameFilter from "./CreatorUsernameFilter.vue";
@@ -77,6 +83,7 @@ export default {
     this.load_summary();
   },
   components: {
+    NumDatasets,
     TagFilter,
     BaseUriFilter,
     CreatorUsernameFilter

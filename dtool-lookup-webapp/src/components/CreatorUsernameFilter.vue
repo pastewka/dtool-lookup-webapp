@@ -17,7 +17,7 @@
               <input
                 type="checkbox"
                 v-bind:id="index + '-creator-checkbox'"
-                v-model="selectedCreators"
+                v-model="canonicalSelectedCreators"
                 v-bind:value="creator"
               />
               <label v-bind:for="index + '-creator-checkbox'" @click.prevent>{{
@@ -47,6 +47,11 @@ export default {
     return {
       selectedCreators: []
     };
+  },
+  computed: {
+    canonicalSelectedCreators: function() {
+      return this.$store.state.creator_usernames;
+    }
   },
   methods: {
     toggleSelect: function(creator) {
