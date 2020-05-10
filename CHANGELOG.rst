@@ -33,6 +33,23 @@ Security
 ^^^^^^^^
 
 
+[0.3.0] - 2020-05-10
+--------------------
+
+Added
+^^^^^
+
+- Display of dataset annotations when available
+- Display of dataset tags
+- Added drop down to create and copy the "dtool tag set" command
+- Ability to filter datasets based on tags
+- Ability to filter datasets by more than one base URI
+- Ability to filter datasets by more than one creator username
+- Added many small improvements to the layout and user experience
+- Added button to allow a user to log out in cases where the token has expired
+
+
+
 [0.2.1] - 2020-03-11
 --------------------
 
