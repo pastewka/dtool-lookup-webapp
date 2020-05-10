@@ -1,20 +1,22 @@
 <template>
-  <div id="app">
-    <nav class="navbar navbar-default navbar-dark bg-dark sticky-top">
-      <span class="navbar-brand mb-0 h1">dtool</span>
-      <TextSearch @start-search="searchDatasets" />
-    </nav>
+  <div id="app" class="container-fluid">
+    <header>
+      <nav class="navbar navbar-dark bg-dark">
+        <span class="navbar-brand mb-0 h1">dtool</span>
+        <TextSearch @start-search="searchDatasets" />
+      </nav>
+    </header>
 
     <div v-if="token" class="">
       <div class="row row-height">
-        <div class="col-md-2 left pr-0">
+        <div class="col-md-2 overflow-auto h-100 pr-0">
           <SummaryInfo
             :auth_str="auth_str"
             :lookup_url="lookup_url"
             @start-search="searchDatasets"
           />
         </div>
-        <div class="col-md-4 left p-0">
+        <div class="col-md-4 overflow-auto h-100 p-0">
           <div v-if="searchLoading" class="spinner-border text-primary">
             <span class="sr-only">Loading...</span>
           </div>
@@ -40,7 +42,7 @@
             </div>
           </div>
         </div>
-        <div v-if="datasetLoaded" class="col-md-6 right p-0">
+        <div v-if="datasetLoaded" class="col-md-6 overflow-auto h-100 pl-0">
           <div class="card">
             <div class="card-header">
               <div v-if="manifestLoading" class="text-primary">
@@ -368,18 +370,8 @@ export default {
 
 /*Set the row height to the viewport*/
 .row-height {
-  height: 100vh;
+  height: calc(100vh - 60px);
 }
 
 /*Set up the columns with a 100% height, body color and overflow scroll*/
-
-.left {
-  height: 100%;
-  overflow-y: scroll;
-}
-
-.right {
-  height: 100%;
-  overflow-y: scroll;
-}
 </style>
