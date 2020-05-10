@@ -1,5 +1,12 @@
 <template>
-  <input type="text" v-model="textQuery" v-on:keyup.enter="startSearch" />
+  <form class="form-inline" @submit.prevent>
+    <input
+      class="form-control"
+      type="text"
+      v-model="textQuery"
+      v-on:keyup.enter.prevent="startSearch"
+    />
+  </form>
 </template>
 
 <script>
