@@ -29,4 +29,3 @@ Provisining a lookup webapp server
 
         ansible-playbook -i hosts playbook.yml
 
-- Log into the dtool-lookup-webapp and restart nginx
