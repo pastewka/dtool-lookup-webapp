@@ -55,7 +55,7 @@ export default {
       signInInfo: null,
       signInLoading: false,
       signInErrored: false,
-      tokenGeneratorURL: process.env.TOKEN_GENERATOR_URL
+      tokenGeneratorURL: process.env.VUE_APP_TOKEN_GENERATOR_URL
     };
   },
   computed: {

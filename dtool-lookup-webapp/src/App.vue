@@ -178,7 +178,7 @@ export default {
       readmeErrored: false,
       annotationsLoading: false,
       annotationsErrored: false,
-      lookup_url: process.env.LOOKUP_URL,
+      lookup_url: process.env.VUE_APP_LOOKUP_URL,
       token: null
     };
   },
