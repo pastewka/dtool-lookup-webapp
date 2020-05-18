@@ -55,7 +55,7 @@ export default {
       signInInfo: null,
       signInLoading: false,
       signInErrored: false,
-      tokenGeneratorURL: "https://token-generator.informatics.jic.ac.uk/token"
+      tokenGeneratorURL: process.env.TOKEN_GENERATOR_URL
     };
   },
   computed: {
