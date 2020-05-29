@@ -10,7 +10,6 @@ This change log uses principles from `keep a changelog <http://keepachangelog.co
 Added
 ^^^^^
 
-- Annotations component
 
 
 Changed
@@ -33,12 +32,24 @@ Security
 ^^^^^^^^
 
 
+[0.4.0] - 2020-05-29
+--------------------
+
+Added
+^^^^^
+
+- Added ability to configure lookup server URL and token generator URL from
+  environment file. Thanks to Lars Pastewka.
+
+
+
 [0.3.0] - 2020-05-10
 --------------------
 
 Added
 ^^^^^
 
+- Annotations component
 - Display of dataset annotations when available
 - Display of dataset tags
 - Added drop down to create and copy the "dtool tag set" command
