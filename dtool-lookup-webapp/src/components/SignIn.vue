@@ -55,7 +55,7 @@ export default {
       signInInfo: null,
       signInLoading: false,
       signInErrored: false,
-      tokenGeneratorURL: "https://token-generator.informatics.jic.ac.uk/token"
+      tokenGeneratorURL: process.env.VUE_APP_DTOOL_LOOKUP_SERVER_TOKEN_GENERATOR_URL
     };
   },
   computed: {
@@ -68,6 +68,7 @@ export default {
       this.$emit("sign-in", token);
     },
     getToken: function() {
+      console.log(process.env);
       this.signInLoading = true;
       this.$http
         .post(this.tokenGeneratorURL, this.loginCredentials, {

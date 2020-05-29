@@ -178,7 +178,7 @@ export default {
       readmeErrored: false,
       annotationsLoading: false,
       annotationsErrored: false,
-      lookup_url: "https://dtool-lookup-server.informatics.jic.ac.uk",
+      lookup_url: process.env.VUE_APP_DTOOL_LOOKUP_SERVER_URL,
       token: null
     };
   },
