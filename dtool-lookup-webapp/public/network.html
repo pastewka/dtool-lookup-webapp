@@ -1,0 +1,18 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Dataset network</title>
+    <link rel="stylesheet" href="../node_modules/vue-d3-network/dist/vue-d3-network.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="../node_modules/vue-d3-network/dist/vue-d3-network.umd.js"></script>
+</head>
+
+<body>
+    <div id="app">
+    <d3-network :net-nodes="nodes" :net-links="links" :options="options">
+    </d3-network>
+    </div>
+    <script src="../src/components/network.js"></script>
+</body>
+</html>
