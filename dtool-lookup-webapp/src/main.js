@@ -1,20 +1,20 @@
-import Vue from "vue";
+import { createApp } from "vue";
 import App from "./App.vue";
+import { store } from './store'
 
 import axios from "axios";
-import BootstrapVue from "bootstrap-vue";
-import store from "./store";
-import VueClipboard from "vue-clipboard2";
+import BootstrapVue3 from 'bootstrap-vue-3';
+import VueAxios from 'vue-axios'
+import { VueClipboard } from '@soerenmartius/vue3-clipboard';
 
 import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
+import "bootstrap-vue-3/dist/bootstrap-vue-3.css";
 
-Vue.use(BootstrapVue);
-Vue.use(VueClipboard);
-Vue.prototype.$http = axios;
-Vue.config.productionTip = false;
+const app = createApp(App);
 
-new Vue({
-  store,
-  render: h => h(App)
-}).$mount("#app");
+app.use(BootstrapVue3);
+app.use(VueClipboard);
+app.use(store);
+app.use(VueAxios, axios)
+app.config.productionTip = false;
+app.mount("#app");
