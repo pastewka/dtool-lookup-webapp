@@ -160,9 +160,9 @@ import SignIn from "./components/SignIn.vue";
 import SummaryInfo from "./components/SummaryInfo.vue";
 import TextSearch from "./components/TextSearch.vue";
 import DatasetTable from "./components/DatasetTable.vue";
-import Manifest from "./components/Manifest.vue";
-import Readme from "./components/Readme.vue";
-import Annotations from "./components/Annotations.vue";
+import Manifest from "./components/DatasetManifest.vue";
+import Readme from "./components/DatasetReadme.vue";
+import Annotations from "./components/DatasetAnnotations.vue";
 import DatasetSummary from "./components/DatasetSummary.vue";
 
 export default {

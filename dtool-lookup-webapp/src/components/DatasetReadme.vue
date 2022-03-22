@@ -8,7 +8,7 @@
 <script>
 var yaml = require("json2yaml");
 export default {
-  name: "Readme",
+  name: "DatasetReadme",
   data: function() {
     return {
       yaml: yaml

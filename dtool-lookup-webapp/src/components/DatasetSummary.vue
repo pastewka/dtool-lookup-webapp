@@ -41,8 +41,8 @@
     </div>
     <div class="d-flex flex-sm-row align-items-start justify-content-between">
       <div v-if="dataset.tags.length > 0" class="p-0">
-        <template v-for="(tag, index) in dataset.tags">
-          <span class="badge badge-pill badge-info" v-bind:key="index">{{
+        <template v-for="(tag, index) in dataset.tags" v-bind:key="index">
+          <span class="badge badge-pill badge-info">{{
             tag
           }}</span
           >{{ "&nbsp;" }}

@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: "Annotations",
+  name: "DatasetAnnotations",
   computed: {
     annotations: function() {
       return this.$store.state.current_dataset_annotations;
