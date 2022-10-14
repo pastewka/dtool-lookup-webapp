@@ -14,6 +14,9 @@
           <small class="p-0">{{
             moment(dataset.created_at).format("YYYY-MM-DD")
           }}</small>
+          <small class="p-0">{{
+            moment(dataset.frozen_at).format("YYYY-MM-DD")
+          }}</small>
         </div>
 
         <div class="d-flex flex-row justify-content-between">
