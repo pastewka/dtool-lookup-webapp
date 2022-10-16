@@ -11,11 +11,11 @@
       >
         <div class="d-flex flex-row justify-content-between">
           <h6 class="p-0">{{ dataset.name }}</h6>
-          <small class="p-0">{{
-            moment(dataset.created_at).format("YYYY-MM-DD")
+          <small class="p-0">created: {{
+            moment(dataset.created_at*1000).format("YYYY-MM-DD")
           }}</small>
-          <small class="p-0">{{
-            moment(dataset.frozen_at).format("YYYY-MM-DD")
+          <small class="p-0">frozen: {{
+            moment(dataset.frozen_at*1000).format("YYYY-MM-DD")
           }}</small>
         </div>
 
