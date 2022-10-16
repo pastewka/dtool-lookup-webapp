@@ -5,4 +5,15 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: "DatasetReadme",
+  computed: {
+    readme: function() {
+      return this.$store.state.current_dataset_readme;
+    }
+  }
+};
+</script>
+
 <style></style>
