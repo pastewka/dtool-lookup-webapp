@@ -3,8 +3,9 @@
     <div class="d-flex justify-content-between flex-row">
       <h3 class="p-1">{{ dataset.name }}</h3>
       <small class="p-1">
-        Created by <em>{{ dataset.creator_username }}</em> at
-        <em>{{ moment(dataset.created_at).format("YYYY-MM-DD") }}</em
+        Created by <em>{{ dataset.creator_username }}</em> on
+        <em>{{ moment(dataset.created_at*1000).format("YYYY-MM-DD") }}</em>, frozen on
+        <em>{{ moment(dataset.frozen_at*1000).format("YYYY-MM-DD") }}</em
         >&nbsp;
         <span class="badge badge-pill badge-info">{{ numItems }} items</span
         >&nbsp;
