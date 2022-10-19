@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="container-fluid">
     <header>
-      <nav class="navbar navbar-dark bg-dark">
+      <nav class="navbar navbar-dark bg-dark p-2">
         <span class="navbar-brand mb-0 h1">dtool</span>
         <TextSearch @start-search="searchDatasets" />
       </nav>
