@@ -7,9 +7,9 @@
         <em>{{ moment(dataset.created_at*1000).format("YYYY-MM-DD") }}</em>, frozen on
         <em>{{ moment(dataset.frozen_at*1000).format("YYYY-MM-DD") }}</em
         >&nbsp;
-        <span class="badge badge-pill badge-info">{{ numItems }} items</span
+        <span class="badge badge-pill badge-info bg-primary">{{ numItems }} items</span
         >&nbsp;
-        <span class="badge badge-pill badge-info">{{
+        <span class="badge badge-pill badge-info bg-primary">{{
           filesize(total_size_in_bytes)
         }}</span>
       </small>
@@ -43,7 +43,7 @@
     <div class="d-flex flex-sm-row align-items-start justify-content-between">
       <div v-if="dataset.tags.length > 0" class="p-0">
         <template v-for="(tag, index) in dataset.tags" v-bind:key="index">
-          <span class="badge badge-pill badge-info">{{
+          <span class="badge badge-pill badge-info bg-primary">{{
             tag
           }}</span
           >{{ "&nbsp;" }}
