@@ -11,8 +11,11 @@
       >
         <div class="d-flex flex-row justify-content-between">
           <h6 class="p-0">{{ dataset.name }}</h6>
-          <small class="p-0">{{
-            moment(dataset.created_at).format("YYYY-MM-DD")
+          <small class="p-0">created: {{
+            moment(dataset.created_at*1000).format("YYYY-MM-DD")
+          }}</small>
+          <small class="p-0">frozen: {{
+            moment(dataset.frozen_at*1000).format("YYYY-MM-DD")
           }}</small>
         </div>
 
@@ -23,8 +26,8 @@
 
         <div class="d-flex flex-row">
           <div class="p-0">
-            <template v-for="(tag, index) in dataset.tags">
-              <span class="badge badge-pill badge-info" v-bind:key="index">{{
+            <template v-for="(tag, index) in dataset.tags" v-bind:key="index">
+              <span class="badge badge-pill badge-info bg-primary">{{
                 tag
               }}</span
               >{{ "&nbsp;" }}

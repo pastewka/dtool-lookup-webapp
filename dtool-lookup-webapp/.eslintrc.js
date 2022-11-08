@@ -3,13 +3,21 @@ module.exports = {
   env: {
     node: true
   },
-  extends: ["plugin:vue/essential", "@vue/prettier"],
+  extends: [
+    "eslint:recommended",
+    "plugin:vue/vue3-essential",
+    //"@vue/prettier"
+  ],
   rules: {
     //"no-console": process.env.NODE_ENV === "production" ? "error" : "off",
     "no-console": "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off"
   },
   parserOptions: {
-    parser: "babel-eslint"
+    parser: "@babel/eslint-parser",
+    requireConfigFile: false,
+    babelOptions: {
+      presets: ["@babel/preset-react"],
+    },
   }
 };

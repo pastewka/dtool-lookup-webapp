@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="container-fluid">
     <header>
-      <nav class="navbar navbar-dark bg-dark">
+      <nav class="navbar navbar-dark bg-dark p-2">
         <span class="navbar-brand mb-0 h1">dtool</span>
         <TextSearch @start-search="searchDatasets" />
       </nav>
@@ -160,9 +160,9 @@ import SignIn from "./components/SignIn.vue";
 import SummaryInfo from "./components/SummaryInfo.vue";
 import TextSearch from "./components/TextSearch.vue";
 import DatasetTable from "./components/DatasetTable.vue";
-import Manifest from "./components/Manifest.vue";
-import Readme from "./components/Readme.vue";
-import Annotations from "./components/Annotations.vue";
+import Manifest from "./components/DatasetManifest.vue";
+import Readme from "./components/DatasetReadme.vue";
+import Annotations from "./components/DatasetAnnotations.vue";
 import DatasetSummary from "./components/DatasetSummary.vue";
 
 export default {

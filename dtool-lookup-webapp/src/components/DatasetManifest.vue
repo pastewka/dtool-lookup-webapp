@@ -50,7 +50,7 @@
 <script>
 var filesize = require("filesize");
 export default {
-  name: "Manifest",
+  name: "DatasetManifest",
   data: function() {
     return {
       filesize: filesize,
