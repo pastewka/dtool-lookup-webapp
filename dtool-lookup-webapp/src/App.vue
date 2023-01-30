@@ -6,15 +6,10 @@
         <TextSearch @start-search="searchDatasets" />
       </nav>
     </header>
-
     <div v-if="token" class="">
       <div class="row row-height">
         <div class="col-md-2 overflow-auto h-100 pr-0">
-          <SummaryInfo
-            :auth_str="auth_str"
-            :lookup_url="lookup_url"
-            @start-search="searchDatasets"
-          />
+          <SummaryInfo :auth_str="auth_str" :lookup_url="lookup_url" @start-search="searchDatasets" />
         </div>
         <div class="col-md-4 overflow-auto h-100 p-0">
           <div v-if="searchLoading" class="spinner-border text-primary">
@@ -23,25 +18,20 @@
           <div v-else>
             <div v-if="searchErrored">
               <p>Unable to load datasets please try again.</p>
-              <a
-                href=""
-                class="btn btn-secondary"
-                @click.prevent="searchDatasets()"
-                >Try again</a
-              >
+              <a href="" class="btn btn-secondary" @click.prevent="searchDatasets()">Try again</a>
               <p>Or try logging out and in again.</p>
-              <a href="" class="btn btn-secondary" @click.prevent="logout()"
-                >Logout</a
-              >
+              <a href="" class="btn btn-secondary" @click.prevent="logout()">Logout</a>
             </div>
             <div v-else>
-              <DatasetTable
-                :datasetHits="datasetHits"
-                @update-dataset="updateDataset"
-              />
+              <DatasetTable :datasetHits="datasetHits" :responseheaders="responseheaders"
+                @update-dataset="updateDataset" />
+              <b-pagination v-model="pageNumber" :total-rows="rows" :per-page="perPage" first-text="First"
+                prev-text="Prev" next-text="Next" last-text="Last" @click="searchDatasets"></b-pagination>
+
             </div>
           </div>
         </div>
+
         <div v-if="datasetLoaded" class="col-md-6 overflow-auto h-100 pl-0">
           <div class="card">
             <div class="card-header">
@@ -51,16 +41,9 @@
               <div v-else>
                 <div v-if="manifestErrored">
                   <p>Unable to load manifest please try again.</p>
-                  <a
-                    href=""
-                    class="btn btn-secondary"
-                    @click.prevent="updateManifest()"
-                    >Try again</a
-                  >
+                  <a href="" class="btn btn-secondary" @click.prevent="updateManifest()">Try again</a>
                   <p>Or try logging out and in again.</p>
-                  <a href="" class="btn btn-secondary" @click.prevent="logout()"
-                    >Logout</a
-                  >
+                  <a href="" class="btn btn-secondary" @click.prevent="logout()">Logout</a>
                 </div>
                 <div v-else>
                   <DatasetSummary />
@@ -76,19 +59,9 @@
                 <div v-else>
                   <div v-if="readmeErrored">
                     <p>Unable to load readme please try again.</p>
-                    <a
-                      href=""
-                      class="btn btn-secondary"
-                      @click.prevent="updateReadme()"
-                      >Try again</a
-                    >
+                    <a href="" class="btn btn-secondary" @click.prevent="updateReadme()">Try again</a>
                     <p>Or try logging out and in again.</p>
-                    <a
-                      href=""
-                      class="btn btn-secondary"
-                      @click.prevent="logout()"
-                      >Logout</a
-                    >
+                    <a href="" class="btn btn-secondary" @click.prevent="logout()">Logout</a>
                   </div>
                   <div v-else>
                     <Readme />
@@ -101,19 +74,9 @@
                 <div v-else>
                   <div v-if="annotationsErrored">
                     <p>Unable to load annotations please try again.</p>
-                    <a
-                      href=""
-                      class="btn btn-secondary"
-                      @click.prevent="updateAnnotations()"
-                      >Try again</a
-                    >
+                    <a href="" class="btn btn-secondary" @click.prevent="updateAnnotations()">Try again</a>
                     <p>Or try logging out and in again.</p>
-                    <a
-                      href=""
-                      class="btn btn-secondary"
-                      @click.prevent="logout()"
-                      >Logout</a
-                    >
+                    <a href="" class="btn btn-secondary" @click.prevent="logout()">Logout</a>
                   </div>
                   <div v-else>
                     <Annotations />
@@ -129,16 +92,9 @@
               <div v-else>
                 <div v-if="manifestErrored">
                   <p>Unable to load manifest please try again.</p>
-                  <a
-                    href=""
-                    class="btn btn-secondary"
-                    @click.prevent="updateManifest()"
-                    >Try again</a
-                  >
+                  <a href="" class="btn btn-secondary" @click.prevent="updateManifest()">Try again</a>
                   <p>Or try logging out and in again.</p>
-                  <a href="" class="btn btn-secondary" @click.prevent="logout()"
-                    >Logout</a
-                  >
+                  <a href="" class="btn btn-secondary" @click.prevent="logout()">Logout</a>
                 </div>
                 <div v-else>
                   <Manifest />
@@ -167,7 +123,7 @@ import DatasetSummary from "./components/DatasetSummary.vue";
 
 export default {
   name: "app",
-  data: function() {
+  data: function () {
     return {
       datasetHits: [],
       searchLoading: true,
@@ -179,32 +135,35 @@ export default {
       annotationsLoading: false,
       annotationsErrored: false,
       lookup_url: process.env.VUE_APP_DTOOL_LOOKUP_SERVER_URL,
-      token: null
+      token: null,
+      perPage: 5,
+      rows: 500,
+      pageNumber: 1
     };
   },
   computed: {
-    datasetLoaded: function() {
+    datasetLoaded: function () {
       return this.$store.state.current_dataset;
     },
-    current_dataset: function() {
+    current_dataset: function () {
       return this.datasetHits[this.$store.state.current_dataset_index];
     },
-    searchURL: function() {
-      return this.lookup_url + "/dataset/search";
+    searchURL: function () {
+      return this.lookup_url + "/dataset/search?page=" + this.pageNumber + "&page_size=" + this.perPage;
     },
-    manifestURL: function() {
+    manifestURL: function () {
       return this.lookup_url + "/dataset/manifest";
     },
-    readmeURL: function() {
+    readmeURL: function () {
       return this.lookup_url + "/dataset/readme";
     },
-    annotationsURL: function() {
+    annotationsURL: function () {
       return this.lookup_url + "/dataset/annotations";
     },
-    auth_str: function() {
+    auth_str: function () {
       return "Bearer ".concat(this.token);
     },
-    searchQuery: function() {
+    searchQuery: function () {
       var query = {};
       if (this.$store.state.free_text) {
         query.free_text = this.$store.state.free_text;
@@ -220,7 +179,7 @@ export default {
       }
       return query;
     },
-    uriQuery: function() {
+    uriQuery: function () {
       if (this.datasetHits.length > 0) {
         return {
           uri: this.datasetHits[this.$store.state.current_dataset_index].uri
@@ -231,11 +190,11 @@ export default {
     }
   },
   methods: {
-    setTokenAndSearch: function(token) {
+    setTokenAndSearch: function (token) {
       this.token = token;
       this.searchDatasets();
     },
-    searchDatasets: function() {
+    searchDatasets: function () {
       console.log("Running search");
       console.log(this.searchQuery);
       this.$store.commit("update_current_dataset_index", 0);
@@ -254,6 +213,7 @@ export default {
         })
         .then(response => {
           this.datasetHits = response.data;
+          this.responseheaders = response.headers;
           this.$store.commit("update_current_dataset", this.current_dataset);
           this.$store.commit("update_num_filtered", this.datasetHits.length);
           this.updateDataset();
@@ -267,12 +227,12 @@ export default {
           this.searchLoading = false;
         });
     },
-    updateDataset: function() {
+    updateDataset: function () {
       this.updateManifest();
       this.updateReadme();
       this.updateAnnotations();
     },
-    updateManifest: function() {
+    updateManifest: function () {
       console.log("Loading manifest");
       console.log(this.uriQuery);
       this.manifestLoading = true;
@@ -294,7 +254,7 @@ export default {
         })
         .finally(() => (this.manifestLoading = false));
     },
-    updateReadme: function() {
+    updateReadme: function () {
       console.log("Loading readme");
       console.log(this.uriQuery);
       this.readmeLoading = true;
@@ -316,7 +276,7 @@ export default {
         })
         .finally(() => (this.readmeLoading = false));
     },
-    updateAnnotations: function() {
+    updateAnnotations: function () {
       console.log("Loading annotations");
       console.log(this.uriQuery);
       this.annotationsLoading = true;
@@ -341,9 +301,13 @@ export default {
         })
         .finally(() => (this.annotationsLoading = false));
     },
-    logout: function() {
+    logout: function () {
       this.token = "";
-    }
+    },
+
+
+
+
   },
   components: {
     SignIn,
