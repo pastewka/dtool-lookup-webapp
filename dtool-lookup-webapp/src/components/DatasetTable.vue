@@ -14,8 +14,8 @@
           }}</small>
         </div>
 
-
-
+       
+        
         <div class="d-flex flex-row justify-content-between">
           <small class="p-0">{{ dataset.creator_username }}</small>
           <small class="p-0">{{ dataset.uuid }}</small>
@@ -42,7 +42,7 @@ export default {
   name: "DatasetTable",
   props: {
     datasetHits: Array,
-    responseheaders: {}
+    responseheaders:{}
   },
   data: function () {
     return {

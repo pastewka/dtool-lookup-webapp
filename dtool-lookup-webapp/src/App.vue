@@ -11,10 +11,15 @@
         <div class="col-md-2 overflow-auto h-100 pr-0">
           <SummaryInfo :auth_str="auth_str" :lookup_url="lookup_url" @start-search="searchDatasets" />
         </div>
+
+
         <div class="col-md-4 overflow-auto h-100 p-0">
           <div v-if="searchLoading" class="spinner-border text-primary">
             <span class="sr-only">Loading...</span>
           </div>
+
+
+        
           <div v-else>
             <div v-if="searchErrored">
               <p>Unable to load datasets please try again.</p>
@@ -25,12 +30,14 @@
             <div v-else>
               <DatasetTable :datasetHits="datasetHits" :responseheaders="responseheaders"
                 @update-dataset="updateDataset" />
-              <b-pagination v-model="pageNumber" :total-rows="rows" :per-page="perPage" first-text="First"
+              <b-pagination v-model="pageNumber" :total-rows="pagination.total" :per-page="perPage" first-text="First"
                 prev-text="Prev" next-text="Next" last-text="Last" @click="searchDatasets"></b-pagination>
 
             </div>
           </div>
         </div>
+
+
 
         <div v-if="datasetLoaded" class="col-md-6 overflow-auto h-100 pl-0">
           <div class="card">
@@ -136,9 +143,9 @@ export default {
       annotationsErrored: false,
       lookup_url: process.env.VUE_APP_DTOOL_LOOKUP_SERVER_URL,
       token: null,
-      perPage: 5,
-      rows: 500,
-      pageNumber: 1
+      perPage: 10,
+      pageNumber: 1,
+      responseheaders:Array
     };
   },
   computed: {
@@ -187,7 +194,10 @@ export default {
       } else {
         return { uri: null };
       }
-    }
+    },
+    pagination: function() {
+    return this.responseheaders['x-pagination'] ? JSON.parse(this.responseheaders['x-pagination']) : {};
+  }
   },
   methods: {
     setTokenAndSearch: function (token) {
