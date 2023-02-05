@@ -11,14 +11,16 @@
         <div class="col-md-2 overflow-auto h-100 pr-0">
           <SummaryInfo :auth_str="auth_str" :lookup_url="lookup_url" @start-search="searchDatasets" />
         </div>
-
+        
+        
+        
 
         <div class="col-md-4 overflow-auto h-100 p-0">
           <div v-if="searchLoading" class="spinner-border text-primary">
             <span class="sr-only">Loading...</span>
           </div>
 
-
+    
         
           <div v-else>
             <div v-if="searchErrored">
@@ -31,7 +33,7 @@
               <DatasetTable :datasetHits="datasetHits" :responseheaders="responseheaders"
                 @update-dataset="updateDataset" />
               <b-pagination v-model="pageNumber" :total-rows="pagination.total" :per-page="perPage" first-text="First"
-                prev-text="Prev" next-text="Next" last-text="Last" @click="searchDatasets"></b-pagination>
+                prev-text="Prev" next-text="Next" last-text="Last" @click="searchDatasets" ></b-pagination>
 
             </div>
           </div>
@@ -70,8 +72,8 @@
                     <p>Or try logging out and in again.</p>
                     <a href="" class="btn btn-secondary" @click.prevent="logout()">Logout</a>
                   </div>
-                  <div v-else>
-                    <Readme />
+                  <div v-else >
+                    <Readme :getinfo="getinfo"/>
                   </div>
                 </div>
 
@@ -145,7 +147,8 @@ export default {
       token: null,
       perPage: 10,
       pageNumber: 1,
-      responseheaders:Array
+      responseheaders:Array,
+      getinfo:{}
     };
   },
   computed: {
@@ -160,6 +163,9 @@ export default {
     },
     manifestURL: function () {
       return this.lookup_url + "/dataset/manifest";
+    },
+    configInfoURL:function () {
+      return this.lookup_url + "/config/info";
     },
     readmeURL: function () {
       return this.lookup_url + "/dataset/readme";
@@ -205,6 +211,7 @@ export default {
       this.searchDatasets();
     },
     searchDatasets: function () {
+      this.getconfiginfo(),
       console.log("Running search");
       console.log(this.searchQuery);
       this.$store.commit("update_current_dataset_index", 0);
@@ -311,6 +318,25 @@ export default {
         })
         .finally(() => (this.annotationsLoading = false));
     },
+    getconfiginfo: function () {
+      console.log("Loading ConfigInfo");
+     
+      this.$http
+        .get(this.configInfoURL, {
+          headers: {
+            Authorization: this.auth_str,
+            "Content-Type": "application/json"
+          }
+        })
+        .then(response => {
+          this.getinfo = response.data;
+        })
+        .catch(error => {
+          console.log(error);
+          console.log(error.response);
+        })
+        
+    },
     logout: function () {
       this.token = "";
     },
@@ -319,6 +345,8 @@ export default {
 
 
   },
+
+  
   components: {
     SignIn,
     SummaryInfo,
