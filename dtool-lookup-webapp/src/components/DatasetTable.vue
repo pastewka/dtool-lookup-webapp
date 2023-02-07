@@ -1,12 +1,14 @@
 <template>
   <div>
-
     <div class="list-group">
-      <a href="" class="list-group-item list-group-item-action" v-for="(dataset, index) in datasetHits"
-        v-bind:class="{ active: selected === index }" v-bind:key="dataset.uri"
-        @click.prevent="updateSelectedDataset(index)">
-
-
+      <a
+        href=""
+        class="list-group-item list-group-item-action"
+        v-for="(dataset, index) in datasetHits"
+        v-bind:class="{ active: selected === index }"
+        v-bind:key="dataset.uri"
+        @click.prevent="updateSelectedDataset(index)"
+      >
         <div class="d-flex flex-row justify-content-between">
           <h6 class="p-0">{{ dataset.name }}</h6>
           <small class="p-0">{{
@@ -14,8 +16,6 @@
           }}</small>
         </div>
 
-       
-        
         <div class="d-flex flex-row justify-content-between">
           <small class="p-0">{{ dataset.creator_username }}</small>
           <small class="p-0">{{ dataset.uuid }}</small>
@@ -26,8 +26,8 @@
             <template v-for="(tag, index) in dataset.tags" v-bind:key="index">
               <span class="badge badge-pill badge-info bg-primary">{{
                 tag
-              }}</span>{{ "&nbsp;" }}
-
+              }}</span
+              >{{ "&nbsp;" }}
             </template>
           </div>
         </div>
@@ -42,19 +42,17 @@ export default {
   name: "DatasetTable",
   props: {
     datasetHits: Array,
-    responseheaders:{}
+    responseheaders: {},
   },
   data: function () {
     return {
       moment: moment,
-
     };
   },
   computed: {
-
     selected: function () {
       return this.$store.state.current_dataset_index;
-    }
+    },
   },
   methods: {
     updateSelectedDataset: function (index) {
@@ -62,12 +60,8 @@ export default {
       this.$store.commit("update_current_dataset", this.datasetHits[index]);
       this.$emit("update-dataset");
     },
-
-
-  }
+  },
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -9,37 +9,51 @@
     <div v-if="token" class="">
       <div class="row row-height">
         <div class="col-md-2 overflow-auto h-100 pr-0">
-          <SummaryInfo :auth_str="auth_str" :lookup_url="lookup_url" @start-search="searchDatasets" />
+          <SummaryInfo
+            :auth_str="auth_str"
+            :lookup_url="lookup_url"
+            @start-search="searchDatasets"
+          />
         </div>
-        
-        
-        
 
         <div class="col-md-4 overflow-auto h-100 p-0">
           <div v-if="searchLoading" class="spinner-border text-primary">
             <span class="sr-only">Loading...</span>
           </div>
 
-    
-        
           <div v-else>
             <div v-if="searchErrored">
               <p>Unable to load datasets please try again.</p>
-              <a href="" class="btn btn-secondary" @click.prevent="searchDatasets()">Try again</a>
+              <a
+                href=""
+                class="btn btn-secondary"
+                @click.prevent="searchDatasets()"
+                >Try again</a
+              >
               <p>Or try logging out and in again.</p>
-              <a href="" class="btn btn-secondary" @click.prevent="logout()">Logout</a>
+              <a href="" class="btn btn-secondary" @click.prevent="logout()"
+                >Logout</a
+              >
             </div>
             <div v-else>
-              <DatasetTable :datasetHits="datasetHits" :responseheaders="responseheaders"
-                @update-dataset="updateDataset" />
-              <b-pagination v-model="pageNumber" :total-rows="pagination.total" :per-page="perPage" first-text="First"
-                prev-text="Prev" next-text="Next" last-text="Last" @click="searchDatasets" ></b-pagination>
-
+              <DatasetTable
+                :datasetHits="datasetHits"
+                :responseheaders="responseheaders"
+                @update-dataset="updateDataset"
+              />
+              <b-pagination
+                v-model="pageNumber"
+                :total-rows="pagination.total"
+                :per-page="perPage"
+                first-text="First"
+                prev-text="Prev"
+                next-text="Next"
+                last-text="Last"
+                @click="searchDatasets"
+              ></b-pagination>
             </div>
           </div>
         </div>
-
-
 
         <div v-if="datasetLoaded" class="col-md-6 overflow-auto h-100 pl-0">
           <div class="card">
@@ -50,9 +64,16 @@
               <div v-else>
                 <div v-if="manifestErrored">
                   <p>Unable to load manifest please try again.</p>
-                  <a href="" class="btn btn-secondary" @click.prevent="updateManifest()">Try again</a>
+                  <a
+                    href=""
+                    class="btn btn-secondary"
+                    @click.prevent="updateManifest()"
+                    >Try again</a
+                  >
                   <p>Or try logging out and in again.</p>
-                  <a href="" class="btn btn-secondary" @click.prevent="logout()">Logout</a>
+                  <a href="" class="btn btn-secondary" @click.prevent="logout()"
+                    >Logout</a
+                  >
                 </div>
                 <div v-else>
                   <DatasetSummary />
@@ -68,12 +89,22 @@
                 <div v-else>
                   <div v-if="readmeErrored">
                     <p>Unable to load readme please try again.</p>
-                    <a href="" class="btn btn-secondary" @click.prevent="updateReadme()">Try again</a>
+                    <a
+                      href=""
+                      class="btn btn-secondary"
+                      @click.prevent="updateReadme()"
+                      >Try again</a
+                    >
                     <p>Or try logging out and in again.</p>
-                    <a href="" class="btn btn-secondary" @click.prevent="logout()">Logout</a>
+                    <a
+                      href=""
+                      class="btn btn-secondary"
+                      @click.prevent="logout()"
+                      >Logout</a
+                    >
                   </div>
-                  <div v-else >
-                    <Readme :getinfo="getinfo"/>
+                  <div v-else>
+                    <Readme :getinfo="getinfo" />
                   </div>
                 </div>
 
@@ -83,9 +114,19 @@
                 <div v-else>
                   <div v-if="annotationsErrored">
                     <p>Unable to load annotations please try again.</p>
-                    <a href="" class="btn btn-secondary" @click.prevent="updateAnnotations()">Try again</a>
+                    <a
+                      href=""
+                      class="btn btn-secondary"
+                      @click.prevent="updateAnnotations()"
+                      >Try again</a
+                    >
                     <p>Or try logging out and in again.</p>
-                    <a href="" class="btn btn-secondary" @click.prevent="logout()">Logout</a>
+                    <a
+                      href=""
+                      class="btn btn-secondary"
+                      @click.prevent="logout()"
+                      >Logout</a
+                    >
                   </div>
                   <div v-else>
                     <Annotations />
@@ -101,9 +142,16 @@
               <div v-else>
                 <div v-if="manifestErrored">
                   <p>Unable to load manifest please try again.</p>
-                  <a href="" class="btn btn-secondary" @click.prevent="updateManifest()">Try again</a>
+                  <a
+                    href=""
+                    class="btn btn-secondary"
+                    @click.prevent="updateManifest()"
+                    >Try again</a
+                  >
                   <p>Or try logging out and in again.</p>
-                  <a href="" class="btn btn-secondary" @click.prevent="logout()">Logout</a>
+                  <a href="" class="btn btn-secondary" @click.prevent="logout()"
+                    >Logout</a
+                  >
                 </div>
                 <div v-else>
                   <Manifest />
@@ -147,8 +195,8 @@ export default {
       token: null,
       perPage: 10,
       pageNumber: 1,
-      responseheaders:Array,
-      getinfo:{}
+      responseheaders: Array,
+      getinfo: {},
     };
   },
   computed: {
@@ -159,12 +207,18 @@ export default {
       return this.datasetHits[this.$store.state.current_dataset_index];
     },
     searchURL: function () {
-      return this.lookup_url + "/dataset/search?page=" + this.pageNumber + "&page_size=" + this.perPage;
+      return (
+        this.lookup_url +
+        "/dataset/search?page=" +
+        this.pageNumber +
+        "&page_size=" +
+        this.perPage
+      );
     },
     manifestURL: function () {
       return this.lookup_url + "/dataset/manifest";
     },
-    configInfoURL:function () {
+    configInfoURL: function () {
       return this.lookup_url + "/config/info";
     },
     readmeURL: function () {
@@ -195,15 +249,17 @@ export default {
     uriQuery: function () {
       if (this.datasetHits.length > 0) {
         return {
-          uri: this.datasetHits[this.$store.state.current_dataset_index].uri
+          uri: this.datasetHits[this.$store.state.current_dataset_index].uri,
         };
       } else {
         return { uri: null };
       }
     },
-    pagination: function() {
-    return this.responseheaders['x-pagination'] ? JSON.parse(this.responseheaders['x-pagination']) : {};
-  }
+    pagination: function () {
+      return this.responseheaders["x-pagination"]
+        ? JSON.parse(this.responseheaders["x-pagination"])
+        : {};
+    },
   },
   methods: {
     setTokenAndSearch: function (token) {
@@ -211,8 +267,7 @@ export default {
       this.searchDatasets();
     },
     searchDatasets: function () {
-      this.getconfiginfo(),
-      console.log("Running search");
+      this.getconfiginfo(), console.log("Running search");
       console.log(this.searchQuery);
       this.$store.commit("update_current_dataset_index", 0);
       this.$store.commit("update_current_dataset", null);
@@ -225,17 +280,17 @@ export default {
         .post(this.searchURL, this.searchQuery, {
           headers: {
             Authorization: this.auth_str,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         })
-        .then(response => {
+        .then((response) => {
           this.datasetHits = response.data;
           this.responseheaders = response.headers;
           this.$store.commit("update_current_dataset", this.current_dataset);
           this.$store.commit("update_num_filtered", this.datasetHits.length);
           this.updateDataset();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           console.log(error.response);
           this.searchErrored = true;
@@ -258,13 +313,13 @@ export default {
         .post(this.manifestURL, this.uriQuery, {
           headers: {
             Authorization: this.auth_str,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         })
-        .then(response => {
+        .then((response) => {
           this.$store.commit("update_current_dataset_manifest", response.data);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           console.log(error.response);
           this.manifestErrored = true;
@@ -280,13 +335,13 @@ export default {
         .post(this.readmeURL, this.uriQuery, {
           headers: {
             Authorization: this.auth_str,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         })
-        .then(response => {
+        .then((response) => {
           this.$store.commit("update_current_dataset_readme", response.data);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           console.log(error.response);
           this.readmeErrored = true;
@@ -302,16 +357,16 @@ export default {
         .post(this.annotationsURL, this.uriQuery, {
           headers: {
             Authorization: this.auth_str,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         })
-        .then(response => {
+        .then((response) => {
           this.$store.commit(
             "update_current_dataset_annotations",
             response.data
           );
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           console.log(error.response);
           this.annotationsErrored = true;
@@ -320,33 +375,27 @@ export default {
     },
     getconfiginfo: function () {
       console.log("Loading ConfigInfo");
-     
+
       this.$http
         .get(this.configInfoURL, {
           headers: {
             Authorization: this.auth_str,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         })
-        .then(response => {
+        .then((response) => {
           this.getinfo = response.data;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           console.log(error.response);
-        })
-        
+        });
     },
     logout: function () {
       this.token = "";
     },
-
-
-
-
   },
 
-  
   components: {
     SignIn,
     SummaryInfo,
@@ -355,8 +404,8 @@ export default {
     Manifest,
     Readme,
     Annotations,
-    DatasetSummary
-  }
+    DatasetSummary,
+  },
 };
 </script>
 
