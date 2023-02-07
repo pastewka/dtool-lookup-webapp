@@ -1,10 +1,22 @@
 <template>
   <div id="app" class="container-fluid">
     <header>
-      <nav class="navbar navbar-dark bg-dark p-2">
-        <span class="navbar-brand mb-0 h1">dtool</span>
-        <TextSearch @start-search="searchDatasets" />
-      </nav>
+      <div v-if="!token">
+        <nav class="navbar navbar-dark bg-dark p-2">
+          <span class="navbar-brand mb-0 h1">dtool</span>
+        </nav>
+      </div>
+      <div v-else>
+        <nav class="navbar navbar-dark bg-dark p-2">
+          <span class="navbar-brand mb-0 h1">dtool</span>
+          <div style="display: flex; justify-content: flex-end">
+            <TextSearch @start-search="searchDatasets" />
+            <b-button pill variant="outline-danger" @click="logout()"
+              >Logout</b-button
+            >
+          </div>
+        </nav>
+      </div>
     </header>
     <div v-if="token" class="">
       <div class="row row-height">
@@ -15,7 +27,6 @@
             @start-search="searchDatasets"
           />
         </div>
-
         <div class="col-md-4 overflow-auto h-100 p-0">
           <div v-if="searchLoading" class="spinner-border text-primary">
             <span class="sr-only">Loading...</span>
