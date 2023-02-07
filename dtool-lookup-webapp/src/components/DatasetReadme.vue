@@ -1,7 +1,15 @@
 <template>
   <div>
     <h3>Readme</h3>
-    <pre>{{ yaml.stringify(readme) }}</pre>
+
+    {{ "Version : " + this.currverison }}
+
+    <template v-if="currverison < '0.18.0'">
+      <pre>{{ yaml.stringify(readme) }}</pre>
+    </template>
+    <template v-else>
+      <pre>{{ readme }}</pre>
+    </template>
   </div>
 </template>
 
@@ -9,16 +17,20 @@
 var yaml = require("json2yaml");
 export default {
   name: "DatasetReadme",
-  data: function() {
+  props: {
+    getinfo: {},
+  },
+  data: function () {
     return {
-      yaml: yaml
+      yaml: yaml,
+      currverison: this.getinfo["version"],
     };
   },
   computed: {
-    readme: function() {
+    readme: function () {
       return this.$store.state.current_dataset_readme;
-    }
-  }
+    },
+  },
 };
 </script>
 

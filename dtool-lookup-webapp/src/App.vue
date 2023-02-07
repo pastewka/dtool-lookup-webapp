@@ -6,7 +6,6 @@
         <TextSearch @start-search="searchDatasets" />
       </nav>
     </header>
-
     <div v-if="token" class="">
       <div class="row row-height">
         <div class="col-md-2 overflow-auto h-100 pr-0">
@@ -16,10 +15,12 @@
             @start-search="searchDatasets"
           />
         </div>
+
         <div class="col-md-4 overflow-auto h-100 p-0">
           <div v-if="searchLoading" class="spinner-border text-primary">
             <span class="sr-only">Loading...</span>
           </div>
+
           <div v-else>
             <div v-if="searchErrored">
               <p>Unable to load datasets please try again.</p>
@@ -37,11 +38,23 @@
             <div v-else>
               <DatasetTable
                 :datasetHits="datasetHits"
+                :responseheaders="responseheaders"
                 @update-dataset="updateDataset"
               />
+              <b-pagination
+                v-model="pageNumber"
+                :total-rows="pagination.total"
+                :per-page="perPage"
+                first-text="First"
+                prev-text="Prev"
+                next-text="Next"
+                last-text="Last"
+                @click="searchDatasets"
+              ></b-pagination>
             </div>
           </div>
         </div>
+
         <div v-if="datasetLoaded" class="col-md-6 overflow-auto h-100 pl-0">
           <div class="card">
             <div class="card-header">
@@ -91,7 +104,7 @@
                     >
                   </div>
                   <div v-else>
-                    <Readme />
+                    <Readme :getinfo="getinfo" />
                   </div>
                 </div>
 
@@ -167,7 +180,7 @@ import DatasetSummary from "./components/DatasetSummary.vue";
 
 export default {
   name: "app",
-  data: function() {
+  data: function () {
     return {
       datasetHits: [],
       searchLoading: true,
@@ -179,32 +192,45 @@ export default {
       annotationsLoading: false,
       annotationsErrored: false,
       lookup_url: process.env.VUE_APP_DTOOL_LOOKUP_SERVER_URL,
-      token: null
+      token: null,
+      perPage: 10,
+      pageNumber: 1,
+      responseheaders: Array,
+      getinfo: {},
     };
   },
   computed: {
-    datasetLoaded: function() {
+    datasetLoaded: function () {
       return this.$store.state.current_dataset;
     },
-    current_dataset: function() {
+    current_dataset: function () {
       return this.datasetHits[this.$store.state.current_dataset_index];
     },
-    searchURL: function() {
-      return this.lookup_url + "/dataset/search";
+    searchURL: function () {
+      return (
+        this.lookup_url +
+        "/dataset/search?page=" +
+        this.pageNumber +
+        "&page_size=" +
+        this.perPage
+      );
     },
-    manifestURL: function() {
+    manifestURL: function () {
       return this.lookup_url + "/dataset/manifest";
     },
-    readmeURL: function() {
+    configInfoURL: function () {
+      return this.lookup_url + "/config/info";
+    },
+    readmeURL: function () {
       return this.lookup_url + "/dataset/readme";
     },
-    annotationsURL: function() {
+    annotationsURL: function () {
       return this.lookup_url + "/dataset/annotations";
     },
-    auth_str: function() {
+    auth_str: function () {
       return "Bearer ".concat(this.token);
     },
-    searchQuery: function() {
+    searchQuery: function () {
       var query = {};
       if (this.$store.state.free_text) {
         query.free_text = this.$store.state.free_text;
@@ -220,23 +246,28 @@ export default {
       }
       return query;
     },
-    uriQuery: function() {
+    uriQuery: function () {
       if (this.datasetHits.length > 0) {
         return {
-          uri: this.datasetHits[this.$store.state.current_dataset_index].uri
+          uri: this.datasetHits[this.$store.state.current_dataset_index].uri,
         };
       } else {
         return { uri: null };
       }
-    }
+    },
+    pagination: function () {
+      return this.responseheaders["x-pagination"]
+        ? JSON.parse(this.responseheaders["x-pagination"])
+        : {};
+    },
   },
   methods: {
-    setTokenAndSearch: function(token) {
+    setTokenAndSearch: function (token) {
       this.token = token;
       this.searchDatasets();
     },
-    searchDatasets: function() {
-      console.log("Running search");
+    searchDatasets: function () {
+      this.getconfiginfo(), console.log("Running search");
       console.log(this.searchQuery);
       this.$store.commit("update_current_dataset_index", 0);
       this.$store.commit("update_current_dataset", null);
@@ -249,16 +280,17 @@ export default {
         .post(this.searchURL, this.searchQuery, {
           headers: {
             Authorization: this.auth_str,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         })
-        .then(response => {
+        .then((response) => {
           this.datasetHits = response.data;
+          this.responseheaders = response.headers;
           this.$store.commit("update_current_dataset", this.current_dataset);
           this.$store.commit("update_num_filtered", this.datasetHits.length);
           this.updateDataset();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           console.log(error.response);
           this.searchErrored = true;
@@ -267,12 +299,12 @@ export default {
           this.searchLoading = false;
         });
     },
-    updateDataset: function() {
+    updateDataset: function () {
       this.updateManifest();
       this.updateReadme();
       this.updateAnnotations();
     },
-    updateManifest: function() {
+    updateManifest: function () {
       console.log("Loading manifest");
       console.log(this.uriQuery);
       this.manifestLoading = true;
@@ -281,20 +313,20 @@ export default {
         .post(this.manifestURL, this.uriQuery, {
           headers: {
             Authorization: this.auth_str,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         })
-        .then(response => {
+        .then((response) => {
           this.$store.commit("update_current_dataset_manifest", response.data);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           console.log(error.response);
           this.manifestErrored = true;
         })
         .finally(() => (this.manifestLoading = false));
     },
-    updateReadme: function() {
+    updateReadme: function () {
       console.log("Loading readme");
       console.log(this.uriQuery);
       this.readmeLoading = true;
@@ -303,20 +335,20 @@ export default {
         .post(this.readmeURL, this.uriQuery, {
           headers: {
             Authorization: this.auth_str,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         })
-        .then(response => {
+        .then((response) => {
           this.$store.commit("update_current_dataset_readme", response.data);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           console.log(error.response);
           this.readmeErrored = true;
         })
         .finally(() => (this.readmeLoading = false));
     },
-    updateAnnotations: function() {
+    updateAnnotations: function () {
       console.log("Loading annotations");
       console.log(this.uriQuery);
       this.annotationsLoading = true;
@@ -325,26 +357,45 @@ export default {
         .post(this.annotationsURL, this.uriQuery, {
           headers: {
             Authorization: this.auth_str,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         })
-        .then(response => {
+        .then((response) => {
           this.$store.commit(
             "update_current_dataset_annotations",
             response.data
           );
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           console.log(error.response);
           this.annotationsErrored = true;
         })
         .finally(() => (this.annotationsLoading = false));
     },
-    logout: function() {
+    getconfiginfo: function () {
+      console.log("Loading ConfigInfo");
+
+      this.$http
+        .get(this.configInfoURL, {
+          headers: {
+            Authorization: this.auth_str,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          this.getinfo = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log(error.response);
+        });
+    },
+    logout: function () {
       this.token = "";
-    }
+    },
   },
+
   components: {
     SignIn,
     SummaryInfo,
@@ -353,8 +404,8 @@ export default {
     Manifest,
     Readme,
     Annotations,
-    DatasetSummary
-  }
+    DatasetSummary,
+  },
 };
 </script>
 
