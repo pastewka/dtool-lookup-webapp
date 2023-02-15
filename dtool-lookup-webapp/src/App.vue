@@ -52,16 +52,18 @@
                 :responseheaders="responseheaders"
                 @update-dataset="updateDataset"
               />
-              <b-pagination
-                v-model="pageNumber"
-                :total-rows="pagination.total"
-                :per-page="perPage"
-                first-text="First"
-                prev-text="Prev"
-                next-text="Next"
-                last-text="Last"
-                @click="searchDatasets"
-              ></b-pagination>
+              <div v-if="shouldShowPagination">
+                <b-pagination
+                  v-model="pageNumber"
+                  :total-rows="pagination.total"
+                  :per-page="this.$store.state.update_current_Per_Page"
+                  first-text="First"
+                  prev-text="Prev"
+                  next-text="Next"
+                  last-text="Last"
+                  @click="searchDatasets"
+                ></b-pagination>
+              </div>
             </div>
           </div>
         </div>
@@ -204,8 +206,9 @@ export default {
       annotationsErrored: false,
       lookup_url: process.env.VUE_APP_DTOOL_LOOKUP_SERVER_URL,
       token: null,
-      perPage: 10,
+      perPage: this.$store.state.update_current_Per_Page,
       pageNumber: 1,
+
       responseheaders: Array,
       getinfo: {},
     };
@@ -223,7 +226,9 @@ export default {
         "/dataset/search?page=" +
         this.pageNumber +
         "&page_size=" +
-        this.perPage
+        (this.$store.state.update_current_Per_Page === 1
+          ? "100"
+          : this.$store.state.update_current_Per_Page)
       );
     },
     manifestURL: function () {
@@ -270,6 +275,17 @@ export default {
       return this.responseheaders["x-pagination"]
         ? JSON.parse(this.responseheaders["x-pagination"])
         : {};
+    },
+
+    totalPageContents() {
+      return this.pagination.total;
+    },
+
+    shouldShowPagination() {
+      return (
+        this.$store.state.update_current_Per_Page !== 1 &&
+        this.getinfo["version"] < this.$store.state.current_required_version
+      );
     },
   },
   methods: {

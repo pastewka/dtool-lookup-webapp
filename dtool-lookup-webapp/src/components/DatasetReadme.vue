@@ -4,7 +4,7 @@
 
     {{ "Version : " + this.currverison }}
 
-    <template v-if="currverison < '0.18.0'">
+    <template v-if="currverison < this.$store.state.current_required_version">
       <pre>{{ yaml.stringify(readme) }}</pre>
     </template>
     <template v-else>
