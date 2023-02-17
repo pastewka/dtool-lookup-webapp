@@ -45,7 +45,11 @@
               <a href="" class="btn btn-secondary" @click.prevent="logout()"
                 >Logout</a
               >
+
+
+              
             </div>
+            
             <div v-else>
               <DatasetTable
                 :datasetHits="datasetHits"
@@ -95,6 +99,10 @@
             </div>
 
             <div class="card-body">
+
+
+
+              {{ this.searchQuery }}
               <div>
                 <div v-if="readmeLoading" class="text-primary">
                   <span class="sr-only">Loading...</span>
@@ -226,9 +234,7 @@ export default {
         "/dataset/search?page=" +
         this.pageNumber +
         "&page_size=" +
-        (this.$store.state.update_current_Per_Page === 1
-          ? "100"
-          : this.$store.state.update_current_Per_Page)
+        ( this.$store.state.update_current_Per_Page)
       );
     },
     manifestURL: function () {
@@ -283,7 +289,6 @@ export default {
 
     shouldShowPagination() {
       return (
-        this.$store.state.update_current_Per_Page !== 1 &&
         this.getinfo["version"] < this.$store.state.current_required_version
       );
     },
