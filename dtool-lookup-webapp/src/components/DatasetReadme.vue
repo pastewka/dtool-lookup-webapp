@@ -2,8 +2,6 @@
   <div>
     <h3>Readme</h3>
 
-    {{ "Version : " + this.currverison }}
-
     <template v-if="currverison < this.$store.state.current_required_version">
       <pre>{{ yaml.stringify(readme) }}</pre>
     </template>

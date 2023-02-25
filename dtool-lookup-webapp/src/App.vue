@@ -11,6 +11,8 @@
           <span class="navbar-brand mb-0 h1">dtool</span>
           <div style="display: flex; justify-content: flex-end">
             <TextSearch @start-search="searchDatasets" />
+          </div>
+          <div>
             <b-button pill variant="outline-danger" @click="logout()"
               >Logout</b-button
             >
@@ -45,11 +47,8 @@
               <a href="" class="btn btn-secondary" @click.prevent="logout()"
                 >Logout</a
               >
-
-
-              
             </div>
-            
+
             <div v-else>
               <DatasetTable
                 :datasetHits="datasetHits"
@@ -99,10 +98,6 @@
             </div>
 
             <div class="card-body">
-
-
-
-              {{ this.searchQuery }}
               <div>
                 <div v-if="readmeLoading" class="text-primary">
                   <span class="sr-only">Loading...</span>
@@ -234,8 +229,11 @@ export default {
         "/dataset/search?page=" +
         this.pageNumber +
         "&page_size=" +
-        ( this.$store.state.update_current_Per_Page)
+        this.$store.state.update_current_Per_Page
       );
+    },
+    mongoSearchURL: function () {
+      return this.lookup_url + "/mongo/query";
     },
     manifestURL: function () {
       return this.lookup_url + "/dataset/manifest";
@@ -254,17 +252,23 @@ export default {
     },
     searchQuery: function () {
       var query = {};
-      if (this.$store.state.free_text) {
-        query.free_text = this.$store.state.free_text;
-      }
-      if (this.$store.state.creator_usernames.length > 0) {
-        query.creator_usernames = this.$store.state.creator_usernames;
-      }
-      if (this.$store.state.base_uris.length > 0) {
-        query.base_uris = this.$store.state.base_uris;
-      }
-      if (this.$store.state.tags.length > 0) {
-        query.tags = this.$store.state.tags;
+
+      if (this.$store.state.mongo_text) {
+        query = this.$store.state.mongo_text;
+      } else {
+        if (this.$store.state.free_text) {
+          query.free_text = this.$store.state.free_text;
+        }
+
+        if (this.$store.state.creator_usernames.length > 0) {
+          query.creator_usernames = this.$store.state.creator_usernames;
+        }
+        if (this.$store.state.base_uris.length > 0) {
+          query.base_uris = this.$store.state.base_uris;
+        }
+        if (this.$store.state.tags.length > 0) {
+          query.tags = this.$store.state.tags;
+        }
       }
       return query;
     },
@@ -308,8 +312,14 @@ export default {
       this.updateDataset();
       this.searchLoading = true;
       this.searchErrored = false;
+
+      let searchURL = this.searchURL;
+      if (this.$store.state.mongo_text) {
+        searchURL = this.mongoSearchURL;
+      }
+
       this.$http
-        .post(this.searchURL, this.searchQuery, {
+        .post(searchURL, this.searchQuery, {
           headers: {
             Authorization: this.auth_str,
             "Content-Type": "application/json",
@@ -425,6 +435,7 @@ export default {
     },
     logout: function () {
       this.token = "";
+      this.$store.commit("clear_all");
     },
   },
 
