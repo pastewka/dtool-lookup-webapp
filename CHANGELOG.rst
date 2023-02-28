@@ -10,6 +10,11 @@ This change log uses principles from `keep a changelog <http://keepachangelog.co
 Added
 ^^^^^
 
+- Logout button.
+- Search result pagniation.
+- Selection of entry number per page.
+- Version-dependent display of pagination.
+- Version-dependent display of README.yml content as clear text or as processed YAML/JSON.
 
 
 Changed
@@ -27,6 +32,7 @@ Removed
 Fixed
 ^^^^^
 
+- No search box on login screen.
 
 Security
 ^^^^^^^^

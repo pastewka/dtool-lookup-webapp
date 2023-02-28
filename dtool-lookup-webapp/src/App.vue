@@ -1,10 +1,24 @@
 <template>
   <div id="app" class="container-fluid">
     <header>
-      <nav class="navbar navbar-dark bg-dark p-2">
-        <span class="navbar-brand mb-0 h1">dtool</span>
-        <TextSearch @start-search="searchDatasets" />
-      </nav>
+      <div v-if="!token">
+        <nav class="navbar navbar-dark bg-dark p-2">
+          <span class="navbar-brand mb-0 h1">dtool</span>
+        </nav>
+      </div>
+      <div v-else>
+        <nav class="navbar navbar-dark bg-dark p-2">
+          <span class="navbar-brand mb-0 h1">dtool</span>
+          <div style="display: flex; justify-content: flex-end">
+            <TextSearch @start-search="searchDatasets" />
+          </div>
+          <div>
+            <b-button pill variant="outline-danger" @click="logout()"
+              >Logout</b-button
+            >
+          </div>
+        </nav>
+      </div>
     </header>
     <div v-if="token" class="">
       <div class="row row-height">
@@ -15,7 +29,6 @@
             @start-search="searchDatasets"
           />
         </div>
-
         <div class="col-md-4 overflow-auto h-100 p-0">
           <div v-if="searchLoading" class="spinner-border text-primary">
             <span class="sr-only">Loading...</span>
@@ -35,22 +48,25 @@
                 >Logout</a
               >
             </div>
+
             <div v-else>
               <DatasetTable
                 :datasetHits="datasetHits"
                 :responseheaders="responseheaders"
                 @update-dataset="updateDataset"
               />
-              <b-pagination
-                v-model="pageNumber"
-                :total-rows="pagination.total"
-                :per-page="perPage"
-                first-text="First"
-                prev-text="Prev"
-                next-text="Next"
-                last-text="Last"
-                @click="searchDatasets"
-              ></b-pagination>
+              <div v-if="shouldShowPagination">
+                <b-pagination
+                  v-model="pageNumber"
+                  :total-rows="pagination.total"
+                  :per-page="this.$store.state.update_current_Per_Page"
+                  first-text="First"
+                  prev-text="Prev"
+                  next-text="Next"
+                  last-text="Last"
+                  @click="searchDatasets"
+                ></b-pagination>
+              </div>
             </div>
           </div>
         </div>
@@ -193,8 +209,9 @@ export default {
       annotationsErrored: false,
       lookup_url: process.env.VUE_APP_DTOOL_LOOKUP_SERVER_URL,
       token: null,
-      perPage: 10,
+      perPage: this.$store.state.update_current_Per_Page,
       pageNumber: 1,
+
       responseheaders: Array,
       getinfo: {},
     };
@@ -212,8 +229,11 @@ export default {
         "/dataset/search?page=" +
         this.pageNumber +
         "&page_size=" +
-        this.perPage
+        this.$store.state.update_current_Per_Page
       );
+    },
+    mongoSearchURL: function () {
+      return this.lookup_url + "/mongo/query";
     },
     manifestURL: function () {
       return this.lookup_url + "/dataset/manifest";
@@ -232,17 +252,23 @@ export default {
     },
     searchQuery: function () {
       var query = {};
-      if (this.$store.state.free_text) {
-        query.free_text = this.$store.state.free_text;
-      }
-      if (this.$store.state.creator_usernames.length > 0) {
-        query.creator_usernames = this.$store.state.creator_usernames;
-      }
-      if (this.$store.state.base_uris.length > 0) {
-        query.base_uris = this.$store.state.base_uris;
-      }
-      if (this.$store.state.tags.length > 0) {
-        query.tags = this.$store.state.tags;
+
+      if (this.$store.state.mongo_text) {
+        query = this.$store.state.mongo_text;
+      } else {
+        if (this.$store.state.free_text) {
+          query.free_text = this.$store.state.free_text;
+        }
+
+        if (this.$store.state.creator_usernames.length > 0) {
+          query.creator_usernames = this.$store.state.creator_usernames;
+        }
+        if (this.$store.state.base_uris.length > 0) {
+          query.base_uris = this.$store.state.base_uris;
+        }
+        if (this.$store.state.tags.length > 0) {
+          query.tags = this.$store.state.tags;
+        }
       }
       return query;
     },
@@ -260,6 +286,16 @@ export default {
         ? JSON.parse(this.responseheaders["x-pagination"])
         : {};
     },
+
+    totalPageContents() {
+      return this.pagination.total;
+    },
+
+    shouldShowPagination() {
+      return (
+        this.getinfo["version"] < this.$store.state.current_required_version
+      );
+    },
   },
   methods: {
     setTokenAndSearch: function (token) {
@@ -276,8 +312,14 @@ export default {
       this.updateDataset();
       this.searchLoading = true;
       this.searchErrored = false;
+
+      let searchURL = this.searchURL;
+      if (this.$store.state.mongo_text) {
+        searchURL = this.mongoSearchURL;
+      }
+
       this.$http
-        .post(this.searchURL, this.searchQuery, {
+        .post(searchURL, this.searchQuery, {
           headers: {
             Authorization: this.auth_str,
             "Content-Type": "application/json",
@@ -393,6 +435,7 @@ export default {
     },
     logout: function () {
       this.token = "";
+      this.$store.commit("clear_all");
     },
   },
 
