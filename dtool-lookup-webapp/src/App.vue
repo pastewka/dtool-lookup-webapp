@@ -1,25 +1,24 @@
 <template>
   <div id="app" class="container-fluid">
     <header>
-      <div v-if="!token">
-        <nav class="navbar navbar-dark bg-dark p-2">
-          <span class="navbar-brand mb-0 h1">dtool</span>
-        </nav>
+  <div v-if="!token">
+    <nav class="navbar navbar-dark bg-dark p-2 w-100">
+      <span class="navbar-brand mb-0 h1">dtool</span>
+    </nav>
+  </div>
+  <div v-else>
+    <nav class="navbar navbar-dark bg-dark p-2">
+      <span class="navbar-brand mb-0 h1 mr-auto">dtool</span>
+      <div class="d-flex align-items-center justify-content-end">
+        <TextSearch @start-search="searchDatasets" />
       </div>
-      <div v-else>
-        <nav class="navbar navbar-dark bg-dark p-2">
-          <span class="navbar-brand mb-0 h1">dtool</span>
-          <div style="display: flex; justify-content: flex-end">
-            <TextSearch @start-search="searchDatasets" />
-          </div>
-          <div>
-            <b-button pill variant="outline-danger" @click="logout()"
-              >Logout</b-button
-            >
-          </div>
-        </nav>
+      <div>
+        <b-button pill variant="outline-danger" @click="logout()">Logout</b-button>
       </div>
-    </header>
+    </nav>
+  </div>
+</header>
+
     <div v-if="token" class="">
       <div class="row row-height">
         <div class="col-md-2 overflow-auto h-100 pr-0">
@@ -254,7 +253,7 @@ export default {
       var query = {};
 
       if (this.$store.state.mongo_text) {
-        query = this.$store.state.mongo_text;
+        query.query = JSON.parse(this.$store.state.mongo_text);
       } else {
         if (this.$store.state.free_text) {
           query.free_text = this.$store.state.free_text;
