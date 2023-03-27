@@ -35,7 +35,6 @@ jobs:
         working-directory: ./dtool-lookup-webapp
         run: npm run build
 
-      # needs true tests first:
-      # - name: Run tests
-      #  working-directory: ./dtool-lookup-webapp
-      #  run: npm test
+      - name: Run tests
+        working-directory: ./dtool-lookup-webapp
+        run: npm test:unit
