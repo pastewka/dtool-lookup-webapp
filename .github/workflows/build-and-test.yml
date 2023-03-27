@@ -29,13 +29,12 @@ jobs:
 
       - name: Lint
         working-directory: ./dtool-lookup-webapp
-        run: npm run lint
+        run: npm run lint src
 
       - name: Build
         working-directory: ./dtool-lookup-webapp
         run: npm run build
 
-      # needs true tests first:
-      # - name: Run tests
-      #  working-directory: ./dtool-lookup-webapp
-      #  run: npm test
+      - name: Run tests
+        working-directory: ./dtool-lookup-webapp
+        run: npm run test:unit
