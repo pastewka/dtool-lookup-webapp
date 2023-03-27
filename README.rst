@@ -29,6 +29,7 @@ Preamble
 Create a file `.env` in the `dtool-lookup-webapp` directory with the following contents:
 
 ::
+
     VUE_APP_DTOOL_LOOKUP_SERVER_URL="http://localhost:5000"
     VUE_APP_DTOOL_LOOKUP_SERVER_TOKEN_GENERATOR_URL="http://localhost:5001/token"
 
@@ -74,6 +75,28 @@ and rebuild
 
 ::
     npm run build
+
+
+Testing
+-------
+
+For testing, the config file 
+
+::
+
+    jest.config.js
+
+is needed. This file has been auto-generated with
+
+::
+
+    vue add unit-jest
+
+after installing the vue cli globally with
+
+::
+
+    npm install -g @vue/cli
 
 
 More information
