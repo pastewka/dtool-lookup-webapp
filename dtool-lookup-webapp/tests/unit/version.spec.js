@@ -25,7 +25,7 @@ describe("DatasetReadme", () => {
   it("displays the current version readme as YAML when the current version is less than the required version", () => {
     const store = createStore({
       state: {
-        current_dataset_readme: { key: "value" },
+        current_dataset_readme: "---\nThis is the current version readme",
         current_required_version: "0.18.0",
       },
     });
@@ -37,7 +37,7 @@ describe("DatasetReadme", () => {
         plugins: [store],
       },
     });
-    const expected = { key: "value" };
+    const expected = "---\nThis is the current version readme";
     const received = yaml.safeLoad(wrapper.find("pre").text());
 
     expect(received).toEqual(expected);
