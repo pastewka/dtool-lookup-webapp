@@ -64,6 +64,7 @@
                   next-text="Next"
                   last-text="Last"
                   @click="searchDatasets"
+                  class="paginationcomponent"
                 ></b-pagination>
               </div>
             </div>
@@ -192,6 +193,7 @@ import Manifest from "./components/DatasetManifest.vue";
 import Readme from "./components/DatasetReadme.vue";
 import Annotations from "./components/DatasetAnnotations.vue";
 import DatasetSummary from "./components/DatasetSummary.vue";
+
 
 export default {
   name: "app",
@@ -447,6 +449,7 @@ export default {
     Readme,
     Annotations,
     DatasetSummary,
+    
   },
 };
 </script>
