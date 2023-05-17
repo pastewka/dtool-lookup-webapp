@@ -238,7 +238,7 @@ export default {
       return this.lookup_url + "/dataset/manifest";
     },
     configInfoURL: function () {
-      return this.lookup_url + "/config/info";
+      return this.lookup_url + "/config/versions";
     },
     readmeURL: function () {
       return this.lookup_url + "/dataset/readme";
@@ -292,7 +292,7 @@ export default {
 
     shouldShowPagination() {
       return (
-        this.getinfo["version"] < this.$store.state.current_required_version
+        this.getinfo["dtool_lookup_server"] < this.$store.state.current_required_version
       );
     },
   },
