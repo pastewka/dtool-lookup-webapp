@@ -1,13 +1,9 @@
 <template>
   <div>
     <h3>Readme</h3>
-
-    <template v-if="currverison < this.$store.state.current_required_version">
-      <pre>{{ yaml.stringify(readme) }}</pre>
-    </template>
-    <template v-else>
-      <pre>{{ readme }}</pre>
-    </template>
+ 
+    <pre v-if="currversion < this.$store.state.current_required_version">{{ getFormattedYaml() }}</pre>
+    <pre v-else>{{ getReadmeContent() }}</pre>
   </div>
 </template>
 
@@ -21,11 +17,19 @@ export default {
   data: function () {
     return {
       yaml: yaml,
-      currverison: this.getinfo["version"],
+      currversion: this.getinfo["dtool_lookup_server"],
     };
   },
   computed: {
     readme: function () {
+      return this.$store.state.current_dataset_readme;
+    },
+  },
+  methods: {
+    getFormattedYaml() {
+      return this.yaml.stringify(this.$store.state.current_dataset_readme);
+    },
+    getReadmeContent() {
       return this.$store.state.current_dataset_readme;
     },
   },
