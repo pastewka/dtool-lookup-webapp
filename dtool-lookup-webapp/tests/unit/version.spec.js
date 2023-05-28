@@ -38,8 +38,8 @@ describe("DatasetReadme", () => {
       },
     });
     const expected = "---\nThis is the current version readme";
-    const received = yaml.safeLoad(wrapper.find("pre").text());
+    const received = wrapper.find("pre").text();
 
-    expect(received).toEqual(expected);
+    expect(received).toBe(expected);
   });
 });
