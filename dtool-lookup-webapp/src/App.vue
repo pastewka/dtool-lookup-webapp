@@ -292,7 +292,7 @@ export default {
 
     shouldShowPagination() {
       return (
-        this.getinfo["version"] < this.$store.state.current_required_version
+        this.getinfo["version"] >= this.$store.state.current_required_version
       );
     },
   },
