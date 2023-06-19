@@ -28,10 +28,11 @@ Preamble
 
 Create a file `.env` in the `dtool-lookup-webapp` directory with the following contents:
 
-```
-VUE_APP_DTOOL_LOOKUP_SERVER_URL="http://localhost:5000"
-VUE_APP_DTOOL_LOOKUP_SERVER_TOKEN_GENERATOR_URL="http://localhost:5001/token"
-```
+::
+
+    VUE_APP_DTOOL_LOOKUP_SERVER_URL="http://localhost:5000"
+    VUE_APP_DTOOL_LOOKUP_SERVER_TOKEN_GENERATOR_URL="http://localhost:5001/token"
+
 
 For deployment, replace these URLs with the actual endpoints of the lookup server and the token generator.
 
@@ -52,6 +53,50 @@ Compile into a static single page website
 
     cd dtool-lookup-webapp
     npm run build
+
+
+Fixing dependencies in broken install
+-------------------------------------
+
+Remove all npm environment-related, e.g.
+
+::
+
+    rm -rf remove dist/ node_modules/
+    rm package-lock.json
+
+reinstall
+
+::
+
+    npm install @vue/cli-service
+
+and rebuild
+
+::
+    npm run build
+
+
+Testing
+-------
+
+For testing, the config file 
+
+::
+
+    jest.config.js
+
+is needed. This file has been auto-generated with
+
+::
+
+    vue add unit-jest
+
+after installing the vue cli globally with
+
+::
+
+    npm install -g @vue/cli
 
 
 More information

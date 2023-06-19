@@ -64,6 +64,7 @@
                   next-text="Next"
                   last-text="Last"
                   @click="searchDatasets"
+                  class="paginationcomponent"
                 ></b-pagination>
               </div>
             </div>
@@ -193,6 +194,7 @@ import Readme from "./components/DatasetReadme.vue";
 import Annotations from "./components/DatasetAnnotations.vue";
 import DatasetSummary from "./components/DatasetSummary.vue";
 
+
 export default {
   name: "app",
   data: function () {
@@ -238,7 +240,7 @@ export default {
       return this.lookup_url + "/dataset/manifest";
     },
     configInfoURL: function () {
-      return this.lookup_url + "/config/info";
+      return this.lookup_url + "/config/versions";
     },
     readmeURL: function () {
       return this.lookup_url + "/dataset/readme";
@@ -292,7 +294,7 @@ export default {
 
     shouldShowPagination() {
       return (
-        this.getinfo["version"] >= this.$store.state.current_required_version
+        this.getinfo["dtool_lookup_server"] >= this.$store.state.current_required_version
       );
     },
   },
@@ -447,6 +449,7 @@ export default {
     Readme,
     Annotations,
     DatasetSummary,
+    
   },
 };
 </script>
