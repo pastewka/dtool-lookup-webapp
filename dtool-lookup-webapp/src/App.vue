@@ -49,6 +49,7 @@
             </div>
 
             <div v-else>
+              <h6 class="p-0">{{this.uriQuery}}</h6>
               <DatasetTable
                 :datasetHits="datasetHits"
                 :responseheaders="responseheaders"
@@ -227,7 +228,7 @@ export default {
     searchURL: function () {
       return (
         this.lookup_url +
-        "/dataset/search?page=" +
+        "/uris?page=" +
         this.pageNumber +
         "&page_size=" +
         this.$store.state.update_current_Per_Page
@@ -237,16 +238,16 @@ export default {
       return this.lookup_url + "/mongo/query";
     },
     manifestURL: function () {
-      return this.lookup_url + "/dataset/manifest";
+      return this.lookup_url + "/manifests";
     },
     configInfoURL: function () {
       return this.lookup_url + "/config/versions";
     },
     readmeURL: function () {
-      return this.lookup_url + "/dataset/readme";
+      return this.lookup_url + "/readmes";
     },
     annotationsURL: function () {
-      return this.lookup_url + "/dataset/annotations";
+      return this.lookup_url + "/annotations";
     },
     auth_str: function () {
       return "Bearer ".concat(this.token);
@@ -349,17 +350,23 @@ export default {
     },
     updateManifest: function () {
       console.log("Loading manifest");
-      console.log(this.uriQuery);
       this.manifestLoading = true;
       this.manifestErrored = false;
+
+      // Since manifestURL is a property (possibly a computed one), access it directly without calling it as a function.
+      // Also directly access the uri property from this.uriQuery object.
+      const uri = this.uriQuery.uri;
+      const fullManifestURL = `${this.manifestURL}/${encodeURIComponent(uri)}`;
+
       this.$http
-        .post(this.manifestURL, this.uriQuery, {
+        .get(fullManifestURL, {
           headers: {
             Authorization: this.auth_str,
-            "Content-Type": "application/json",
+            'Accept': 'application/json' // Specify the expected response format.
           },
         })
         .then((response) => {
+          // Proceed as before
           this.$store.commit("update_current_dataset_manifest", response.data);
         })
         .catch((error) => {
@@ -367,55 +374,77 @@ export default {
           console.log(error.response);
           this.manifestErrored = true;
         })
-        .finally(() => (this.manifestLoading = false));
+        .finally(() => {
+          this.manifestLoading = false;
+        });
     },
     updateReadme: function () {
-      console.log("Loading readme");
-      console.log(this.uriQuery);
-      this.readmeLoading = true;
-      this.readmeErrored = false;
-      this.$http
-        .post(this.readmeURL, this.uriQuery, {
-          headers: {
-            Authorization: this.auth_str,
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          this.$store.commit("update_current_dataset_readme", response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-          console.log(error.response);
-          this.readmeErrored = true;
-        })
-        .finally(() => (this.readmeLoading = false));
+  console.log("Loading readme");
+  this.readmeLoading = true;
+  this.readmeErrored = false;
+
+  // Directly access the uri property from this.uriQuery object, similar to updateManifest
+  const uri = this.uriQuery.uri; // Ensuring we're accessing the uri property correctly
+  const fullReadmeURL = `${this.readmeURL}/${encodeURIComponent(uri)}`; // Construct the full URL
+
+  console.log(fullReadmeURL); // For debugging, to verify the constructed URL
+
+  this.$http
+    .get(fullReadmeURL, {
+      headers: {
+        Authorization: this.auth_str,
+        'Accept': 'application/json', // Specify the expected response format
+      },
+    })
+    .then((response) => {
+      // Proceed as before
+      this.$store.commit("update_current_dataset_readme", response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+      console.log(error.response);
+      this.readmeErrored = true;
+    })
+    .finally(() => {
+      this.readmeLoading = false;
+    });
     },
+
+
+
     updateAnnotations: function () {
-      console.log("Loading annotations");
-      console.log(this.uriQuery);
-      this.annotationsLoading = true;
-      this.annotationsErrored = false;
-      this.$http
-        .post(this.annotationsURL, this.uriQuery, {
-          headers: {
-            Authorization: this.auth_str,
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          this.$store.commit(
-            "update_current_dataset_annotations",
-            response.data
-          );
-        })
-        .catch((error) => {
-          console.log(error);
-          console.log(error.response);
-          this.annotationsErrored = true;
-        })
-        .finally(() => (this.annotationsLoading = false));
-    },
+  console.log("Loading annotations");
+  this.annotationsLoading = true;
+  this.annotationsErrored = false;
+
+  // Directly access the uri property from this.uriQuery object, ensuring correct data access
+  const uri = this.uriQuery.uri; // Corrected access to uri property
+  const fullAnnotationsURL = `${this.annotationsURL}/${encodeURIComponent(uri)}`; // Construct the full URL
+
+  console.log(fullAnnotationsURL); // For debugging, to verify the constructed URL
+
+  this.$http
+    .get(fullAnnotationsURL, {
+      headers: {
+        Authorization: this.auth_str,
+        'Accept': 'application/json', // Specify the expected response format
+      },
+    })
+    .then((response) => {
+      // Proceed as before
+      this.$store.commit("update_current_dataset_annotations", response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+      console.log(error.response);
+      this.annotationsErrored = true;
+    })
+    .finally(() => {
+      this.annotationsLoading = false;
+    });
+},
+
+
     getconfiginfo: function () {
       console.log("Loading ConfigInfo");
 
