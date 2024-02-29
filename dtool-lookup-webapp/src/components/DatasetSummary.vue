@@ -41,7 +41,7 @@
       </b-dropdown>
     </div>
     <div class="d-flex flex-sm-row align-items-start justify-content-between">
-      <div v-if="dataset.tags.length > 0" class="p-0">
+      <div v-if="dataset.tags?.length > 0" class="p-0">
         <template v-for="(tag, index) in dataset.tags" v-bind:key="index">
           <span class="badge badge-pill badge-info bg-primary">{{
             tag
@@ -100,9 +100,9 @@ export default {
       return this.$store.state.current_dataset;
     },
     numItems: function() {
-      return Object.values(this.$store.state.current_dataset_manifest.items)
-        .length;
-    },
+  return this.$store.state.current_dataset_manifest && this.$store.state.current_dataset_manifest.items ? Object.values(this.$store.state.current_dataset_manifest.items).length : 0;
+}
+,
     total_size_in_bytes: function() {
       var total = 0;
       Object.values(this.$store.state.current_dataset_manifest.items).forEach(

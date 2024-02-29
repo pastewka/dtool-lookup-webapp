@@ -2,9 +2,6 @@
   <div id="app" class="container-fluid">
     <header>
   <div v-if="!token">
-    <nav class="navbar navbar-dark bg-dark p-2 w-100">
-      <span class="navbar-brand mb-0 h1">dtool</span>
-    </nav>
   </div>
   <div v-else>
     <nav class="navbar navbar-dark bg-dark p-2">
@@ -349,94 +346,102 @@ export default {
       this.updateAnnotations();
     },
     updateManifest: function () {
-      console.log("Loading manifest");
-      this.manifestLoading = true;
-      this.manifestErrored = false;
+  console.log("Loading manifest");
+  this.manifestLoading = true;
+  this.manifestErrored = false;
 
-      // Since manifestURL is a property (possibly a computed one), access it directly without calling it as a function.
-      // Also directly access the uri property from this.uriQuery object.
-      const uri = this.uriQuery.uri;
-      const fullManifestURL = `${this.manifestURL}/${encodeURIComponent(uri)}`;
+  const uri = this.uriQuery.uri;
+  if (!uri) { // Check if uri is not null
+    console.log("No URI available for manifest.");
+    this.manifestErrored = true;
+    this.manifestLoading = false;
+    return; // Exit the method if no URI
+  }
 
-      this.$http
-        .get(fullManifestURL, {
-          headers: {
-            Authorization: this.auth_str,
-            'Accept': 'application/json' // Specify the expected response format.
-          },
-        })
-        .then((response) => {
-          // Proceed as before
-          this.$store.commit("update_current_dataset_manifest", response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-          console.log(error.response);
-          this.manifestErrored = true;
-        })
-        .finally(() => {
-          this.manifestLoading = false;
-        });
-    },
-    updateReadme: function () {
+  const fullManifestURL = `${this.manifestURL}/${encodeURIComponent(uri)}`;
+
+  this.$http
+    .get(fullManifestURL, {
+      headers: {
+        Authorization: this.auth_str,
+        'Accept': 'application/json'
+      },
+    })
+    .then((response) => {
+      this.$store.commit("update_current_dataset_manifest", response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+      this.manifestErrored = true;
+    })
+    .finally(() => {
+      this.manifestLoading = false;
+    });
+},
+
+updateReadme: function () {
   console.log("Loading readme");
   this.readmeLoading = true;
   this.readmeErrored = false;
 
-  // Directly access the uri property from this.uriQuery object, similar to updateManifest
-  const uri = this.uriQuery.uri; // Ensuring we're accessing the uri property correctly
-  const fullReadmeURL = `${this.readmeURL}/${encodeURIComponent(uri)}`; // Construct the full URL
+  const uri = this.uriQuery.uri;
+  if (!uri) { // Check if uri is not null
+    console.log("No URI available for readme.");
+    this.readmeErrored = true;
+    this.readmeLoading = false;
+    return; // Exit the method if no URI
+  }
 
-  console.log(fullReadmeURL); // For debugging, to verify the constructed URL
+  const fullReadmeURL = `${this.readmeURL}/${encodeURIComponent(uri)}`;
 
   this.$http
     .get(fullReadmeURL, {
       headers: {
         Authorization: this.auth_str,
-        'Accept': 'application/json', // Specify the expected response format
+        'Accept': 'application/json',
       },
     })
     .then((response) => {
-      // Proceed as before
       this.$store.commit("update_current_dataset_readme", response.data);
     })
     .catch((error) => {
       console.log(error);
-      console.log(error.response);
       this.readmeErrored = true;
     })
     .finally(() => {
       this.readmeLoading = false;
     });
-    },
+},
 
 
 
-    updateAnnotations: function () {
+updateAnnotations: function () {
   console.log("Loading annotations");
   this.annotationsLoading = true;
   this.annotationsErrored = false;
 
-  // Directly access the uri property from this.uriQuery object, ensuring correct data access
-  const uri = this.uriQuery.uri; // Corrected access to uri property
-  const fullAnnotationsURL = `${this.annotationsURL}/${encodeURIComponent(uri)}`; // Construct the full URL
+  const uri = this.uriQuery.uri;
+  if (!uri) { // Check if uri is not null
+    console.log("No URI available for annotations.");
+    this.annotationsErrored = true;
+    this.annotationsLoading = false;
+    return; // Exit the method if no URI
+  }
 
-  console.log(fullAnnotationsURL); // For debugging, to verify the constructed URL
+  const fullAnnotationsURL = `${this.annotationsURL}/${encodeURIComponent(uri)}`;
 
   this.$http
     .get(fullAnnotationsURL, {
       headers: {
         Authorization: this.auth_str,
-        'Accept': 'application/json', // Specify the expected response format
+        'Accept': 'application/json',
       },
     })
     .then((response) => {
-      // Proceed as before
       this.$store.commit("update_current_dataset_annotations", response.data);
     })
     .catch((error) => {
       console.log(error);
-      console.log(error.response);
       this.annotationsErrored = true;
     })
     .finally(() => {
