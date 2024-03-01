@@ -14,19 +14,19 @@
               <a
                 href="https://github.com/livMatS/dtool-lookup-webapp"
                 target="_blank"
-                >GitHub Repository</a
+                >dtool-lookup-webapp repository</a
               >
             </li>
             <li>
               <a
                 href="https://demo.dtool.dev/lookup/doc/swagger"
                 target="_blank"
-                >Dtool Lookup API Documentation</a
+                >dserver REST API documentation</a
               >
             </li>
             <li>
               <a href="https://dtool.readthedocs.io/" target="_blank"
-                >Comprehensive Dtool Documentation</a
+                >dtool documentation</a
               >
             </li>
           </ul>
@@ -209,8 +209,8 @@ a {
 
 button {
   border-radius: 20px;
-  border: 1px solid #cc1e67;
-  background-color: #cc1e67;
+  border: 1px solid #95319b;
+  background-color: #95319b;
   color: #ffffff;
   font-size: 12px;
   font-weight: bold;
@@ -223,8 +223,8 @@ button {
 button:hover,
 button:active,
 button:focus {
-  background-color: #54081e; /* Background color for hover and active states */
-  border-color: #54081e; /* Border color for hover and active states */
+  background-color: #8b319b; /* Background color for hover and active states */
+  border-color: #8b319b; /* Border color for hover and active states */
 }
 
 button:active {
@@ -332,8 +332,18 @@ input {
 
 .overlay {
   background: #cc1e67;
-  background: -webkit-linear-gradient(135deg, #54081e, #990945, #cc1e67);
-  background: linear-gradient(135deg, #54081e, #990945, #cc1e67);
+  background: -webkit-linear-gradient(135deg, 
+                                    #8b319b 0%, 
+                                    #95319b 50%, 
+                                    #b44acb 75%, 
+                                    #cc70e6 100%);
+background: linear-gradient(135deg, 
+                            #8b319b 0%, 
+                            #95319b 50%, 
+                            #b44acb 75%, 
+                            #cc70e6 100%);
+
+
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
