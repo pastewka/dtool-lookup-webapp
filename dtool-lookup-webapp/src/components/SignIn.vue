@@ -5,41 +5,18 @@
       :class="{ 'right-panel-active': rightPanelActive }"
       id="container"
     >
-      <div class="form-container sign-up-container">
-        <form action="#">
-          <h1>Supporting Documentation</h1>
-          <p>Please refer to the following resources for more information:</p>
-          <ul style="list-style-type: none; padding: 0">
-            <li>
-              <a
-                href="https://github.com/livMatS/dtool-lookup-webapp"
-                target="_blank"
-                >dtool-lookup-webapp repository</a
-              >
-            </li>
-            <li>
-              <a
-                href="https://demo.dtool.dev/lookup/doc/swagger"
-                target="_blank"
-                >dserver REST API documentation</a
-              >
-            </li>
-            <li>
-              <a href="https://dtool.readthedocs.io/" target="_blank"
-                >dtool documentation</a
-              >
-            </li>
-          </ul>
-        </form>
-      </div>
-
       <!-- Sign In Form -->
       <div class="form-container sign-in-container">
         <form @submit.stop.prevent="getToken">
+          <!-- Logo Image -->
+          <img
+            src="../assets/icons/128x128/dtool_logo.png"
+            alt="Logo"
+            style="max-width: 100px; display: block; margin: 0 auto 20px"
+          />
+
           <h1>Sign in</h1>
-          <div v-if="signInFailed" class="alert alert-danger" role="alert">
-            Invalid username or password
-          </div>
+
           <input
             v-model="username"
             type="username"
@@ -54,12 +31,16 @@
             required
             :disabled="signInLoading"
           />
+          <div v-if="signInFailed" class="alert alert-danger" role="alert">
+            Invalid username or password
+          </div>
           <button
             :disabled="signInLoading"
             class="btn btn-lg btn-primary btn-block"
           >
             Sign In
           </button>
+
           <div class="d-flex justify-content-center" v-if="signInLoading">
             <div class="spinner-border text-primary">
               <span class="sr-only">Authenticating...</span>
@@ -68,29 +49,48 @@
         </form>
       </div>
 
-      <!-- Overlay Container -->
+      <!-- second and third Container -->
       <div class="overlay-container">
         <div class="overlay">
-          <div class="overlay-panel overlay-left">
-            <h1>Access Your Account</h1>
+          <div class="overlay-panel second-container">
+            <h1>{{ welcomeTitle }}</h1>
             <p>
-              To log in, use the default credentials: Username -
-              <strong>testuser</strong>, Password -
-              <strong>test_password</strong>.
+              {{ welcomeMessage }}
             </p>
+            <button class="ghost" @click="activateRightPanel">More Info</button>
+          </div>
+
+          <div class="overlay-panel third-container">
+            <!-- Logo Image -->
+            <img
+              src="../assets/icons/128x128/dtool_logo.png"
+              alt="Logo"
+              style="max-width: 100px; display: block; margin: 0 auto 20px"
+            />
+            <h1>{{ thirdContainerHeading }}</h1>
+            <p v-html="thirdContainerMessage"></p>
+
             <button class="ghost" @click="deactivateRightPanel">
               Return to Sign In
             </button>
           </div>
-          <div class="overlay-panel overlay-right">
-            <h1>Welcome to Dtool</h1>
-            <p>
-              Make your data more resilient, portable and easy to work with by
-              packaging files & metadata into self contained datasets
-            </p>
-            <button class="ghost" @click="activateRightPanel">More Info</button>
-          </div>
         </div>
+      </div>
+
+      <!-- Fourth Container -->
+      <div class="form-container fourth-container">
+        <form action="#">
+          <h1>{{ fourthContainerHeading }}</h1>
+          <p>{{ fourthContainerIntro }}</p>
+          <ul style="list-style-type: none; padding: 0">
+            <li
+              v-for="(resource, index) in fourthContainerResources"
+              :key="index"
+            >
+              <a :href="resource.url" target="_blank">{{ resource.text }}</a>
+            </li>
+          </ul>
+        </form>
       </div>
     </div>
   </div>
@@ -110,6 +110,37 @@ export default {
       rightPanelActive: false,
       tokenGeneratorURL:
         process.env.VUE_APP_DTOOL_LOOKUP_SERVER_TOKEN_GENERATOR_URL,
+      welcomeTitle: process.env.VUE_APP_WELCOME_TITLE || "Welcome to Dtool",
+      welcomeMessage:
+        process.env.VUE_APP_WELCOME_MESSAGE ||
+        "Make your data more resilient, portable and easy to work with by packaging files & metadata into self-contained datasets.",
+      thirdContainerHeading:
+        process.env.VUE_APP_THIRD_CONTAINER_HEADING || "Access Your Account",
+      thirdContainerMessage:
+        process.env.VUE_APP_THIRD_CONTAINER_MESSAGE ||
+        "To log in, use the default credentials: Username - <strong>testuser</strong>, Password - <strong>test_password</strong>.",
+      fourthContainerHeading:
+        process.env.VUE_APP_FOURTH_CONTAINER_HEADING ||
+        "Supporting Documentation",
+      fourthContainerIntro:
+        process.env.VUE_APP_FOURTH_CONTAINER_INTRO ||
+        "Please refer to the following resources for more information:",
+      fourthContainerResources: process.env.VUE_APP_FOURTH_CONTAINER_RESOURCES
+        ? JSON.parse(process.env.VUE_APP_FOURTH_CONTAINER_RESOURCES)
+        : [
+            {
+              text: "dtool-lookup-webapp repository",
+              url: "https://github.com/livMatS/dtool-lookup-webapp",
+            },
+            {
+              text: "dserver REST API documentation",
+              url: "https://demo.dtool.dev/lookup/doc/swagger",
+            },
+            {
+              text: "dtool documentation",
+              url: "https://dtool.readthedocs.io/",
+            },
+          ],
     };
   },
   computed: {
@@ -189,7 +220,7 @@ h2 {
 }
 
 p {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 100;
   line-height: 20px;
   letter-spacing: 0.5px;
@@ -267,7 +298,7 @@ input {
   overflow: hidden;
   width: 90vw;
   max-width: 800px;
-  min-height: 480px;
+  min-height: 530px;
 }
 
 .form-container {
@@ -287,14 +318,14 @@ input {
   transform: translateX(100%);
 }
 
-.sign-up-container {
+.fourth-container {
   left: 0;
   width: 50%;
   opacity: 0;
   z-index: 1;
 }
 
-.container.right-panel-active .sign-up-container {
+.container.right-panel-active .fourth-container {
   transform: translateX(100%);
   opacity: 1;
   z-index: 5;
@@ -332,17 +363,20 @@ input {
 
 .overlay {
   background: #cc1e67;
-  background: -webkit-linear-gradient(135deg, 
-                                    #8b319b 0%, 
-                                    #95319b 50%, 
-                                    #b44acb 75%, 
-                                    #cc70e6 100%);
-background: linear-gradient(135deg, 
-                            #8b319b 0%, 
-                            #95319b 50%, 
-                            #b44acb 75%, 
-                            #cc70e6 100%);
-
+  background: -webkit-linear-gradient(
+    135deg,
+    #8b319b 0%,
+    #95319b 50%,
+    #b44acb 75%,
+    #cc70e6 100%
+  );
+  background: linear-gradient(
+    135deg,
+    #8b319b 0%,
+    #95319b 50%,
+    #b44acb 75%,
+    #cc70e6 100%
+  );
 
   background-repeat: no-repeat;
   background-size: cover;
@@ -375,20 +409,20 @@ background: linear-gradient(135deg,
   transition: transform 0.6s ease-in-out;
 }
 
-.overlay-left {
+.third-container {
   transform: translateX(-20%);
 }
 
-.container.right-panel-active .overlay-left {
+.container.right-panel-active .third-container {
   transform: translateX(0);
 }
 
-.overlay-right {
+.second-container {
   right: 0;
   transform: translateX(0);
 }
 
-.container.right-panel-active .overlay-right {
+.container.right-panel-active .second-container {
   transform: translateX(20%);
 }
 </style>
