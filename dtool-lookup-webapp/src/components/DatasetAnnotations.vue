@@ -22,8 +22,9 @@ export default {
       return this.$store.state.current_dataset_annotations;
     },
     num_annotations: function() {
-      return Object.keys(this.annotations).length;
-    }
+  return this.annotations ? Object.keys(this.annotations).length : 0;
+}
+
   }
 };
 </script>

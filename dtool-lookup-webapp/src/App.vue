@@ -1,23 +1,37 @@
 <template>
   <div id="app" class="container-fluid">
     <header>
-  <div v-if="!token">
-    <nav class="navbar navbar-dark bg-dark p-2 w-100">
-      <span class="navbar-brand mb-0 h1">dtool</span>
-    </nav>
-  </div>
-  <div v-else>
-    <nav class="navbar navbar-dark bg-dark p-2">
-      <span class="navbar-brand mb-0 h1 mr-auto">dtool</span>
-      <div class="d-flex align-items-center justify-content-end">
-        <TextSearch @start-search="searchDatasets" />
-      </div>
-      <div>
-        <b-button pill variant="outline-danger" @click="logout()">Logout</b-button>
-      </div>
-    </nav>
-  </div>
+  <nav v-if="token" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <!-- Brand/logo with image -->
+    <a class="navbar-brand" href="#">
+      <img src="./assets/icons/128x128/dtool_logo.png" alt="dtool Logo" style="height: 35px;">
+      dtool
+    </a>
+
+    <!-- Toggler/collapsible Button for smaller screens -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar content -->
+    <div class="collapse navbar-collapse" id="navbarToggler">
+      <!-- Navbar items aligned to the right -->
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
+        <!-- Search input -->
+        <li class="nav-item">
+          <form class="d-flex" role="search">
+            <TextSearch @start-search="searchDatasets" class="me-2" />
+          </form>
+        </li>
+        <!-- Logout button -->
+        <li class="nav-item">
+          <button class="btn btn-outline-danger" type="button" @click="logout">Logout</button>
+        </li>
+      </ul>
+    </div>
+  </nav>
 </header>
+
 
     <div v-if="token" class="">
       <div class="row row-height">
@@ -227,7 +241,7 @@ export default {
     searchURL: function () {
       return (
         this.lookup_url +
-        "/dataset/search?page=" +
+        "/uris?page=" +
         this.pageNumber +
         "&page_size=" +
         this.$store.state.update_current_Per_Page
@@ -237,16 +251,16 @@ export default {
       return this.lookup_url + "/mongo/query";
     },
     manifestURL: function () {
-      return this.lookup_url + "/dataset/manifest";
+      return this.lookup_url + "/manifests";
     },
     configInfoURL: function () {
       return this.lookup_url + "/config/versions";
     },
     readmeURL: function () {
-      return this.lookup_url + "/dataset/readme";
+      return this.lookup_url + "/readmes";
     },
     annotationsURL: function () {
-      return this.lookup_url + "/dataset/annotations";
+      return this.lookup_url + "/annotations";
     },
     auth_str: function () {
       return "Bearer ".concat(this.token);
@@ -348,74 +362,110 @@ export default {
       this.updateAnnotations();
     },
     updateManifest: function () {
-      console.log("Loading manifest");
-      console.log(this.uriQuery);
-      this.manifestLoading = true;
-      this.manifestErrored = false;
-      this.$http
-        .post(this.manifestURL, this.uriQuery, {
-          headers: {
-            Authorization: this.auth_str,
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          this.$store.commit("update_current_dataset_manifest", response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-          console.log(error.response);
-          this.manifestErrored = true;
-        })
-        .finally(() => (this.manifestLoading = false));
-    },
-    updateReadme: function () {
-      console.log("Loading readme");
-      console.log(this.uriQuery);
-      this.readmeLoading = true;
-      this.readmeErrored = false;
-      this.$http
-        .post(this.readmeURL, this.uriQuery, {
-          headers: {
-            Authorization: this.auth_str,
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          this.$store.commit("update_current_dataset_readme", response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-          console.log(error.response);
-          this.readmeErrored = true;
-        })
-        .finally(() => (this.readmeLoading = false));
-    },
-    updateAnnotations: function () {
-      console.log("Loading annotations");
-      console.log(this.uriQuery);
-      this.annotationsLoading = true;
-      this.annotationsErrored = false;
-      this.$http
-        .post(this.annotationsURL, this.uriQuery, {
-          headers: {
-            Authorization: this.auth_str,
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          this.$store.commit(
-            "update_current_dataset_annotations",
-            response.data
-          );
-        })
-        .catch((error) => {
-          console.log(error);
-          console.log(error.response);
-          this.annotationsErrored = true;
-        })
-        .finally(() => (this.annotationsLoading = false));
-    },
+  console.log("Loading manifest");
+  this.manifestLoading = true;
+  this.manifestErrored = false;
+
+  const uri = this.uriQuery.uri;
+  if (!uri) { // Check if uri is not null
+    console.log("No URI available for manifest.");
+    this.manifestErrored = true;
+    this.manifestLoading = false;
+    return; // Exit the method if no URI
+  }
+
+  const fullManifestURL = `${this.manifestURL}/${encodeURIComponent(uri)}`;
+
+  this.$http
+    .get(fullManifestURL, {
+      headers: {
+        Authorization: this.auth_str,
+        'Accept': 'application/json'
+      },
+    })
+    .then((response) => {
+      this.$store.commit("update_current_dataset_manifest", response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+      this.manifestErrored = true;
+    })
+    .finally(() => {
+      this.manifestLoading = false;
+    });
+},
+
+updateReadme: function () {
+  console.log("Loading readme");
+  this.readmeLoading = true;
+  this.readmeErrored = false;
+
+  const uri = this.uriQuery.uri;
+  if (!uri) { // Check if uri is not null
+    console.log("No URI available for readme.");
+    this.readmeErrored = true;
+    this.readmeLoading = false;
+    return; // Exit the method if no URI
+  }
+
+  const fullReadmeURL = `${this.readmeURL}/${encodeURIComponent(uri)}`;
+
+  this.$http
+    .get(fullReadmeURL, {
+      headers: {
+        Authorization: this.auth_str,
+        'Accept': 'application/json',
+      },
+    })
+    .then((response) => {
+      this.$store.commit("update_current_dataset_readme", response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+      this.readmeErrored = true;
+    })
+    .finally(() => {
+      this.readmeLoading = false;
+    });
+},
+
+
+
+updateAnnotations: function () {
+  console.log("Loading annotations");
+  this.annotationsLoading = true;
+  this.annotationsErrored = false;
+
+  const uri = this.uriQuery.uri;
+  if (!uri) { // Check if uri is not null
+    console.log("No URI available for annotations.");
+    this.annotationsErrored = true;
+    this.annotationsLoading = false;
+    return; // Exit the method if no URI
+  }
+
+  const fullAnnotationsURL = `${this.annotationsURL}/${encodeURIComponent(uri)}`;
+
+  this.$http
+    .get(fullAnnotationsURL, {
+      headers: {
+        Authorization: this.auth_str,
+        'Accept': 'application/json',
+      },
+    })
+    .then((response) => {
+      this.$store.commit("update_current_dataset_annotations", response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+      this.annotationsErrored = true;
+    })
+    .finally(() => {
+      this.annotationsLoading = false;
+    });
+},
+
+
     getconfiginfo: function () {
       console.log("Loading ConfigInfo");
 
@@ -464,10 +514,29 @@ export default {
   margin-top: 60px;
 } */
 
+#app {
+  width: 100vw;  /* 100% of the viewport width */
+  height: 100vh; /* 100% of the viewport height */
+  overflow: hidden; /* Prevents scrollbars if the content is larger than the viewport */
+}
+
+
 /*Set the row height to the viewport*/
 .row-height {
   height: calc(100vh - 60px);
 }
+
+
+.navbar {
+  background: linear-gradient(
+    190deg, 
+    #8b319b 0%, 
+    #95319b 50%, 
+    #8a419b 75%, 
+    #c800ff 100%
+  );
+}
+
 
 /*Set up the columns with a 100% height, body color and overflow scroll*/
 </style>

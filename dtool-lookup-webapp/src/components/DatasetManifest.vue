@@ -62,8 +62,9 @@ export default {
       return this.$store.state.current_dataset_manifest;
     },
     numItems: function() {
-      return Object.values(this.manifest.items).length;
-    },
+  return this.manifest && this.manifest.items ? Object.values(this.manifest.items).length : 0;
+}
+,
     fetch_command: function() {
       return (
         "dtool item fetch " +

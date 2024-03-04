@@ -36,6 +36,24 @@ Create a file `.env` in the `dtool-lookup-webapp` directory with the following c
 
 For deployment, replace these URLs with the actual endpoints of the lookup server and the token generator.
 
+If desired, customize the landing page by setting the following variables in the `.env` file:
+
+::
+
+   VUE_APP_FIRST_CONTAINER_TITLE=Log in
+   VUE_APP_SECOND_CONTAINER_TITLE=dserver
+   VUE_APP_SECOND_CONTAINER_MESSAGE=Welcome to <b>dserver</b>'s webapp.
+   VUE_APP_THIRD_CONTAINER_HEADING=Access
+   VUE_APP_THIRD_CONTAINER_MESSAGE=Some notes on how to gain access.
+   VUE_APP_FOURTH_CONTAINER_HEADING=Docs
+   VUE_APP_FOURTH_CONTAINER_INTRO=Some notes on how to find help. The following list may contain an arbitrary number of links.
+   VUE_APP_FOURTH_CONTAINER_RESOURCES=[{"text": "dtool-lookup-webapp repsotiory", "url": "https://github.com/jic-dtool/dtool-lookup-webapp"}]
+   VUE_APP_LANDING_PAGE_ICON_PATH=/path/to/custom/icon.png
+
+To apply changes to this file, run::
+
+    npm install
+
 
 Start a development server
 --------------------------

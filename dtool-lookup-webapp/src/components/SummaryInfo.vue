@@ -57,7 +57,7 @@ export default {
   },
   computed: {
     source: function() {
-      return this.lookup_url + "/dataset/summary";
+      return this.lookup_url + "/users/testuser/summary";
     }
   },
   methods: {
