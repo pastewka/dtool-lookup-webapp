@@ -16,6 +16,7 @@ Added
 - Selection of entry number per page.
 - Version-dependent display of pagination.
 - Version-dependent display of README.yml content as clear text or as processed YAML/JSON.
+- A few simple unit tests.
 
 
 Changed

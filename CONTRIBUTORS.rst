@@ -2,7 +2,8 @@ Contributors
 ============
 
 - Ashwin Vazhappilly added direct mongo query functionality, added logout
-  button, adapted the webapp to remodeled dserver REST API, added customizable
+  button, added pagination functionality, added a few unit tests,
+  adapted the webapp to remodeled dserver REST API, added customizable
   landing page.
 - Johannes L. Hörmann updated initial codebase from vue-2 to vue-3.
 - Lars Pastewka added the ability to configure the dtool-lookup-server and
