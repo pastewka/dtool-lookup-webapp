@@ -10,6 +10,7 @@ This change log uses principles from `keep a changelog <http://keepachangelog.co
 Added
 ^^^^^
 
+- Customizable landing page.
 - Logout button.
 - Search result pagniation.
 - Selection of entry number per page.
@@ -19,6 +20,9 @@ Added
 
 Changed
 ^^^^^^^
+
+- Updated from bootstrap-vue-3 to bootstap-vue-next
+- Adapted routes to remodeled dserver REST API.
 
 
 Deprecated
