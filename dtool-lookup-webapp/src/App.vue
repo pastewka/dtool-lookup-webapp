@@ -1,20 +1,37 @@
 <template>
   <div id="app" class="container-fluid">
     <header>
-  <div v-if="!token">
-  </div>
-  <div v-else>
-    <nav class="navbar navbar-dark bg-dark p-2">
-      <span class="navbar-brand mb-0 h1 mr-auto">dtool</span>
-      <div class="d-flex align-items-center justify-content-end">
-        <TextSearch @start-search="searchDatasets" />
-      </div>
-      <div>
-        <b-button pill variant="outline-danger" @click="logout()">Logout</b-button>
-      </div>
-    </nav>
-  </div>
+  <nav v-if="token" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <!-- Brand/logo with image -->
+    <a class="navbar-brand" href="#">
+      <img src="./assets/icons/128x128/dtool_logo.png" alt="dtool Logo" style="height: 35px;">
+      dtool
+    </a>
+
+    <!-- Toggler/collapsible Button for smaller screens -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar content -->
+    <div class="collapse navbar-collapse" id="navbarToggler">
+      <!-- Navbar items aligned to the right -->
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
+        <!-- Search input -->
+        <li class="nav-item">
+          <form class="d-flex" role="search">
+            <TextSearch @start-search="searchDatasets" class="me-2" />
+          </form>
+        </li>
+        <!-- Logout button -->
+        <li class="nav-item">
+          <button class="btn btn-outline-danger" type="button" @click="logout">Logout</button>
+        </li>
+      </ul>
+    </div>
+  </nav>
 </header>
+
 
     <div v-if="token" class="">
       <div class="row row-height">
@@ -46,7 +63,6 @@
             </div>
 
             <div v-else>
-              <h6 class="p-0">{{this.uriQuery}}</h6>
               <DatasetTable
                 :datasetHits="datasetHits"
                 :responseheaders="responseheaders"
@@ -498,10 +514,29 @@ updateAnnotations: function () {
   margin-top: 60px;
 } */
 
+#app {
+  width: 100vw;  /* 100% of the viewport width */
+  height: 100vh; /* 100% of the viewport height */
+  overflow: hidden; /* Prevents scrollbars if the content is larger than the viewport */
+}
+
+
 /*Set the row height to the viewport*/
 .row-height {
   height: calc(100vh - 60px);
 }
+
+
+.navbar {
+  background: linear-gradient(
+    190deg, 
+    #8b319b 0%, 
+    #95319b 50%, 
+    #8a419b 75%, 
+    #c800ff 100%
+  );
+}
+
 
 /*Set up the columns with a 100% height, body color and overflow scroll*/
 </style>
