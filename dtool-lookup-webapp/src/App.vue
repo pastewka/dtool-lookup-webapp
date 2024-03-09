@@ -1,10 +1,11 @@
 <template>
   <div id="app" class="container-fluid">
     <header>
-  <nav v-if="token" class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav v-if="token" class="navbar navbar-expand-lg navbar-dark">
+
     <!-- Brand/logo with image -->
     <a class="navbar-brand" href="#">
-      <img src="./assets/icons/128x128/dtool_logo.png" alt="dtool Logo" style="height: 35px;">
+      <img src="/icons/128x128/dtool_logo.png" alt="dtool Logo" style="height: 35px;">
       dtool
     </a>
 
@@ -528,14 +529,10 @@ updateAnnotations: function () {
 
 
 .navbar {
-  background: linear-gradient(
-    190deg, 
-    #8b319b 0%, 
-    #95319b 50%, 
-    #8a419b 75%, 
-    #c800ff 100%
-  );
+  background: #ffffffb9; /* White background */
+  color: #000000; /* Black text color for contrast */
 }
+
 
 
 /*Set up the columns with a 100% height, body color and overflow scroll*/

@@ -10,12 +10,12 @@
         <form @submit.stop.prevent="getToken">
           <!-- Logo Image -->
           <img
-            src="../assets/icons/128x128/dtool_logo.png"
+            :src="logoSrc"
             alt="Logo"
             style="max-width: 100px; display: block; margin: 0 auto 20px"
           />
 
-          <h1>Sign in</h1>
+          <h1 v-html="firstContainerTitle"></h1>
 
           <input
             v-model="username"
@@ -53,21 +53,15 @@
       <div class="overlay-container">
         <div class="overlay">
           <div class="overlay-panel second-container">
-            <h1>{{ welcomeTitle }}</h1>
-            <p>
-              {{ welcomeMessage }}
-            </p>
+            <h1 v-html="secondContainerTitle"></h1>
+
+            <p v-html="secondContainerMessage"></p>
             <button class="ghost" @click="activateRightPanel">More Info</button>
           </div>
 
           <div class="overlay-panel third-container">
-            <!-- Logo Image -->
-            <img
-              src="../assets/icons/128x128/dtool_logo.png"
-              alt="Logo"
-              style="max-width: 100px; display: block; margin: 0 auto 20px"
-            />
-            <h1>{{ thirdContainerHeading }}</h1>
+            <h1 v-html="thirdContainerHeading"></h1>
+
             <p v-html="thirdContainerMessage"></p>
 
             <button class="ghost" @click="deactivateRightPanel">
@@ -80,8 +74,15 @@
       <!-- Fourth Container -->
       <div class="form-container fourth-container">
         <form action="#">
-          <h1>{{ fourthContainerHeading }}</h1>
-          <p>{{ fourthContainerIntro }}</p>
+          <img
+            :src="logoSrc"
+            alt="Logo"
+            style="max-width: 100px; display: block; margin: 0 auto 20px"
+          />
+
+          <h1 v-html="fourthContainerHeading"></h1>
+
+          <p v-html="fourthContainerIntro"></p>
           <ul style="list-style-type: none; padding: 0">
             <li
               v-for="(resource, index) in fourthContainerResources"
@@ -110,9 +111,15 @@ export default {
       rightPanelActive: false,
       tokenGeneratorURL:
         process.env.VUE_APP_DTOOL_LOOKUP_SERVER_TOKEN_GENERATOR_URL,
-      welcomeTitle: process.env.VUE_APP_WELCOME_TITLE || "Welcome to Dtool",
-      welcomeMessage:
-        process.env.VUE_APP_WELCOME_MESSAGE ||
+
+      logoSrc: process.env.VUE_APP_LOGO_SRC || "/icons/128x128/dtool_logo.png",
+
+      firstContainerTitle:
+        process.env.VUE_APP_FIRST_CONTAINER_TITLE || "Sign In",
+      secondContainerTitle:
+        process.env.VUE_APP_SECOND_CONTAINER_TITLE || "Welcome to Dtool",
+      secondContainerMessage:
+        process.env.VUE_APP_SECOND_CONTAINER_MESSAGE ||
         "Make your data more resilient, portable and easy to work with by packaging files & metadata into self-contained datasets.",
       thirdContainerHeading:
         process.env.VUE_APP_THIRD_CONTAINER_HEADING || "Access Your Account",
