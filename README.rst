@@ -9,9 +9,8 @@ dtool lookup webapp
     :target: https://opensource.org/licenses/MIT
     :alt: License: MIT
 
-- `GitHub repository <https://github.com/jic-dtool/dtool-lookup-webapp>`_
-- License: `MIT License <https://opensource.org/licenses/MIT>`_
-
+- GitHub repository: https://github.com/jic-dtool/dtool-lookup-webapp
+- License: MIT License (https://opensource.org/licenses/MIT)
 
 This web application allows querying and displaying information about datasets stored in one or more base URIs.
 
@@ -20,8 +19,8 @@ Dependencies
 
 The web application requires two other web services:
 
-1. `dtool-lookup-server <https://github.com/jic-dtool/dtool-lookup-server>`_: Provides a means to search and display dataset metadata.
-2. `token-generator-ldap <https://github.com/jic-dtool/token-generator-ldap>`_: Facilitates user authentication.
+1. dtool-lookup-server: https://github.com/jic-dtool/dtool-lookup-server - Provides a means to search and display dataset metadata.
+2. token-generator-ldap: https://github.com/jic-dtool/token-generator-ldap - Facilitates user authentication.
 
 Setup
 -----
@@ -43,7 +42,7 @@ For deployment, replace these URLs with the actual endpoints of the lookup serve
 
 Customization options for the landing page are available through the following environment variables in the `.env` file:
 
-.. code-block:: bash
+.. code-block:: text
 
    VUE_APP_FIRST_CONTAINER_TITLE=Log in
    VUE_APP_SECOND_CONTAINER_TITLE=dserver
