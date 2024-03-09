@@ -112,7 +112,7 @@ export default {
       tokenGeneratorURL:
         process.env.VUE_APP_DTOOL_LOOKUP_SERVER_TOKEN_GENERATOR_URL,
 
-      logoSrc: process.env.VUE_APP_LOGO_SRC || "/icons/128x128/dtool_logo.png",
+      logoSrc: process.env.VUE_APP_LANDING_PAGE_ICON_PATH || "/icons/128x128/dtool_logo.png",
 
       firstContainerTitle:
         process.env.VUE_APP_FIRST_CONTAINER_TITLE || "Sign In",
