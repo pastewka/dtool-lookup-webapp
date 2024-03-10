@@ -7,7 +7,7 @@ import { createBootstrap } from 'bootstrap-vue-next';
 import VueAxios from 'vue-axios';
 import { VueClipboard } from '@soerenmartius/vue3-clipboard';
 
-import 'bootstrap/dist/css/bootstrap.css';
+import './assets/css/custom.scss';
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'; 
 
 const app = createApp(App);

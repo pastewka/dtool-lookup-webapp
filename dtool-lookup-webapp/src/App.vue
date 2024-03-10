@@ -40,8 +40,8 @@
           <SummaryInfo
             :auth_str="auth_str"
             :lookup_url="lookup_url"
-            @start-search="searchDatasets"
-          />
+            @start-search="searchDatasets"    
+            />
         </div>
         <div class="col-md-4 overflow-auto h-100 p-0">
           <div v-if="searchLoading" class="spinner-border text-primary">
@@ -64,24 +64,28 @@
             </div>
 
             <div v-else>
+             
+
+
               <DatasetTable
                 :datasetHits="datasetHits"
                 :responseheaders="responseheaders"
                 @update-dataset="updateDataset"
               />
               <div v-if="shouldShowPagination">
-                <b-pagination
-                  v-model="pageNumber"
-                  :total-rows="pagination.total"
-                  :per-page="this.$store.state.update_current_Per_Page"
-                  first-text="First"
-                  prev-text="Prev"
-                  next-text="Next"
-                  last-text="Last"
-                  @click="searchDatasets"
-                  class="paginationcomponent"
-                ></b-pagination>
-              </div>
+  <b-pagination
+    v-model="pageNumber"
+    :total-rows="pagination.total"
+    :per-page="this.$store.state.update_current_Per_Page"
+    first-text="First"
+    prev-text="Prev"
+    next-text="Next"
+    last-text="Last"
+    @update:modelValue="updatePageNumber"
+    class="paginationcomponent"
+  ></b-pagination>
+</div>
+
             </div>
           </div>
         </div>
@@ -309,7 +313,7 @@ export default {
 
     shouldShowPagination() {
       return (
-        this.getinfo["dtool_lookup_server"] >= this.$store.state.current_required_version
+        true
       );
     },
   },
@@ -515,22 +519,35 @@ updateAnnotations: function () {
   margin-top: 60px;
 } */
 
+
+
 #app {
-  width: 100vw;  /* 100% of the viewport width */
-  height: 100vh; /* 100% of the viewport height */
-  overflow: hidden; /* Prevents scrollbars if the content is larger than the viewport */
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
 }
 
-
-/*Set the row height to the viewport*/
-.row-height {
-  height: calc(100vh - 60px);
-}
 
 
 .navbar {
-  background: #ffffffb9; /* White background */
-  color: #000000; /* Black text color for contrast */
+  background: #e1e1e1; /* Light grey background */
+  color: #95319b; /* Purple text color, as per your previous request */
+}
+
+/* Increased specificity for text color changes */
+.navbar .navbar-brand, .navbar .navbar-nav .nav-link {
+  color: #95319b !important; /* Custom purple text color */
+  font-weight: bold;
+  font-size: 22px;
+}
+
+/* Specific style for the logout button */
+.navbar .btn-outline-danger {
+  color: #95319b !important; /* Custom purple text color */
+  border-color: #95319b !important; /* Custom purple border */
+}
+
+.navbar .btn-outline-danger:hover {
+  background-color: #95319b !important; /* Custom purple background on hover */
+  color: #ffffff !important; /* White text color on hover */
 }
 
 
