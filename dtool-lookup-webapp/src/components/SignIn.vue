@@ -432,4 +432,20 @@ input {
 .container.right-panel-active .second-container {
   transform: translateX(20%);
 }
+
+
+@media (max-width: 668px) {
+  .overlay-container,
+  .fourth-container {
+    display: none;
+  }
+
+  /* Ensure the sign-in container takes full available space */
+  .sign-in-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto; /* Center the sign-in container */
+  }
+}
+
 </style>
