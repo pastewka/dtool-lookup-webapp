@@ -2,11 +2,16 @@
   <div class="card">
     <div class="card-body p-0">
       <div class="list-group">
-        <a @click.prevent="clearFilters()" class="list-group-item list-group-item-action">
+        <a
+          @click.prevent="clearFilters()"
+          class="list-group-item list-group-item-action"
+        >
           <div class="d-flex justify-content-between">
             <small> All </small>
             <small>
-              <span class="badge badge-pill badge-primary">{{ summary_info.number_of_datasets }}</span>
+              <span class="badge badge-pill badge-primary dataset-count">{{
+                summary_info.number_of_datasets
+              }}</span>
             </small>
           </div>
         </a>
@@ -15,7 +20,9 @@
           <div class="d-flex justify-content-between">
             <small> Filtered </small>
             <small>
-              <span class="badge badge-pill badge-secondary">{{ this.$store.state.num_filtered }}</span>
+              <span class="badge badge-pill badge-secondary dataset-count">{{
+                this.$store.state.num_filtered
+              }}</span>
             </small>
           </div>
         </a>
@@ -30,7 +37,9 @@
                   :key="option"
                   @click="updatePerPage(option)"
                   @dblclick.prevent="clearSelection()"
-                  :variant="selectedPerPage === option ? 'primary' : 'outline-info'"
+                  :variant="
+                    selectedPerPage === option ? 'primary' : 'outline-info'
+                  "
                   class="flex-grow-1"
                   :class="{ 'selected-button': selectedPerPage === option }"
                 >
@@ -46,7 +55,7 @@
 </template>
 
 <script>
-import { BButton, BButtonGroup } from 'bootstrap-vue-next';
+import { BButton, BButtonGroup } from "bootstrap-vue-next";
 
 export default {
   name: "NumDatasets",
@@ -59,8 +68,8 @@ export default {
   },
   data() {
     return {
-      selectedPerPage: null, // Initially, no selection
-      perPageOptions: [5, 20, 50, 100], // Your page size options
+      selectedPerPage: 10,
+      perPageOptions: [10, 20, 50, 100], // Your page size options
     };
   },
   methods: {
@@ -81,4 +90,7 @@ export default {
 </script>
 
 <style scoped>
+.dataset-count {
+  color: #000; /* Change text color to black */
+}
 </style>
