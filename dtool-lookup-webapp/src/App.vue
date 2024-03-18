@@ -49,6 +49,7 @@
           <SummaryInfo
             :auth_str="auth_str"
             :lookup_url="lookup_url"
+            :token="token"
             @start-search="searchDatasets"
           />
         </div>
@@ -77,7 +78,6 @@
                 :datasetHits="datasetHits"
                 :responseheaders="responseheaders"
                 @update-dataset="updateDataset"
-
               />
               <div v-if="shouldShowPagination">
                 <b-pagination
@@ -326,51 +326,51 @@ export default {
       this.searchDatasets();
     },
     searchDatasets: function () {
-  this.getconfiginfo();
-  console.log("Running search");
-  console.log(this.searchQuery);
-  this.$store.commit("update_current_dataset_index", 0);
-  this.$store.commit("update_current_dataset", null);
-  this.$store.commit("update_current_dataset_manifest", null);
-  this.$store.commit("update_current_dataset_readme", null);
-  this.updateDataset();
-  this.searchLoading = true;
-  this.searchErrored = false;
-
-  let searchURL = this.searchURL;
-  if (this.$store.state.mongo_text) {
-    searchURL = this.mongoSearchURL;
-  }
-
-  this.$http
-    .post(searchURL, this.searchQuery, {
-      headers: {
-        Authorization: this.auth_str,
-        "Content-Type": "application/json",
-      },
-    })
-    .then((response) => {
-      this.datasetHits = response.data;
-      this.responseheaders = response.headers;
-      this.$store.commit("update_current_dataset", this.current_dataset);
-      this.$store.commit("update_num_filtered", this.pagination.total);
+      this.getconfiginfo();
+      console.log("Running search");
+      console.log(this.searchQuery);
+      this.$store.commit("update_current_dataset_index", 0);
+      this.$store.commit("update_current_dataset", null);
+      this.$store.commit("update_current_dataset_manifest", null);
+      this.$store.commit("update_current_dataset_readme", null);
       this.updateDataset();
-    })
-    .catch((error) => {
-      console.log(error);
-      if (error.response && error.response.status === 404) {
-        console.log("404 Not Found - Resetting pageNumber and retrying");
-        this.pageNumber = 1;
-        this.searchDatasets(); // Retry the search with pageNumber reset to 1
-      } else {
-        console.log(error.response);
-        this.searchErrored = true;
+      this.searchLoading = true;
+      this.searchErrored = false;
+
+      let searchURL = this.searchURL;
+      if (this.$store.state.mongo_text) {
+        searchURL = this.mongoSearchURL;
       }
-    })
-    .finally(() => {
-      this.searchLoading = false;
-    });
-},
+
+      this.$http
+        .post(searchURL, this.searchQuery, {
+          headers: {
+            Authorization: this.auth_str,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          this.datasetHits = response.data;
+          this.responseheaders = response.headers;
+          this.$store.commit("update_current_dataset", this.current_dataset);
+          this.$store.commit("update_num_filtered", this.pagination.total);
+          this.updateDataset();
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error.response && error.response.status === 404) {
+            console.log("404 Not Found - Resetting pageNumber and retrying");
+            this.pageNumber = 1;
+            this.searchDatasets(); // Retry the search with pageNumber reset to 1
+          } else {
+            console.log(error.response);
+            this.searchErrored = true;
+          }
+        })
+        .finally(() => {
+          this.searchLoading = false;
+        });
+    },
 
     updateDataset: function () {
       this.updateManifest();
@@ -505,7 +505,6 @@ export default {
           console.log(error.response);
         });
     },
-   
 
     logout: function () {
       this.token = "";

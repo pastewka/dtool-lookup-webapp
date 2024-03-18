@@ -81,7 +81,6 @@ export default {
       this.selectedPerPage = this.selectedPerPage === perpage ? null : perpage; // Toggle selection
       this.$store.commit("update_current_Per_Page", perpage);
       this.$emit("start-search");
-      
     },
     clearSelection() {
       this.selectedPerPage = null; // Clear selection on double-click

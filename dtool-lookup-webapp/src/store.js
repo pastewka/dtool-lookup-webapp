@@ -7,6 +7,7 @@ export const store = createStore({
     creator_usernames: [],
     base_uris: [],
     tags: [],
+    username: null,
     current_dataset_index: 0,
     current_pageNumber: 1,
     current_dataset: null,
@@ -57,13 +58,18 @@ export const store = createStore({
     update_current_Per_Page(state, perpage) {
       state.update_current_Per_Page = perpage;
     },
+    updateUsername(state, username) {
+      state.username = username;
+    },
 
     clear_all(state) {
+      state.username = null;
       state.free_text = null;
       state.mongo_text = null;
       state.creator_usernames = [];
       state.tags = [];
       state.base_uris = [];
+
     },
   },
   actions: {},
