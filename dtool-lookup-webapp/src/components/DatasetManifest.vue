@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { BDropdown, BInputGroup, BFormInput, BButton } from "bootstrap-vue-next";
 var filesize = require("filesize");
 export default {
   name: "DatasetManifest",
@@ -79,7 +80,15 @@ export default {
       console.log("update_fetch_identifer: " + identifier);
       this.fetch_identifier = identifier;
     }
-  }
+  },
+  
+  components: {
+    BDropdown,
+    BInputGroup,
+    BFormInput,
+    BButton
+  },
+
 };
 </script>
 

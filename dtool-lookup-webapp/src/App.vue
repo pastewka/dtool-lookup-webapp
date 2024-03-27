@@ -317,8 +317,8 @@ export default {
     },
 
     shouldShowPagination() {
-      return true;
-    },
+    return this.pagination.total > 1;
+  },
   },
   methods: {
     setTokenAndSearch: function (token) {

@@ -84,6 +84,7 @@
 </template>
 
 <script>
+import { BDropdown, BInputGroup, BFormInput, BButton } from "bootstrap-vue-next";
 var filesize = require("filesize");
 var moment = require("moment");
 export default {
@@ -118,7 +119,14 @@ export default {
     tag_command: function() {
       return "dtool tag set " + this.dataset.uri + " " + this.tag_name;
     }
-  }
+  },
+  
+  components: {
+    BDropdown,
+    BInputGroup,
+    BFormInput,
+    BButton
+  },
 };
 </script>
 
