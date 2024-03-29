@@ -1,28 +1,23 @@
 <template>
   <div>
-    <!-- Display the main heading only if there are annotations -->
-    <div v-if="num_annotations > 0">
-      <!-- Loop through each annotation -->
-      <div v-for="(details, annotationName, index) in annotations" :key="index">
-        <!-- Transform the first letter of each annotation name to uppercase -->
-        <h3 class="annotations-heading">{{ capitalizeFirstLetter(annotationName) }}</h3>
-        <!-- Only render the table if the current annotation has data -->
-        <table class="table table-striped table-sm" v-if="isObjectNotEmpty(details)">
-          <thead>
-            <tr>
-              <th>Property Name</th>
-              <th>Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Loop through each property of the annotation and display it -->
-            <tr v-for="(value, propertyName, index) in details" :key="index">
-              <td>{{ propertyName }}</td>
-              <td>{{ value }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <!-- Loop through each filtered annotation that has non-empty values -->
+    <div v-for="(details, annotationName, index) in filteredAnnotations" :key="index">
+      <h3 class="annotations-heading">{{ capitalizeFirstLetter(annotationName) }}</h3>
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Loop through each property of the annotation and display it -->
+          <tr v-for="(value, propertyName, subIndex) in details" :key="`details-${index}-${subIndex}`">
+            <td>{{ propertyName }}</td>
+            <td>{{ value }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -31,36 +26,38 @@
 export default {
   name: "DatasetAnnotations",
   computed: {
-    // Compute the annotations from the Vuex store
     annotations: function() {
       return this.$store.state.current_dataset_annotations;
     },
-    // Compute the number of annotations to conditionally display the content
-    num_annotations: function() {
-      return this.annotations ? Object.keys(this.annotations).length : 0;
+    // Computed property to filter annotations that have non-empty values
+    filteredAnnotations: function() {
+      let filtered = {};
+      for (let annotationName in this.annotations) {
+        if (this.hasNonEmptyValues(this.annotations[annotationName])) {
+          filtered[annotationName] = this.annotations[annotationName];
+        }
+      }
+      return filtered;
     }
   },
   methods: {
-    // Method to capitalize the first letter of a string
     capitalizeFirstLetter: function(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
-    // Method to check if an object is not empty
-    isObjectNotEmpty: function(obj) {
-      return obj && Object.keys(obj).length > 0;
+    // Method to check if an object has non-empty values
+    hasNonEmptyValues: function(obj) {
+      return Object.values(obj).some(value => value);
     }
   }
 };
 </script>
 <style>
-/* Add styles specific to the annotations heading */
 h3.annotations-heading {
-  margin-top: 2rem; /* Adds space above the heading */
-  margin-bottom: 1rem; /* Adds space below the heading */
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
 
-/* Style for the tables to match spacing as well */
 .table.table-striped.table-sm {
-  margin-bottom: 1rem; /* Adds space below each table */
+  margin-bottom: 1rem;
 }
 </style>
