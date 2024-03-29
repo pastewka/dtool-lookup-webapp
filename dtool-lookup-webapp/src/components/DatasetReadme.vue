@@ -1,8 +1,11 @@
 <template>
   <div>
-    <h3>Readme</h3>
-    <div class="readme-container">
-      <pre>{{ getReadmeContent }}</pre>
+    <!-- Render this section only if there is readme content -->
+    <div v-if="getReadmeContent">
+      <h5>Readme</h5>
+      <div class="readme-container">
+        <pre>{{ getReadmeContent }}</pre>
+      </div>
     </div>
   </div>
 </template>
@@ -12,8 +15,9 @@ export default {
   name: "DatasetReadme",
   computed: {
     getReadmeContent() {
-      // Accessing the string content of the 'readme' key directly.
-      return this.$store.state.current_dataset_readme.readme;
+      // Accessing the string content of the 'readme' key directly
+      // Ensure the content is trimmed to check for non-blank content
+      return this.$store.state.current_dataset_readme.readme.trim();
     },
   },
 };
