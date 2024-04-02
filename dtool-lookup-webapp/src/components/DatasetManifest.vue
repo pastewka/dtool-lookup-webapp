@@ -19,16 +19,16 @@
           <small>{{ id }}</small>
 
           <BDropdown right size="sm">
-  <template #button-content> Fetch </template>
+            <template #button-content> Fetch </template>
 
-  <template #default>
-    <div class="container centered-content">
-      <!-- Dropdown text for descriptive content -->
-      <BDropdownText>
-        The command below fetches the dataset item and returns an
-        absolute path on disk from where it can be accessed.
-      </BDropdownText>
-    </div>
+            <template #default>
+              <div class="container centered-content">
+                <!-- Dropdown text for descriptive content -->
+                <BDropdownText>
+                  The command below fetches the dataset item and returns an
+                  absolute path on disk from where it can be accessed.
+                </BDropdownText>
+              </div>
 
               <!-- Dropdown form containing input group, form input, and button -->
               <BDropdownForm style="width: 440px">
@@ -117,9 +117,7 @@ export default {
   justify-content: flex-start; /* Aligns content to the start of the container */
   align-items: center; /* Aligns content vertically center */
   height: 100%; /* Sets the height to fill the container */
-  text-align: left; /* Ensures the text itself is right-aligned */
+  text-align: left; /* Ensures the text itself is left-aligned */
   margin-right: 10px; /* Adjust as needed for your design */
 }
-
-
 </style>
