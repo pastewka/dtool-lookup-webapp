@@ -18,7 +18,7 @@
         <div class="d-flex justify-content-between">
           <small>{{ id }}</small>
 
-          <BDropdown right size="sm">
+          <BDropdown right size="sm" class="p-0">
             <template #button-content> Fetch </template>
 
             <template #default>
@@ -112,12 +112,4 @@ export default {
 </script>
 
 <style>
-.centered-content {
-  display: flex;
-  justify-content: flex-start; /* Aligns content to the start of the container */
-  align-items: center; /* Aligns content vertically center */
-  height: 100%; /* Sets the height to fill the container */
-  text-align: left; /* Ensures the text itself is left-aligned */
-  margin-right: 10px; /* Adjust as needed for your design */
-}
 </style>
