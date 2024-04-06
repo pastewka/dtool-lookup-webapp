@@ -10,7 +10,6 @@
           />
           dtool
         </a>
-
         <button
           class="navbar-toggler"
           type="button"
@@ -31,25 +30,13 @@
             </li>
             <li class="nav-item mr-2">
               <!-- Apply margin to this <li> element -->
-              <BDropdown
-                id="account-dropdown"
-                v-model="show1"
-                text="Account"
-                variant="primary"
-                class="ml-auto"
+              <button
+                class="btn btn-outline-danger"
+                type="button"
+                @click="logout"
               >
-                <BDropdownItem @click="downloadFile('yaml')"
-                  >Download Readme as YAML</BDropdownItem
-                >
-                <BDropdownItem @click="downloadFile('json')"
-                  >Download Readme as JSON</BDropdownItem
-                >
-                <BDropdownItem @click="logout">
-                  <button class="btn btn-outline-danger" type="button">
-                    Logout
-                  </button>
-                </BDropdownItem>
-              </BDropdown>
+                Logout
+              </button>
             </li>
           </ul>
         </div>
@@ -231,7 +218,7 @@ import Manifest from "./components/DatasetManifest.vue";
 import Readme from "./components/DatasetReadme.vue";
 import Annotations from "./components/DatasetAnnotations.vue";
 import DatasetSummary from "./components/DatasetSummary.vue";
-import { BPagination, BDropdown, BDropdownItem } from "bootstrap-vue-next";
+import { BPagination} from "bootstrap-vue-next";
 
 export default {
   name: "app",
@@ -560,31 +547,7 @@ export default {
           console.log(error.response);
         });
     },
-    async downloadFile(fileType) {
-      let fileName = "dtool_readme";
-      let fileExtension = fileType === "yaml" ? ".yml" : ".json";
-      let filePath = `data/templates/${fileName}${fileExtension}`;
-
-      try {
-        let response = await fetch(filePath);
-        if (!response.ok) throw new Error("Network response was not ok");
-
-        let text = await response.text();
-        let blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-        let downloadUrl = window.URL.createObjectURL(blob);
-
-        let a = document.createElement("a");
-        a.href = downloadUrl;
-        a.download = `${fileName}${fileExtension}`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(downloadUrl);
-        document.body.removeChild(a);
-      } catch (error) {
-        console.error("Failed to download file:", error);
-      }
-    },
-
+    
     logout: function () {
       this.token = "";
       this.$store.commit("clear_all");
@@ -601,8 +564,6 @@ export default {
     Annotations,
     DatasetSummary,
     BPagination,
-    BDropdown,
-    BDropdownItem,
   },
 };
 </script>
