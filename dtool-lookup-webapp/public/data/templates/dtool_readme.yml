@@ -1,0 +1,12 @@
+project: Project name
+description: Short description
+owners:
+  - name: Your Full Name
+    email: your_email@example.com
+    username: Your username
+    orcid: 
+funders:
+  - organization: Deutsche Forschungsgemeinschaft (DFG)
+    program: Clusters of Excellence
+    code: EXC 2193
+creation_date: '{date}'
