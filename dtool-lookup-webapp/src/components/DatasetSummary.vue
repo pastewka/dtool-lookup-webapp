@@ -54,12 +54,15 @@
       </BDropdown>
     </div>
     <div class="d-flex flex-sm-row align-items-start justify-content-between">
-      <div v-if="dataset.tags?.length > 0" class="p-0">
-        <template v-for="(tag, index) in dataset.tags" v-bind:key="index">
-          <span class="badge badge-pill badge-info bg-primary">{{ tag }}</span
-          >{{ "&nbsp;" }}
+      <div v-if="currentTags.length > 0" class="p-0">
+        <template v-for="(tag, index) in currentTags" :key="index">
+          <h5>
+            <span class="badge badge-pill badge-info bg-primary">{{ tag }}</span
+            >{{ "&nbsp;" }}
+          </h5>
         </template>
       </div>
+
       <div v-else class="alert alert-info p-1" role="alert">
         Use tags to organise your datasets!
       </div>
@@ -151,6 +154,17 @@ export default {
     },
     tag_command: function () {
       return "dtool tag set " + this.dataset.uri + " " + this.tag_name;
+    },
+    currentTags() {
+      // Check if `current_dataset_tags` exists and has a `tags` property
+      if (
+        this.$store.state.current_dataset_tags &&
+        this.$store.state.current_dataset_tags.tags
+      ) {
+        return this.$store.state.current_dataset_tags.tags;
+      }
+      // Return an empty array if `current_dataset_tags` is null or doesn't have a `tags` property
+      return [];
     },
   },
 

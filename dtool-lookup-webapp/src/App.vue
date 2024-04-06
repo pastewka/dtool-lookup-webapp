@@ -244,6 +244,8 @@ export default {
       manifestErrored: false,
       readmeLoading: false,
       readmeErrored: false,
+      tagsLoading: false,
+      tagsErrored: false,
       annotationsLoading: false,
       annotationsErrored: false,
       lookup_url: process.env.VUE_APP_DTOOL_LOOKUP_SERVER_URL,
@@ -285,9 +287,13 @@ export default {
     annotationsURL: function () {
       return this.lookup_url + "/annotations";
     },
+    tagsURL: function () {
+      return this.lookup_url + "/tags";
+    },
     auth_str: function () {
       return "Bearer ".concat(this.token);
     },
+
     searchQuery: function () {
       var query = {};
 
@@ -346,6 +352,7 @@ export default {
       this.$store.commit("update_current_dataset", null);
       this.$store.commit("update_current_dataset_manifest", null);
       this.$store.commit("update_current_dataset_readme", null);
+      this.$store.commit("update_current_dataset_tags", null);
       this.updateDataset();
       this.searchLoading = true;
       this.searchErrored = false;
@@ -389,6 +396,7 @@ export default {
       this.updateManifest();
       this.updateReadme();
       this.updateAnnotations();
+      this.updateTags();
     },
     updateManifest: function () {
       console.log("Loading manifest");
@@ -497,6 +505,40 @@ export default {
         })
         .finally(() => {
           this.annotationsLoading = false;
+        });
+    },
+
+    updateTags: function () {
+      console.log("Loading tags");
+      this.tagsLoading = true;
+      this.tagsErrored = false;
+
+      const uri = this.uriQuery.uri;
+      if (!uri) {
+        console.log("No URI available for tags.");
+        this.tagsErrored = true;
+        this.tagsLoading = false;
+        return; // Exit the method if no URI
+      }
+
+      const fullTagsURL = `${this.tagsURL}/${encodeURIComponent(uri)}`;
+
+      this.$http
+        .get(fullTagsURL, {
+          headers: {
+            Authorization: this.auth_str,
+            Accept: "application/json",
+          },
+        })
+        .then((response) => {
+          this.$store.commit("update_current_dataset_tags", response.data); // Assuming you have a mutation named 'update_current_dataset_tags'
+        })
+        .catch((error) => {
+          console.error(error);
+          this.tagsErrored = true;
+        })
+        .finally(() => {
+          this.tagsLoading = false;
         });
     },
 
