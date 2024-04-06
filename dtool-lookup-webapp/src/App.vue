@@ -81,7 +81,7 @@
               />
               <div v-if="shouldShowPagination">
                 <b-pagination
-                  v-model="pageNumber"
+                  v-model="this.$store.state.current_pageNumber"
                   :total-rows="pagination.total"
                   :per-page="this.$store.state.update_current_Per_Page"
                   first-text="First"
@@ -218,7 +218,7 @@ import Manifest from "./components/DatasetManifest.vue";
 import Readme from "./components/DatasetReadme.vue";
 import Annotations from "./components/DatasetAnnotations.vue";
 import DatasetSummary from "./components/DatasetSummary.vue";
-import { BPagination } from "bootstrap-vue-next";
+import { BPagination} from "bootstrap-vue-next";
 
 export default {
   name: "app",
@@ -231,12 +231,13 @@ export default {
       manifestErrored: false,
       readmeLoading: false,
       readmeErrored: false,
+      tagsLoading: false,
+      tagsErrored: false,
       annotationsLoading: false,
       annotationsErrored: false,
       lookup_url: process.env.VUE_APP_DTOOL_LOOKUP_SERVER_URL,
       token: null,
       perPage: this.$store.state.update_current_Per_Page,
-      pageNumber: 1,
       responseheaders: Array,
       getinfo: {},
     };
@@ -252,7 +253,7 @@ export default {
       return (
         this.lookup_url +
         "/uris?page=" +
-        this.pageNumber +
+        this.$store.state.current_pageNumber +
         "&page_size=" +
         this.$store.state.update_current_Per_Page
       );
@@ -272,9 +273,13 @@ export default {
     annotationsURL: function () {
       return this.lookup_url + "/annotations";
     },
+    tagsURL: function () {
+      return this.lookup_url + "/tags";
+    },
     auth_str: function () {
       return "Bearer ".concat(this.token);
     },
+
     searchQuery: function () {
       var query = {};
 
@@ -317,8 +322,8 @@ export default {
     },
 
     shouldShowPagination() {
-    return this.pagination.total > 1;
-  },
+      return this.pagination.total > 1;
+    },
   },
   methods: {
     setTokenAndSearch: function (token) {
@@ -333,6 +338,7 @@ export default {
       this.$store.commit("update_current_dataset", null);
       this.$store.commit("update_current_dataset_manifest", null);
       this.$store.commit("update_current_dataset_readme", null);
+      this.$store.commit("update_current_dataset_tags", null);
       this.updateDataset();
       this.searchLoading = true;
       this.searchErrored = false;
@@ -360,7 +366,7 @@ export default {
           console.log(error);
           if (error.response && error.response.status === 404) {
             console.log("404 Not Found - Resetting pageNumber and retrying");
-            this.pageNumber = 1;
+            this.$store.state.current_pageNumber = 1;
             this.searchDatasets(); // Retry the search with pageNumber reset to 1
           } else {
             console.log(error.response);
@@ -376,6 +382,7 @@ export default {
       this.updateManifest();
       this.updateReadme();
       this.updateAnnotations();
+      this.updateTags();
     },
     updateManifest: function () {
       console.log("Loading manifest");
@@ -487,6 +494,40 @@ export default {
         });
     },
 
+    updateTags: function () {
+      console.log("Loading tags");
+      this.tagsLoading = true;
+      this.tagsErrored = false;
+
+      const uri = this.uriQuery.uri;
+      if (!uri) {
+        console.log("No URI available for tags.");
+        this.tagsErrored = true;
+        this.tagsLoading = false;
+        return; // Exit the method if no URI
+      }
+
+      const fullTagsURL = `${this.tagsURL}/${encodeURIComponent(uri)}`;
+
+      this.$http
+        .get(fullTagsURL, {
+          headers: {
+            Authorization: this.auth_str,
+            Accept: "application/json",
+          },
+        })
+        .then((response) => {
+          this.$store.commit("update_current_dataset_tags", response.data); // Assuming you have a mutation named 'update_current_dataset_tags'
+        })
+        .catch((error) => {
+          console.error(error);
+          this.tagsErrored = true;
+        })
+        .finally(() => {
+          this.tagsLoading = false;
+        });
+    },
+
     getconfiginfo: function () {
       console.log("Loading ConfigInfo");
 
@@ -505,7 +546,7 @@ export default {
           console.log(error.response);
         });
     },
-
+    
     logout: function () {
       this.token = "";
       this.$store.commit("clear_all");

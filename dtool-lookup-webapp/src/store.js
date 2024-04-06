@@ -9,14 +9,14 @@ export const store = createStore({
     tags: [],
     username: null,
     current_dataset_index: 0,
-    current_pageNumber: 1,
     current_dataset: null,
     current_dataset_manifest: null,
     current_dataset_readme: null,
     current_dataset_annotations: null,
+    current_dataset_tags: null,
     num_filtered: 0,
     update_current_Per_Page: 10,
-    current_required_version: "0.18.0",
+    current_pageNumber:1,
   },
   mutations: {
     update_free_text(state, free_text) {
@@ -37,8 +37,8 @@ export const store = createStore({
     update_current_dataset_index(state, index) {
       state.current_dataset_index = index;
     },
-    update_current_pageNumber(state) {
-      state.update_current_pageNumber = 2;
+    update_current_pageNumber(state,pageNumber) {
+      state.current_pageNumber = pageNumber;
     },
     update_current_dataset(state, dataset) {
       state.current_dataset = dataset;
@@ -51,6 +51,9 @@ export const store = createStore({
     },
     update_current_dataset_annotations(state, annotations) {
       state.current_dataset_annotations = annotations;
+    },
+    update_current_dataset_tags(state, tags) {
+      state.current_dataset_tags = tags;
     },
     update_num_filtered(state, num_filtered) {
       state.num_filtered = num_filtered;

@@ -80,6 +80,7 @@ export default {
         .finally(() => (this.loading = false));
     },
     searchDatasets: function () {
+      this.$store.state.current_pageNumber=1; // Resetting the page number to 1 if we make any changes in the filters. 
       this.$emit("start-search");
     },
   },
