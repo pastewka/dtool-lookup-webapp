@@ -81,7 +81,7 @@
               />
               <div v-if="shouldShowPagination">
                 <b-pagination
-                  v-model="pageNumber"
+                  v-model="this.$store.state.current_pageNumber"
                   :total-rows="pagination.total"
                   :per-page="this.$store.state.update_current_Per_Page"
                   first-text="First"
@@ -238,7 +238,6 @@ export default {
       lookup_url: process.env.VUE_APP_DTOOL_LOOKUP_SERVER_URL,
       token: null,
       perPage: this.$store.state.update_current_Per_Page,
-      pageNumber: 1,
       responseheaders: Array,
       getinfo: {},
     };
@@ -254,7 +253,7 @@ export default {
       return (
         this.lookup_url +
         "/uris?page=" +
-        this.pageNumber +
+        this.$store.state.current_pageNumber +
         "&page_size=" +
         this.$store.state.update_current_Per_Page
       );
@@ -367,7 +366,7 @@ export default {
           console.log(error);
           if (error.response && error.response.status === 404) {
             console.log("404 Not Found - Resetting pageNumber and retrying");
-            this.pageNumber = 1;
+            this.$store.state.current_pageNumber = 1;
             this.searchDatasets(); // Retry the search with pageNumber reset to 1
           } else {
             console.log(error.response);
