@@ -2,85 +2,95 @@
   <div class="card">
     <div class="card-body p-0">
       <div class="list-group">
-        <li
-          href=""
+        <a
+          @click.prevent="clearFilters()"
           class="list-group-item list-group-item-action"
-          @click="clearFilters()"
         >
           <div class="d-flex justify-content-between">
             <small> All </small>
-
             <small>
-              <span class="badge badge-pill badge-primary">{{
-                summary_info["number_of_datasets"]
+              <span class="badge badge-pill badge-primary dataset-count">{{
+                summary_info.number_of_datasets
               }}</span>
             </small>
           </div>
-        </li>
+        </a>
 
-        <li href="" class="list-group-item">
+        <a class="list-group-item">
           <div class="d-flex justify-content-between">
             <small> Filtered </small>
-
             <small>
-              <span class="badge badge-pill badge-secondary">{{
+              <span class="badge badge-pill badge-secondary dataset-count">{{
                 this.$store.state.num_filtered
               }}</span>
             </small>
           </div>
-        </li>
+        </a>
 
-        <li href="" class="list-group-item">
+        <div class="list-group-item">
           <div>
             <small> Contents per Page </small>
-
             <div class="mt-3">
-              <b-button-group class="w-100">
-                <b-button-group class="w-100">
-                  <b-button @click="updatePerPage(5)" variant="outline-info"
-                    >5</b-button
-                  >
-                  <b-button @click="updatePerPage(20)" variant="outline-info"
-                    >20</b-button
-                  >
-                  <b-button @click="updatePerPage(50)" variant="outline-info"
-                    >50</b-button
-                  >
-                  <b-button @click="updatePerPage(100)" variant="outline-info"
-                    >100</b-button
-                  >
-                </b-button-group>
+              <b-button-group size="sm" class="w-100">
+                <b-button
+                  v-for="option in perPageOptions"
+                  :key="option"
+                  @click="updatePerPage(option)"
+                  @dblclick.prevent="clearSelection()"
+                  :variant="
+                    selectedPerPage === option ? 'primary' : 'outline-info'
+                  "
+                  class="flex-grow-1"
+                  :class="{ 'selected-button': selectedPerPage === option }"
+                >
+                  {{ option }}
+                </b-button>
               </b-button-group>
             </div>
           </div>
-        </li>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { BButton, BButtonGroup } from "bootstrap-vue-next";
+
 export default {
   name: "NumDatasets",
+  components: {
+    BButton,
+    BButtonGroup,
+  },
   props: {
     summary_info: Object,
   },
-  data: function () {
+  data() {
     return {
-      selectedTags: [],
+      selectedPerPage: 10,
+      perPageOptions: [10, 20, 50, 100], // Your page size options
     };
   },
   methods: {
-    clearFilters: function () {
+    clearFilters() {
       this.$store.commit("clear_all");
       this.$emit("start-search");
     },
-    updatePerPage: function (perpage) {
+    updatePerPage(perpage) {
+      this.selectedPerPage = this.selectedPerPage === perpage ? null : perpage; // Toggle selection
       this.$store.commit("update_current_Per_Page", perpage);
       this.$emit("start-search");
+    },
+    clearSelection() {
+      this.selectedPerPage = null; // Clear selection on double-click
     },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.dataset-count {
+  color: #000; /* Change text color to black */
+}
+</style>

@@ -1,39 +1,39 @@
 <template>
   <div>
-    <h3>Readme</h3>
- 
-    <pre v-if="currversion < this.$store.state.current_required_version">{{ getFormattedYaml() }}</pre>
-    <pre v-else>{{ getReadmeContent() }}</pre>
+    <!-- Render this section only if there is readme content -->
+    <div v-if="getReadmeContent">
+      <h5>Readme</h5>
+      <div class="readme-container">
+        <pre>{{ getReadmeContent }}</pre>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-var yaml = require("json2yaml");
 export default {
   name: "DatasetReadme",
-  props: {
-    getinfo: {},
-  },
-  data: function () {
-    return {
-      yaml: yaml,
-      currversion: this.getinfo["dtool_lookup_server"],
-    };
-  },
   computed: {
-    readme: function () {
-      return this.$store.state.current_dataset_readme;
-    },
-  },
-  methods: {
-    getFormattedYaml() {
-      return this.yaml.stringify(this.$store.state.current_dataset_readme);
-    },
     getReadmeContent() {
-      return this.$store.state.current_dataset_readme;
+      // Accessing the string content of the 'readme' key directly
+      // Ensure the content is trimmed to check for non-blank content
+      return this.$store.state.current_dataset_readme.readme.trim();
     },
   },
 };
 </script>
 
-<style></style>
+<style>
+.readme-container {
+  max-height: 250px; /* Adjust height to fit 6-7 lines */
+  overflow-y: auto; /* Vertical scrolling */
+  overflow-x: auto; /* Horizontal scrolling */
+  white-space: pre-wrap; /* Ensures that text will wrap and not force horizontal scroll unless needed */
+  word-wrap: break-word; /* Allows long words to break and wrap onto the next line */
+  border: 1px solid #ccc; /* Adds a border around the container */
+  margin-top: 10px; /* Adds some space above the container */
+  background-color: #f8f9fa; /* Sets a background color for the container */
+  padding: 10px; /* Adds some padding inside the container */
+  border-radius: 5px; /* Rounds the corners of the container */
+}
+</style>

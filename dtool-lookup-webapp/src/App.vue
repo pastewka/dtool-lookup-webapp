@@ -1,23 +1,47 @@
 <template>
   <div id="app" class="container-fluid">
     <header>
-  <div v-if="!token">
-    <nav class="navbar navbar-dark bg-dark p-2 w-100">
-      <span class="navbar-brand mb-0 h1">dtool</span>
-    </nav>
-  </div>
-  <div v-else>
-    <nav class="navbar navbar-dark bg-dark p-2">
-      <span class="navbar-brand mb-0 h1 mr-auto">dtool</span>
-      <div class="d-flex align-items-center justify-content-end">
-        <TextSearch @start-search="searchDatasets" />
-      </div>
-      <div>
-        <b-button pill variant="outline-danger" @click="logout()">Logout</b-button>
-      </div>
-    </nav>
-  </div>
-</header>
+      <nav v-if="token" class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand navbar-logo" href="#">
+          <img
+            src="/icons/128x128/dtool_logo.png"
+            alt="dtool Logo"
+            style="height: 35px"
+          />
+          dtool
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarToggler"
+          aria-controls="navbarToggler"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarToggler">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
+            <li class="nav-item">
+              <form class="d-flex" role="search">
+                <TextSearch @start-search="searchDatasets" class="me-2" />
+              </form>
+            </li>
+            <li class="nav-item mr-2">
+              <!-- Apply margin to this <li> element -->
+              <button
+                class="btn btn-outline-danger"
+                type="button"
+                @click="logout"
+              >
+                Logout
+              </button>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
 
     <div v-if="token" class="">
       <div class="row row-height">
@@ -25,6 +49,7 @@
           <SummaryInfo
             :auth_str="auth_str"
             :lookup_url="lookup_url"
+            :token="token"
             @start-search="searchDatasets"
           />
         </div>
@@ -56,7 +81,7 @@
               />
               <div v-if="shouldShowPagination">
                 <b-pagination
-                  v-model="pageNumber"
+                  v-model="this.$store.state.current_pageNumber"
                   :total-rows="pagination.total"
                   :per-page="this.$store.state.update_current_Per_Page"
                   first-text="First"
@@ -193,7 +218,7 @@ import Manifest from "./components/DatasetManifest.vue";
 import Readme from "./components/DatasetReadme.vue";
 import Annotations from "./components/DatasetAnnotations.vue";
 import DatasetSummary from "./components/DatasetSummary.vue";
-
+import { BPagination} from "bootstrap-vue-next";
 
 export default {
   name: "app",
@@ -206,13 +231,13 @@ export default {
       manifestErrored: false,
       readmeLoading: false,
       readmeErrored: false,
+      tagsLoading: false,
+      tagsErrored: false,
       annotationsLoading: false,
       annotationsErrored: false,
       lookup_url: process.env.VUE_APP_DTOOL_LOOKUP_SERVER_URL,
       token: null,
       perPage: this.$store.state.update_current_Per_Page,
-      pageNumber: 1,
-
       responseheaders: Array,
       getinfo: {},
     };
@@ -227,8 +252,8 @@ export default {
     searchURL: function () {
       return (
         this.lookup_url +
-        "/dataset/search?page=" +
-        this.pageNumber +
+        "/uris?page=" +
+        this.$store.state.current_pageNumber +
         "&page_size=" +
         this.$store.state.update_current_Per_Page
       );
@@ -237,20 +262,24 @@ export default {
       return this.lookup_url + "/mongo/query";
     },
     manifestURL: function () {
-      return this.lookup_url + "/dataset/manifest";
+      return this.lookup_url + "/manifests";
     },
     configInfoURL: function () {
       return this.lookup_url + "/config/versions";
     },
     readmeURL: function () {
-      return this.lookup_url + "/dataset/readme";
+      return this.lookup_url + "/readmes";
     },
     annotationsURL: function () {
-      return this.lookup_url + "/dataset/annotations";
+      return this.lookup_url + "/annotations";
+    },
+    tagsURL: function () {
+      return this.lookup_url + "/tags";
     },
     auth_str: function () {
       return "Bearer ".concat(this.token);
     },
+
     searchQuery: function () {
       var query = {};
 
@@ -293,9 +322,7 @@ export default {
     },
 
     shouldShowPagination() {
-      return (
-        this.getinfo["dtool_lookup_server"] >= this.$store.state.current_required_version
-      );
+      return this.pagination.total > 1;
     },
   },
   methods: {
@@ -304,12 +331,14 @@ export default {
       this.searchDatasets();
     },
     searchDatasets: function () {
-      this.getconfiginfo(), console.log("Running search");
+      this.getconfiginfo();
+      console.log("Running search");
       console.log(this.searchQuery);
       this.$store.commit("update_current_dataset_index", 0);
       this.$store.commit("update_current_dataset", null);
       this.$store.commit("update_current_dataset_manifest", null);
       this.$store.commit("update_current_dataset_readme", null);
+      this.$store.commit("update_current_dataset_tags", null);
       this.updateDataset();
       this.searchLoading = true;
       this.searchErrored = false;
@@ -330,33 +359,52 @@ export default {
           this.datasetHits = response.data;
           this.responseheaders = response.headers;
           this.$store.commit("update_current_dataset", this.current_dataset);
-          this.$store.commit("update_num_filtered", this.datasetHits.length);
+          this.$store.commit("update_num_filtered", this.pagination.total);
           this.updateDataset();
         })
         .catch((error) => {
           console.log(error);
-          console.log(error.response);
-          this.searchErrored = true;
+          if (error.response && error.response.status === 404) {
+            console.log("404 Not Found - Resetting pageNumber and retrying");
+            this.$store.state.current_pageNumber = 1;
+            this.searchDatasets(); // Retry the search with pageNumber reset to 1
+          } else {
+            console.log(error.response);
+            this.searchErrored = true;
+          }
         })
         .finally(() => {
           this.searchLoading = false;
         });
     },
+
     updateDataset: function () {
       this.updateManifest();
       this.updateReadme();
       this.updateAnnotations();
+      this.updateTags();
     },
     updateManifest: function () {
       console.log("Loading manifest");
-      console.log(this.uriQuery);
       this.manifestLoading = true;
       this.manifestErrored = false;
+
+      const uri = this.uriQuery.uri;
+      if (!uri) {
+        // Check if uri is not null
+        console.log("No URI available for manifest.");
+        this.manifestErrored = true;
+        this.manifestLoading = false;
+        return; // Exit the method if no URI
+      }
+
+      const fullManifestURL = `${this.manifestURL}/${encodeURIComponent(uri)}`;
+
       this.$http
-        .post(this.manifestURL, this.uriQuery, {
+        .get(fullManifestURL, {
           headers: {
             Authorization: this.auth_str,
-            "Content-Type": "application/json",
+            Accept: "application/json",
           },
         })
         .then((response) => {
@@ -364,21 +412,34 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          console.log(error.response);
           this.manifestErrored = true;
         })
-        .finally(() => (this.manifestLoading = false));
+        .finally(() => {
+          this.manifestLoading = false;
+        });
     },
+
     updateReadme: function () {
       console.log("Loading readme");
-      console.log(this.uriQuery);
       this.readmeLoading = true;
       this.readmeErrored = false;
+
+      const uri = this.uriQuery.uri;
+      if (!uri) {
+        // Check if uri is not null
+        console.log("No URI available for readme.");
+        this.readmeErrored = true;
+        this.readmeLoading = false;
+        return; // Exit the method if no URI
+      }
+
+      const fullReadmeURL = `${this.readmeURL}/${encodeURIComponent(uri)}`;
+
       this.$http
-        .post(this.readmeURL, this.uriQuery, {
+        .get(fullReadmeURL, {
           headers: {
             Authorization: this.auth_str,
-            "Content-Type": "application/json",
+            Accept: "application/json",
           },
         })
         .then((response) => {
@@ -386,21 +447,36 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          console.log(error.response);
           this.readmeErrored = true;
         })
-        .finally(() => (this.readmeLoading = false));
+        .finally(() => {
+          this.readmeLoading = false;
+        });
     },
+
     updateAnnotations: function () {
       console.log("Loading annotations");
-      console.log(this.uriQuery);
       this.annotationsLoading = true;
       this.annotationsErrored = false;
+
+      const uri = this.uriQuery.uri;
+      if (!uri) {
+        // Check if uri is not null
+        console.log("No URI available for annotations.");
+        this.annotationsErrored = true;
+        this.annotationsLoading = false;
+        return; // Exit the method if no URI
+      }
+
+      const fullAnnotationsURL = `${this.annotationsURL}/${encodeURIComponent(
+        uri
+      )}`;
+
       this.$http
-        .post(this.annotationsURL, this.uriQuery, {
+        .get(fullAnnotationsURL, {
           headers: {
             Authorization: this.auth_str,
-            "Content-Type": "application/json",
+            Accept: "application/json",
           },
         })
         .then((response) => {
@@ -411,11 +487,47 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          console.log(error.response);
           this.annotationsErrored = true;
         })
-        .finally(() => (this.annotationsLoading = false));
+        .finally(() => {
+          this.annotationsLoading = false;
+        });
     },
+
+    updateTags: function () {
+      console.log("Loading tags");
+      this.tagsLoading = true;
+      this.tagsErrored = false;
+
+      const uri = this.uriQuery.uri;
+      if (!uri) {
+        console.log("No URI available for tags.");
+        this.tagsErrored = true;
+        this.tagsLoading = false;
+        return; // Exit the method if no URI
+      }
+
+      const fullTagsURL = `${this.tagsURL}/${encodeURIComponent(uri)}`;
+
+      this.$http
+        .get(fullTagsURL, {
+          headers: {
+            Authorization: this.auth_str,
+            Accept: "application/json",
+          },
+        })
+        .then((response) => {
+          this.$store.commit("update_current_dataset_tags", response.data); // Assuming you have a mutation named 'update_current_dataset_tags'
+        })
+        .catch((error) => {
+          console.error(error);
+          this.tagsErrored = true;
+        })
+        .finally(() => {
+          this.tagsLoading = false;
+        });
+    },
+
     getconfiginfo: function () {
       console.log("Loading ConfigInfo");
 
@@ -434,6 +546,7 @@ export default {
           console.log(error.response);
         });
     },
+    
     logout: function () {
       this.token = "";
       this.$store.commit("clear_all");
@@ -449,7 +562,7 @@ export default {
     Readme,
     Annotations,
     DatasetSummary,
-    
+    BPagination,
   },
 };
 </script>
@@ -464,10 +577,40 @@ export default {
   margin-top: 60px;
 } */
 
-/*Set the row height to the viewport*/
-.row-height {
-  height: calc(100vh - 60px);
+#app {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
 }
 
-/*Set up the columns with a 100% height, body color and overflow scroll*/
+.navbar {
+  background: #e1e1e1; /* Light grey background */
+  color: #95319b; /* Purple text color */
+  padding-left: 20px; /* Add padding to the left side of the navbar */
+  padding-right: 20px; /* Add padding to the right side of the navbar */
+}
+
+.navbar .navbar-brand,
+.navbar .navbar-nav .nav-link {
+  color: #95319b !important; /* Custom purple text color */
+  font-weight: bold;
+  font-size: 22px;
+}
+
+.navbar .btn-outline-danger {
+  color: #95319b !important; /* Custom purple text color */
+  border-color: #95319b !important; /* Custom purple border */
+}
+
+.navbar .btn-outline-danger:hover {
+  background-color: #95319b !important; /* Custom purple background on hover */
+  color: #ffffff !important; /* White text color on hover */
+}
+
+.navbar-logo {
+  padding-left: 20px; /* Add padding to the left of the logo to push it inward */
+}
+
+.nav-item.mr-2 {
+  /* This targets the <li> element with the mr-2 class */
+  margin-right: 20px; /* Adjust this value as needed */
+}
 </style>

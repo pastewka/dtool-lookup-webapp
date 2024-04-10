@@ -2,38 +2,41 @@
   <div class="textSearch">
     <form class="form-inline" @submit.prevent>
       <div class="searchContainer d-flex align-items-center">
+        <!-- Span for the JSON Checker label with tooltip -->
+        <span
+          class="jsonChecker"
+          v-if="textQuery !== ''"
+          v-b-tooltip.hover.top="
+            'Enclose a JSON query in braces {} to have it interpreted as a direct MongoDB query.'
+          "
+        >
+          {{ isJson ? "MongoDB query (MQL):" : "free text search:" }}
+        </span>
+        <!-- Input for the text query -->
         <input
           class="form-control"
           type="text"
           v-model="textQuery"
-          v-on:keyup.enter.prevent="startSearch"
-   
+          @keyup.enter.prevent="startSearch"
+          placeholder="Search..."
         />
-        <span
-          class="jsonChecker"
-          v-if="textQuery !== ''"
-          :class="{ 'is-invalid': !isJson, 'is-valid': isJson }"
-          ref="tooltip"
-          v-b-tooltip.hover.top="'Enclose a JSON query in braces {} to have it interpreted as a direct MongoDB query.'"
-        >
-          {{ isJson ? "✔ JSON Format" : "✘ Not in JSON  ⓘ" }}
-        </span>
       </div>
     </form>
   </div>
 </template>
 
 <script>
+import { BTooltip } from "bootstrap-vue-next";
 export default {
   name: "TextSearch",
-  data: function () {
+  BTooltip,
+  data() {
     return {
       textQuery: "",
-      isFocused: false,
     };
   },
   computed: {
-    isJson: function () {
+    isJson() {
       if (this.textQuery === "") {
         return false;
       }
@@ -46,7 +49,7 @@ export default {
     },
   },
   methods: {
-    startSearch: function () {
+    startSearch() {
       if (this.isJson) {
         this.$store.commit("update_mongo_text", this.textQuery);
       } else {
@@ -54,7 +57,6 @@ export default {
       }
       this.$emit("start-search");
     },
-   
   },
 };
 </script>
@@ -63,19 +65,29 @@ export default {
 .searchContainer {
   display: flex;
   align-items: center;
-}
-
-.is-invalid {
-  color: red;
-}
-
-.is-valid {
-  color: rgb(0, 255, 0);
+  gap: 8px; /* Spacing between elements */
+  width: 100%; /* Ensure container takes full width */
 }
 
 .jsonChecker {
-  display: inline-block;
-  margin-left: 10px;
-  white-space: nowrap;
+  color: #6f42c1; /* Soft purple for label text */
+  flex-shrink: 0; /* Prevent the label from shrinking */
+}
+
+.form-control {
+  border: 2px solid #6f42c1; /* A lighter shade of purple for border */
+  flex-grow: 1; /* Allow the input to grow and fill the space */
+  margin-right: auto; /* Push all subsequent elements to the right */
+}
+
+.jsonChecker {
+  max-width: calc(50% - 4px); /* Adjust accordingly */
+  white-space: nowrap; /* Keep the label text on a single line */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis; /* Add an ellipsis to truncated text */
+}
+
+.form-control {
+  padding: 0.375rem 0.75rem;
 }
 </style>
