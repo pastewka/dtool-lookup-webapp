@@ -17,6 +17,7 @@ export const store = createStore({
     num_filtered: 0,
     update_current_Per_Page: 10,
     current_pageNumber:1,
+    selected_sort_option: null,
   },
   mutations: {
     update_free_text(state, free_text) {
@@ -63,6 +64,9 @@ export const store = createStore({
     },
     updateUsername(state, username) {
       state.username = username;
+    },
+    update_selected_sort_option(state, selected_sort_option) {
+      state.selected_sort_option = selected_sort_option;
     },
 
     clear_all(state) {
