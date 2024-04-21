@@ -17,7 +17,7 @@ export const store = createStore({
     num_filtered: 0,
     update_current_Per_Page: 10,
     current_pageNumber:1,
-    selected_sort_option: null,
+    selected_sort_option: "-frozen_at",
   },
   mutations: {
     update_free_text(state, free_text) {

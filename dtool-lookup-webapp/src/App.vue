@@ -74,6 +74,8 @@
             </div>
 
             <div v-else>
+              <div> <dataset-sorting @start-search="searchDatasets"></dataset-sorting>
+              {{  this.$store.state.selected_sort_option}} </div>
               <DatasetTable
                 :datasetHits="datasetHits"
                 :responseheaders="responseheaders"
@@ -125,6 +127,7 @@
             <div class="card-body">
               <div>
                 <div v-if="readmeLoading" class="text-primary">
+                  
                   <span class="sr-only">Loading...</span>
                 </div>
                 <div v-else>
@@ -218,6 +221,7 @@ import Manifest from "./components/DatasetManifest.vue";
 import Readme from "./components/DatasetReadme.vue";
 import Annotations from "./components/DatasetAnnotations.vue";
 import DatasetSummary from "./components/DatasetSummary.vue";
+import DatasetSorting from "./components/DatasetSorting.vue";
 import { BPagination} from "bootstrap-vue-next";
 
 export default {
@@ -255,7 +259,8 @@ export default {
         "/uris?page=" +
         this.$store.state.current_pageNumber +
         "&page_size=" +
-        this.$store.state.update_current_Per_Page
+        this.$store.state.update_current_Per_Page +
+        "&sort=" + this.$store.state.selected_sort_option
       );
     },
     mongoSearchURL: function () {
@@ -562,6 +567,7 @@ export default {
     Readme,
     Annotations,
     DatasetSummary,
+    DatasetSorting,
     BPagination,
   },
 };

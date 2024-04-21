@@ -26,45 +26,48 @@ export default {
           sortOptions: [
             'uri', 'base_uri', 'created_at', 'creator_username', 'frozen_at', 'name', 'uuid'
           ],
-          sortDirection: 'asc'
+          sortDirection: 'asc' // Initial sort direction
       };
   },
   computed: {
       formattedOptions() {
+          // Format sort options for display in the dropdown
           return this.sortOptions.map(option => ({
-              text: option.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+              text: option.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), // Capitalize each word
               value: option
           }));
       }
   },
   methods: {
       getPrefixedValue(option) {
-          if(option.startsWith('+') || option.startsWith('-')) {
-              return option;
-          }
+          // Add the current sort direction prefix to the option
           return (this.sortDirection === 'asc' ? '%2B' : '-') + option;
       },
       toggleSortDirection() {
+          // Toggle sort direction between 'asc' and 'desc'
           this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-          this.commitToStore(this.selectedSortOption);
       },
-      commitToStore(value) {
-          this.$store.commit('update_selected_sort_option', this.getPrefixedValue(value));
+      updateStoreAndEmit(option) {
+          // Update Vuex store and emit a search event
+          const prefixedValue = this.getPrefixedValue(option);
+          this.$store.commit('update_selected_sort_option', prefixedValue);
+          this.$emit('start-search');
       }
-  },
-  mounted() {
-      this.commitToStore(this.selectedSortOption);
   },
   watch: {
+      sortDirection() {
+          // React to changes in sort direction
+          this.updateStoreAndEmit(this.selectedSortOption);
+      },
       selectedSortOption(newValue) {
-          this.commitToStore(newValue);
+          // React to changes in selected sort option
+          this.updateStoreAndEmit(newValue);
       }
-      
   }
 };
 </script>
 
 <style scoped>
-/* Add Bootstrap icons */
+/* Add Bootstrap icons for the toggle button */
 @import "https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css";
 </style>
