@@ -74,8 +74,14 @@
             </div>
 
             <div v-else>
-              <div> <dataset-sorting @start-search="searchDatasets"></dataset-sorting>
-              {{  this.$store.state.selected_sort_option}} </div>
+              <div>
+                <div class="dataset-sorting-margin">
+                  <dataset-sorting
+                    @start-search="searchDatasets"
+                  ></dataset-sorting>
+                </div>
+              </div>
+
               <DatasetTable
                 :datasetHits="datasetHits"
                 :responseheaders="responseheaders"
@@ -127,7 +133,6 @@
             <div class="card-body">
               <div>
                 <div v-if="readmeLoading" class="text-primary">
-                  
                   <span class="sr-only">Loading...</span>
                 </div>
                 <div v-else>
@@ -222,7 +227,7 @@ import Readme from "./components/DatasetReadme.vue";
 import Annotations from "./components/DatasetAnnotations.vue";
 import DatasetSummary from "./components/DatasetSummary.vue";
 import DatasetSorting from "./components/DatasetSorting.vue";
-import { BPagination} from "bootstrap-vue-next";
+import { BPagination } from "bootstrap-vue-next";
 
 export default {
   name: "app",
@@ -260,7 +265,8 @@ export default {
         this.$store.state.current_pageNumber +
         "&page_size=" +
         this.$store.state.update_current_Per_Page +
-        "&sort=" + this.$store.state.selected_sort_option
+        "&sort=" +
+        this.$store.state.selected_sort_option
       );
     },
     mongoSearchURL: function () {
@@ -551,7 +557,7 @@ export default {
           console.log(error.response);
         });
     },
-    
+
     logout: function () {
       this.token = "";
       this.$store.commit("clear_all");
@@ -618,5 +624,9 @@ export default {
 .nav-item.mr-2 {
   /* This targets the <li> element with the mr-2 class */
   margin-right: 20px; /* Adjust this value as needed */
+}
+.dataset-sorting-margin {
+  /* Add margin to the dataset sorting component */
+  margin-bottom: 20px;
 }
 </style>

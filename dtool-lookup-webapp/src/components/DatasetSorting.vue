@@ -83,7 +83,6 @@ export default {
 </script>
 
 <style>
-// Style the sort button and icon
 .sort-button {
   color: inherit;
 }
