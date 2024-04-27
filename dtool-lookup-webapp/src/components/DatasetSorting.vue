@@ -1,16 +1,13 @@
 <template>
   <div class="d-flex justify-content-end align-items-center">
-      <!-- Dropdown for sorting options with limited width -->
-      <BFormSelect v-model="selectedSortOption" class="me-2" style="width: 200px;"
-      :options="formattedOptions">
-      </BFormSelect>
-      
-      <!-- Button to toggle sorting direction with primary color -->
-      <button class="btn btn-primary" @click="toggleSortDirection">
-          <i :class="sortDirection === 'asc' ? 'bi bi-sort-up' : 'bi bi-sort-down'"></i>
-      </button>
+    <BFormSelect v-model="selectedSortOption" class="me-2" style="width: 200px;" :options="formattedOptions">
+    </BFormSelect>
+    <button class="btn btn-primary sort-button" @click="toggleSortDirection">
+      <img :src="sortIcon" alt="Sort Icon" class="sort-icon" />
+    </button>
   </div>
 </template>
+
 
 <script>
 import { BFormSelect } from "bootstrap-vue-next";
@@ -18,56 +15,73 @@ import { BFormSelect } from "bootstrap-vue-next";
 export default {
   name: "DatasetSorting",
   components: {
-      BFormSelect
+    BFormSelect,
   },
   data() {
-      return {
-          selectedSortOption: 'uri', // Initialize with simple value
-          sortOptions: [
-            'uri', 'base_uri', 'created_at', 'creator_username', 'frozen_at', 'name', 'uuid'
-          ],
-          sortDirection: 'asc' // Initial sort direction
-      };
+    let initialSortOption = this.$store.state.selected_sort_option;
+    let initialSortDirection = "asc";
+    if (initialSortOption.startsWith("-")) {
+      initialSortDirection = "desc";
+      initialSortOption = initialSortOption.substring(1);
+    }
+    return {
+      selectedSortOption: initialSortOption,
+      sortOptions: [
+        "uri",
+        "base_uri",
+        "created_at",
+        "creator_username",
+        "frozen_at",
+        "name",
+        "uuid",
+      ],
+      sortDirection: initialSortDirection,
+    };
   },
   computed: {
-      formattedOptions() {
-          // Format sort options for display in the dropdown
-          return this.sortOptions.map(option => ({
-              text: option.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), // Capitalize each word
-              value: option
-          }));
-      }
+    formattedOptions() {
+      return this.sortOptions.map((option) => ({
+        text: option.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
+        value: option,
+      }));
+    },
+    sortIcon() {
+      return require(`@/assets/icons/sort-${this.sortDirection}.svg`);
+    },
+    selectedSortValue() {
+      return this.sortDirection === "asc" ? this.selectedSortOption : `-${this.selectedSortOption}`;
+    },
   },
   methods: {
-      getPrefixedValue(option) {
-          // Add the current sort direction prefix to the option
-          return (this.sortDirection === 'asc' ? '%2B' : '-') + option;
-      },
-      toggleSortDirection() {
-          // Toggle sort direction between 'asc' and 'desc'
-          this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-      },
-      updateStoreAndEmit(option) {
-          // Update Vuex store and emit a search event
-          const prefixedValue = this.getPrefixedValue(option);
-          this.$store.commit('update_selected_sort_option', prefixedValue);
-          this.$emit('start-search');
-      }
+    toggleSortDirection() {
+      this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
+      this.$store.commit("update_selected_sort_option", this.selectedSortValue);
+      this.$emit("start-search");
+    },
   },
   watch: {
-      sortDirection() {
-          // React to changes in sort direction
-          this.updateStoreAndEmit(this.selectedSortOption);
-      },
-      selectedSortOption(newValue) {
-          // React to changes in selected sort option
-          this.updateStoreAndEmit(newValue);
-      }
-  }
+    selectedSortOption() {
+      this.$store.commit("update_selected_sort_option", this.selectedSortValue);
+      this.$emit("start-search");
+    },
+  },
 };
 </script>
 
-<style scoped>
-/* Add Bootstrap icons for the toggle button */
-@import "https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css";
+<style>
+.sort-button {
+  /* Ensures the icon inherits the color from the button */
+  color: inherit;
+}
+
+.sort-icon {
+  /* Sets the default icon color to white */
+  filter: invert(100%);
+  transition: filter 0.3s; /* Smooth transition for the filter effect */
+}
+
+.sort-button:hover .sort-icon {
+  /* Changes the icon color to black on hover */
+  filter: invert(0%);
+}
 </style>
