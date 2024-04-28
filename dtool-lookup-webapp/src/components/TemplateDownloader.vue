@@ -38,7 +38,32 @@ export default {
     methods: {
         logout() {
             this.$emit("logoutAction");
-        }
+        },
+        async downloadFile(fileType) {
+      let fileName = "dtool_readme";
+      let fileExtension = fileType === "yaml" ? ".yml" : ".json";
+      let filePath = `data/templates/${fileName}${fileExtension}`;
+
+      try {
+        let response = await fetch(filePath);
+        if (!response.ok) throw new Error("Network response was not ok");
+
+        let text = await response.text();
+        let blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+        let downloadUrl = window.URL.createObjectURL(blob);
+
+        let a = document.createElement("a");
+        a.href = downloadUrl;
+        a.download = `${fileName}${fileExtension}`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(downloadUrl);
+        document.body.removeChild(a);
+      } catch (error) {
+        console.error("Failed to download file:", error);
+      }
+    },
+
     }
 };
 </script>

@@ -30,13 +30,7 @@
             </li>
             <li class="nav-item mr-2">
               <!-- Apply margin to this <li> element -->
-              <button
-                class="btn btn-outline-danger"
-                type="button"
-                @click="logout"
-              >
-                Logout
-              </button>
+              
               <div> <template-downloader @logoutAction="logout" > </template-downloader> </div>
            
             </li>
