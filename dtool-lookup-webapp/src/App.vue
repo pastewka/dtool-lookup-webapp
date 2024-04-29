@@ -74,6 +74,14 @@
             </div>
 
             <div v-else>
+              <div>
+                <div class="dataset-sorting-margin">
+                  <dataset-sorting
+                    @start-search="searchDatasets"
+                  ></dataset-sorting>
+                </div>
+              </div>
+
               <DatasetTable
                 :datasetHits="datasetHits"
                 :responseheaders="responseheaders"
@@ -218,7 +226,8 @@ import Manifest from "./components/DatasetManifest.vue";
 import Readme from "./components/DatasetReadme.vue";
 import Annotations from "./components/DatasetAnnotations.vue";
 import DatasetSummary from "./components/DatasetSummary.vue";
-import { BPagination} from "bootstrap-vue-next";
+import DatasetSorting from "./components/DatasetSorting.vue";
+import { BPagination } from "bootstrap-vue-next";
 
 export default {
   name: "app",
@@ -255,7 +264,9 @@ export default {
         "/uris?page=" +
         this.$store.state.current_pageNumber +
         "&page_size=" +
-        this.$store.state.update_current_Per_Page
+        this.$store.state.update_current_Per_Page +
+        "&sort=" +
+        this.$store.state.selected_sort_option
       );
     },
     mongoSearchURL: function () {
@@ -546,7 +557,7 @@ export default {
           console.log(error.response);
         });
     },
-    
+
     logout: function () {
       this.token = "";
       this.$store.commit("clear_all");
@@ -562,6 +573,7 @@ export default {
     Readme,
     Annotations,
     DatasetSummary,
+    DatasetSorting,
     BPagination,
   },
 };
@@ -612,5 +624,9 @@ export default {
 .nav-item.mr-2 {
   /* This targets the <li> element with the mr-2 class */
   margin-right: 20px; /* Adjust this value as needed */
+}
+.dataset-sorting-margin {
+  /* Add margin to the dataset sorting component */
+  margin-bottom: 20px;
 }
 </style>
