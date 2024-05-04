@@ -6,34 +6,46 @@
   
     <!-- Render the dropdown menu if any of the conditions are true -->
     <BDropdown id="account-dropdown" v-model="show1" text="Account" variant="primary" class="ml-auto" v-else>
-      <BDropdownItem @click="downloadFile('yaml')">
+        <BDropdownItem @click="downloadFile('yaml')" v-if="downloadReadmeYaml">
         Download dtool_readme.yml
-      </BDropdownItem>
+        </BDropdownItem>
   
-      <BDropdownItem @click="downloadFile('json')">
+        <BDropdownItem @click="downloadFile('json')" v-if="downloadReadmeJson">
         Download dtool.json
-      </BDropdownItem>
-  
-      <BDropdownItem @click="logout">
-        <button class="btn btn-outline-danger" type="button">Logout</button>
-      </BDropdownItem>
+        </BDropdownItem>
+    
+        <BDropdownItem @click="showInfo" v-if="showInfoMenuEntry">
+            Info    
+        </BDropdownItem>
+
+        <BDropdownItem @click="logout">
+            <button class="btn btn-outline-danger" type="button">Logout</button>
+        </BDropdownItem>
     </BDropdown>
-  </template>
+
+    <!-- Modal Component -->
+    <BModal ref="infoModal" id="modal-center" centered title="Info" ok-only>
+        <p class="my-4"> {{ infoContent }}</p>
+    </BModal>
+</template>
+
 
 <script>
-import { BDropdown, BDropdownItem } from "bootstrap-vue-next";
+import { BDropdown, BDropdownItem,BModal } from "bootstrap-vue-next";
 export default {
     name: "TemplateDownloader",
     data() {
         return {
             downloadReadmeYaml: process.env.VUE_APP_OFFER_DTOOL_README_YAML_DOWNLOAD|| false,
             downloadReadmeJson: process.env.VUE_APP_OFFER_DTOOL_JSON_DOWNLOAD || false,
-            showInfoMenuEntry : process.env.VUE_APP_SHOW_INFO_MENU_ENTRY || false,
+            showInfoMenuEntry : process.env.VUE_APP_SHOW_INFO_MENU_ENTRY || true,
+            infoContent : process.env.VUE_APP_INFO_CONTENT || "Info Content",
         };
     },
     components: {
         BDropdown,
-        BDropdownItem
+        BDropdownItem,
+        BModal
     },
     methods: {
         logout() {
@@ -63,7 +75,9 @@ export default {
         console.error("Failed to download file:", error);
       }
     },
-
+    showInfo() {
+            this.$refs.infoModal.show();
+        },
     }
 };
 </script>

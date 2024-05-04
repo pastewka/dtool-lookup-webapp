@@ -29,10 +29,8 @@
               </form>
             </li>
             <li class="nav-item mr-2">
-              <!-- Apply margin to this <li> element -->
-              
-              <div> <template-downloader @logoutAction="logout" > </template-downloader> </div>
-           
+              <template-downloader @logoutAction="logout">
+              </template-downloader>
             </li>
           </ul>
         </div>
