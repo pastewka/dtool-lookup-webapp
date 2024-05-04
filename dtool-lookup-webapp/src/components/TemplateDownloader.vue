@@ -1,3 +1,25 @@
+/**
+ * Component: TemplateDownloader
+ * Description: This component renders a button and a dropdown menu. The button is used for logout functionality, and the dropdown menu is used to download files and display information.
+ * 
+ * Props:
+ *   - None
+ * 
+ * Data:
+ *   - downloadReadmeYaml: A boolean indicating whether to offer the download of dtool_readme.yml file.
+ *   - downloadReadmeJson: A boolean indicating whether to offer the download of dtool.json file.
+ *   - showInfoMenuEntry: A boolean indicating whether to show the "Info" menu entry.
+ *   - infoContent: A string containing the content to be displayed in the info modal.
+ * 
+ * Events:
+ *   - logoutAction: This event is emitted when the logout button is clicked.
+ * 
+ * Methods:
+ *   - logout: A method that emits the "logoutAction" event.
+ *   - downloadFile: A method that downloads a file based on the provided file name.
+ *   - showInfo: A method that shows the info modal.
+ * 
+ */
 <template>
     <!-- Render the logout button if all conditions are false -->
     <button class="btn btn-outline-danger" type="button" @click="logout" v-if="!downloadReadmeYaml && !downloadReadmeJson && !showInfoMenuEntry">
@@ -6,11 +28,11 @@
   
     <!-- Render the dropdown menu if any of the conditions are true -->
     <BDropdown id="account-dropdown" v-model="show1" text="Account" variant="primary" class="ml-auto" v-else>
-        <BDropdownItem @click="downloadFile('yaml')" v-if="downloadReadmeYaml">
+        <BDropdownItem @click="downloadFile('dtool_readme.yml')" v-if="downloadReadmeYaml">
         Download dtool_readme.yml
         </BDropdownItem>
   
-        <BDropdownItem @click="downloadFile('json')" v-if="downloadReadmeJson">
+        <BDropdownItem @click="downloadFile('dtool.json')" v-if="downloadReadmeJson">
         Download dtool.json
         </BDropdownItem>
     
@@ -31,15 +53,15 @@
 
 
 <script>
-import { BDropdown, BDropdownItem,BModal } from "bootstrap-vue-next";
+import { BDropdown, BDropdownItem, BModal } from "bootstrap-vue-next";
 export default {
     name: "TemplateDownloader",
     data() {
         return {
-            downloadReadmeYaml: process.env.VUE_APP_OFFER_DTOOL_README_YAML_DOWNLOAD|| false,
+            downloadReadmeYaml: process.env.VUE_APP_OFFER_DTOOL_README_YAML_DOWNLOAD || false,
             downloadReadmeJson: process.env.VUE_APP_OFFER_DTOOL_JSON_DOWNLOAD || false,
-            showInfoMenuEntry : process.env.VUE_APP_SHOW_INFO_MENU_ENTRY || true,
-            infoContent : process.env.VUE_APP_INFO_CONTENT || "Info Content",
+            showInfoMenuEntry: process.env.VUE_APP_SHOW_INFO_MENU_ENTRY || false,
+            infoContent: process.env.VUE_APP_INFO_CONTENT || "Info Content",
         };
     },
     components: {
@@ -51,33 +73,35 @@ export default {
         logout() {
             this.$emit("logoutAction");
         },
-        async downloadFile(fileType) {
-      let fileName = "dtool_readme";
-      let fileExtension = fileType === "yaml" ? ".yml" : ".json";
-      let filePath = `data/templates/${fileName}${fileExtension}`;
+        async downloadFile(fileName) {
+            let filePath = fileName === 'dtool.json' ?
+                           (process.env.VUE_APP_DTOOL_JSON_PATH || `data/templates/${fileName}`) :
+                           (process.env.VUE_APP_DTOOL_README_YAML_PATH || `data/templates/${fileName}`);
 
-      try {
-        let response = await fetch(filePath);
-        if (!response.ok) throw new Error("Network response was not ok");
+            try {
+                let response = await fetch(filePath);
+                if (!response.ok) throw new Error("Network response was not ok");
 
-        let text = await response.text();
-        let blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-        let downloadUrl = window.URL.createObjectURL(blob);
+                let text = await response.text();
+                let blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+                let downloadUrl = window.URL.createObjectURL(blob);
 
-        let a = document.createElement("a");
-        a.href = downloadUrl;
-        a.download = `${fileName}${fileExtension}`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(downloadUrl);
-        document.body.removeChild(a);
-      } catch (error) {
-        console.error("Failed to download file:", error);
-      }
-    },
-    showInfo() {
+                let a = document.createElement("a");
+                a.href = downloadUrl;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(downloadUrl);
+                document.body.removeChild(a);
+            } catch (error) {
+                console.error("Failed to download file:", error);
+            }
+        },
+
+        showInfo() {
             this.$refs.infoModal.show();
         },
     }
 };
 </script>
+
