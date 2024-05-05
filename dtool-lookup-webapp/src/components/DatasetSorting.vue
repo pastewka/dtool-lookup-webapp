@@ -1,15 +1,34 @@
 <template>
-  <div class="d-flex justify-content-end align-items-center">
-    <BFormSelect
-      v-model="selectedSortOption"
-      class="me-2"
-      style="width: 200px"
-      :options="formattedOptions"
-    >
-    </BFormSelect>
-    <button class="btn btn-primary sort-button" @click="toggleSortDirection">
-      <img :src="sortIcon" alt="Sort Icon" class="sort-icon" />
-    </button>
+  <div class="d-flex justify-content-between align-items-center">
+    <!-- Left side: Text and Dropdown for contents per page -->
+    <div class="d-flex align-items-center">
+      <!-- Adjusted margin and alignment -->
+      <div class="align-self-center" style="margin-right: 8px; font-size: 16px">
+        Contents per page:
+      </div>
+      <BFormSelect
+        v-model="selectedContentsPerPage"
+        class="me-3"
+        style="width: 100px"
+        :options="perPageOptions"
+        @click="updatePerPage(selectedContentsPerPage)"
+      >
+      </BFormSelect>
+    </div>
+
+    <!-- Right side: Dropdown for sorting options and Button for sort direction -->
+    <div class="d-flex align-items-center">
+      <BFormSelect
+        v-model="selectedSortOption"
+        class="me-2"
+        style="width: 200px"
+        :options="formattedOptions"
+      >
+      </BFormSelect>
+      <button class="btn btn-primary sort-button" @click="toggleSortDirection">
+        <img :src="sortIcon" alt="Sort Icon" class="sort-icon" />
+      </button>
+    </div>
   </div>
 </template>
 
@@ -24,6 +43,8 @@ export default {
   data() {
     // Initialize selectedSortOption and sortDirection based on store state
     let initialSortOption = this.$store.state.selected_sort_option;
+    let initialcontentsPerPage = this.$store.state.update_current_Per_Page;
+
     let initialSortDirection = "asc";
     if (initialSortOption.startsWith("-")) {
       initialSortDirection = "desc";
@@ -41,6 +62,13 @@ export default {
         "uuid",
       ],
       sortDirection: initialSortDirection,
+      selectedContentsPerPage: initialcontentsPerPage,
+      perPageOptions: [
+        { text: "10", value: 10 },
+        { text: "20", value: 20 },
+        { text: "50", value: 50 },
+        { text: "100", value: 100 },
+      ],
     };
   },
   computed: {
@@ -69,6 +97,12 @@ export default {
     toggleSortDirection() {
       this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
       this.$store.commit("update_selected_sort_option", this.selectedSortValue);
+      this.$emit("start-search");
+    },
+    updatePerPage(perpage) {
+      this.selectedContentsPerPage =
+        this.selectedContentsPerPage === perpage ? null : perpage; // Toggle selection
+      this.$store.commit("update_current_Per_Page", perpage);
       this.$emit("start-search");
     },
   },
