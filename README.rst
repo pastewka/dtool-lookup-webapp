@@ -52,7 +52,27 @@ Customization options for the landing page are available through the following e
    VUE_APP_FOURTH_CONTAINER_HEADING=Docs
    VUE_APP_FOURTH_CONTAINER_INTRO=Some notes on how to find help. The following list may contain an arbitrary number of links.
    VUE_APP_FOURTH_CONTAINER_RESOURCES=[{"text": "dtool-lookup-webapp repository", "url": "https://github.com/jic-dtool/dtool-lookup-webapp"}]
-   VUE_APP_LANDING_PAGE_ICON_PATH=/path/to/custom/icon.png
+   VUE_APP_LANDING_PAGE_ICON_PATH=/icons/128x128/dtool_logo.png
+
+Customization options for the upper right corner drop-down menu in the app are available through the following environment variables in the `.env` file:
+
+.. code-block:: text
+
+   VUE_APP_OFFER_DTOOL_README_YAML_DOWNLOAD=true
+   VUE_APP_OFFER_DTOOL_JSON_DOWNLOAD=true
+   VUE_APP_SHOW_INFO_MENU_ENTRY=true
+   VUE_APP_DTOOL_JSON_PATH=/data/templates/dtool.json
+   VUE_APP_DTOOL_README_YAML_PATH=/data/templates/dtool_readme.yml
+   VUE_APP_INFO_CONTENT="<tt>dtool.json</tt> is you local <i>dtool</i> client's configuration file. Place it at <tt>~/.config/dtool/dtool.json</tt>, where <tt>~</tt> is your home directoy, and create the directories if they do not exist.<br /><br /><tt>dtool_readme.yml</tt> is the metadata template used for documenting your datasets. Place it anywhere, but make sure that the entry <tt>DTOOL_README_TEMPLATE_FPATH</tt> within above's dtool.json points to the correct absolute path of your <tt>dtool_readme.yml</tt>. See <a href="https://dtool.readthedocs.io/en/latest/configuring_a_custom_readme_template.html" target="_blank" rel="noopener noreferrer">Configuring a custom README template</a> of <a href="https://dtool.readthedocs.io" target="_blank" rel="noopener noreferrer"></i>dtool</i>'s documentation</a>."
+
+All paths provided in these environment variables must be relative to this
+repository's `dtool-lookup-webapp/public` as root. 
+Setting any of the `VUE_APP_OFFER_DTOOL_README_YAML_DOWNLOAD`,
+`VUE_APP_OFFER_DTOOL_JSON_DOWNLOAD`, `VUE_APP_SHOW_INFO_MENU_ENTRY` to `true`
+will show a download button for a `dtool_readme.yml` template, for a
+`dtool.json` configuration file, and a button for displaying arbitrary
+textual information configured with `VUE_APP_INFO_CONTENT`.
+Per default, all these buttons are hidden.
 
 To apply changes to the `.env` file, execute:
 
