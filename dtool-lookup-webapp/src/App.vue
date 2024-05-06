@@ -29,14 +29,8 @@
               </form>
             </li>
             <li class="nav-item mr-2">
-              <!-- Apply margin to this <li> element -->
-              <button
-                class="btn btn-outline-danger"
-                type="button"
-                @click="logout"
-              >
-                Logout
-              </button>
+              <template-downloader @logoutAction="logout">
+              </template-downloader>
             </li>
           </ul>
         </div>
@@ -227,6 +221,7 @@ import Readme from "./components/DatasetReadme.vue";
 import Annotations from "./components/DatasetAnnotations.vue";
 import DatasetSummary from "./components/DatasetSummary.vue";
 import DatasetSorting from "./components/DatasetSorting.vue";
+import TemplateDownloader from "./components/TemplateDownloader.vue";
 import { BPagination } from "bootstrap-vue-next";
 
 export default {
@@ -574,6 +569,7 @@ export default {
     Annotations,
     DatasetSummary,
     DatasetSorting,
+    TemplateDownloader,
     BPagination,
   },
 };
