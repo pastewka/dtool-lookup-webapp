@@ -7,13 +7,15 @@
         Contents per page:
       </div>
       <BFormSelect
-        v-model="selectedContentsPerPage"
-        class="me-3"
-        style="width: 100px"
-        :options="perPageOptions"
-        @click="updatePerPage(selectedContentsPerPage)"
-      >
-      </BFormSelect>
+  v-model="selectedContentsPerPage"
+  class="me-3"
+  style="width: 100px"
+  :options="perPageOptions"
+  @change="updatePerPage($event.target.value)"
+>
+</BFormSelect>
+
+
     </div>
 
     <!-- Right side: Dropdown for sorting options and Button for sort direction -->
