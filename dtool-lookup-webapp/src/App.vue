@@ -75,7 +75,7 @@
                   ></dataset-sorting>
                 </div>
               </div>
-
+            <!--  <h2>{{ this.getinfo.versions.dserver_retrieve_plugin_mongo  }}</h2> -->
               <DatasetTable
                 :datasetHits="datasetHits"
                 :responseheaders="responseheaders"
@@ -338,6 +338,8 @@ export default {
     },
     searchDatasets: function () {
       this.getconfiginfo();
+      console.log(this.getinfo);
+      
       console.log("Running search");
       console.log(this.searchQuery);
       this.$store.commit("update_current_dataset_index", 0);
@@ -624,5 +626,6 @@ export default {
 .dataset-sorting-margin {
   /* Add margin to the dataset sorting component */
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 </style>
