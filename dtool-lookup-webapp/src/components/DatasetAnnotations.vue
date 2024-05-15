@@ -157,7 +157,7 @@ export default {
     },
     // Computed property to generate the create command
     computedCreateCommand() {
-      return `dtool annotation create ${this.$store.state.current_dataset.uri} ${this.newKey} ${this.newValue}`;
+      return `dtool annotation set ${this.$store.state.current_dataset.uri} ${this.newKey} ${this.newValue}`;
     },
   },
   methods: {
