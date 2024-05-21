@@ -1,7 +1,10 @@
 <template>
   <div>
     <!-- Loop through each filtered annotation that has non-empty values -->
-    <div v-for="(details, annotationName, index) in filteredAnnotations" :key="index">
+    <div
+      v-for="(details, annotationName, index) in filteredAnnotations"
+      :key="index"
+    >
       <!-- Container for the heading and create dropdown -->
       <div class="heading-container">
         <!-- Display the annotation name outside and above the container -->
@@ -18,7 +21,8 @@
             <div class="container centered-content">
               <!-- Dropdown text for descriptive content -->
               <BDropdownText>
-                The command below creates a key-value pair for the annotation and updates it in the dataset.
+                The command below creates a key-value pair for the annotation
+                and updates it in the dataset.
               </BDropdownText>
             </div>
 
@@ -64,48 +68,82 @@
             <tr>
               <th>Key</th>
               <th>Value</th>
-              <th style="width: 1%;"></th> <!-- Blank header for the dropdown, set minimal width -->
+              <th style="width: 1%"></th>
+              <!-- Blank header for the dropdown, set minimal width -->
             </tr>
           </thead>
           <tbody>
             <!-- Loop through each property of the annotation and display it -->
-            <tr v-for="(value, propertyName, subIndex) in details" :key="`details-${index}-${subIndex}`">
+            <tr
+              v-for="(value, propertyName, subIndex) in details"
+              :key="`details-${index}-${subIndex}`"
+            >
               <td>{{ propertyName }}</td>
               <td>{{ value }}</td>
-              <td class="text-right"> <!-- Align dropdown to the right -->
+              <td class="text-right">
+                <!-- Align dropdown to the right -->
                 <!-- Add the dropdown button here -->
-                <BDropdown right size="sm" class="p-0">
+                <b-dropdown
+                  right
+                  size="sm"
+                  dropstart
+                  class="p-0"
+                  auto-close="outside"
+                  ref="dropdown"
+                  @show="resetEditableValue"
+                >
                   <template #button-content> Set </template>
                   <template #default>
                     <div class="container centered-content">
                       <!-- Dropdown text for descriptive content -->
-                      <BDropdownText>
-                        The command below helps to set the annotation and update it in the dataset.
-                      </BDropdownText>
+                      <b-dropdown-text>
+                        The command below helps to set the annotation.
+                      </b-dropdown-text>
                     </div>
-                    <!-- Dropdown form containing input group, form input, and button -->
-                    <BDropdownForm style="width: 440px">
+                    <!-- Input group containing the property name and the input field for the value -->
+                    <b-dropdown-form style="width: 440px">
                       <template #default>
-                        <b-input-group>
+                        <b-input-group size="sm">
+                          <b-input-group-prepend>
+                            <b-input-group-text>{{
+                              propertyName
+                            }}</b-input-group-text>
+                          </b-input-group-prepend>
                           <b-form-input
-                            readonly
-                            :value="generateSetCommand(propertyName, value)"
+                            v-model="editableValue"
+                            :placeholder="value"
                             size="sm"
                           ></b-form-input>
+                        </b-input-group>
+                        <b-input-group class="mt-2">
+                          <div class="form-control form-control-sm">
+                            {{
+                              generateSetCommand(
+                                propertyName,
+                                editableValue || value
+                              )
+                            }}
+                          </div>
                           <b-input-group-append>
                             <b-button
                               size="sm"
                               variant="outline-secondary"
-                              v-clipboard:copy="generateSetCommand(propertyName, value)"
+                              v-clipboard:copy="
+                                generateSetCommand(
+                                  propertyName,
+                                  editableValue || value
+                                )
+                              "
+                              @click="closeDropdown"
                             >
                               <span class="octicon octicon-clippy"></span>
                             </b-button>
                           </b-input-group-append>
                         </b-input-group>
                       </template>
-                    </BDropdownForm>
+                    </b-dropdown-form>
                   </template>
-                </BDropdown>
+                </b-dropdown>
               </td>
             </tr>
           </tbody>
@@ -139,6 +177,7 @@ export default {
     return {
       newKey: "", // Data property to hold the new key
       newValue: "", // Data property to hold the new value
+      editableValue: this.value, // Data property to hold the editable value
     };
   },
   computed: {
@@ -174,6 +213,9 @@ export default {
     },
     generateSetCommand(propertyName, value) {
       return `dtool annotation set ${this.$store.state.current_dataset.uri} ${propertyName} ${value}`;
+    },
+    resetEditableValue() {
+      this.editableValue = "";
     },
   },
 };
