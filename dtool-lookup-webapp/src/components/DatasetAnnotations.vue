@@ -41,11 +41,10 @@
 
                 <!-- Input group for displaying the create command -->
                 <b-input-group>
-                  <b-form-input
-                    readonly
-                    :value="computedCreateCommand"
-                    size="sm"
-                  ></b-form-input>
+                  <div class="form-control form-control-sm">
+                    {{ computedCreateCommand }}
+                  </div>
+
                   <b-input-group-append>
                     <b-button
                       size="sm"
