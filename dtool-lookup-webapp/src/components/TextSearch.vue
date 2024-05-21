@@ -10,7 +10,13 @@
             'Enclose a JSON query in braces {} to have it interpreted as a direct MongoDB query.'
           "
         >
-          {{ isJson ? "MongoDB query (MQL):" : "free text search:" }}
+          {{
+            isJsonEnabled
+              ? isJson
+                ? "MongoDB query (MQL):"
+                : "free text search:"
+              : "free text search:"
+          }}
         </span>
         <!-- Input for the text query -->
         <input
@@ -27,9 +33,18 @@
 
 <script>
 import { BTooltip } from "bootstrap-vue-next";
+
 export default {
   name: "TextSearch",
-  BTooltip,
+  directives: {
+    "b-tooltip": BTooltip,
+  },
+  props: {
+    mongoplugin: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       textQuery: "",
@@ -47,10 +62,13 @@ export default {
         return false;
       }
     },
+    isJsonEnabled() {
+      return this.mongoplugin !== "N/A";
+    },
   },
   methods: {
     startSearch() {
-      if (this.isJson) {
+      if (this.isJsonEnabled && this.isJson) {
         this.$store.commit("update_mongo_text", this.textQuery);
       } else {
         this.$store.commit("update_free_text", this.textQuery);

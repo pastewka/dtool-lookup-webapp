@@ -25,7 +25,11 @@
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
             <li class="nav-item">
               <form class="d-flex" role="search">
-                <TextSearch @start-search="searchDatasets" class="me-2" />
+                <TextSearch
+                  :mongoplugin="safeMongoPlugin"
+                  @start-search="searchDatasets"
+                  class="me-2"
+                />
               </form>
             </li>
             <li class="nav-item mr-2">
@@ -75,7 +79,6 @@
                   ></dataset-sorting>
                 </div>
               </div>
-            <!--  <h2>{{ this.getinfo.versions.dserver_retrieve_plugin_mongo  }}</h2> -->
               <DatasetTable
                 :datasetHits="datasetHits"
                 :responseheaders="responseheaders"
@@ -243,7 +246,9 @@ export default {
       token: null,
       perPage: this.$store.state.update_current_Per_Page,
       responseheaders: Array,
-      getinfo: {},
+      getinfo: {
+        versions: {},
+      },
     };
   },
   computed: {
@@ -330,6 +335,10 @@ export default {
     shouldShowPagination() {
       return this.pagination.total > 1;
     },
+
+    safeMongoPlugin() {
+      return this.getinfo.versions.dserver_retrieve_plugin_mongo || "N/A";
+    },
   },
   methods: {
     setTokenAndSearch: function (token) {
@@ -339,7 +348,7 @@ export default {
     searchDatasets: function () {
       this.getconfiginfo();
       console.log(this.getinfo);
-      
+
       console.log("Running search");
       console.log(this.searchQuery);
       this.$store.commit("update_current_dataset_index", 0);
