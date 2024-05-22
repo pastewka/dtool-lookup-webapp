@@ -22,9 +22,14 @@
  */
 <template>
     <!-- Render the logout button if all conditions are false -->
-    <button class="btn btn-outline-danger" type="button" @click="logout" v-if="!downloadReadmeYaml && !downloadReadmeJson && !showInfoMenuEntry">
-      Logout
-    </button>
+    <button class="btn btn-outline-danger" 
+        type="button" 
+        @click="logout" 
+        v-if="downloadReadmeYaml === false && downloadReadmeJson === false && showInfoMenuEntry === false">
+  Logout
+   
+</button>
+
   
     <!-- Render the dropdown menu if any of the conditions are true -->
     <BDropdown id="account-dropdown" v-model="show1" text="Account" variant="primary" class="ml-auto" v-else>
@@ -37,7 +42,7 @@
         </BDropdownItem>
     
         <BDropdownItem @click="showInfo" v-if="showInfoMenuEntry">
-            Info    
+            Info              
         </BDropdownItem>
 
         <BDropdownItem @click="logout">
@@ -47,8 +52,9 @@
 
     <!-- Modal Component -->
     <BModal ref="infoModal" id="modal-center" centered title="Info" ok-only>
-        <p class="my-4"> {{ infoContent }}</p>
-    </BModal>
+    <p class="my-4" v-html="infoContent"></p>
+</BModal>
+
 </template>
 
 
@@ -58,9 +64,9 @@ export default {
     name: "TemplateDownloader",
     data() {
         return {
-            downloadReadmeYaml: process.env.VUE_APP_OFFER_DTOOL_README_YAML_DOWNLOAD || false,
-            downloadReadmeJson: process.env.VUE_APP_OFFER_DTOOL_JSON_DOWNLOAD || false,
-            showInfoMenuEntry: process.env.VUE_APP_SHOW_INFO_MENU_ENTRY || false,
+            downloadReadmeYaml: process.env.VUE_APP_OFFER_DTOOL_README_YAML_DOWNLOAD === 'true',
+            downloadReadmeJson: process.env.VUE_APP_OFFER_DTOOL_JSON_DOWNLOAD === 'true',
+            showInfoMenuEntry: process.env.VUE_APP_SHOW_INFO_MENU_ENTRY === 'true',
             infoContent: process.env.VUE_APP_INFO_CONTENT || "Info Content",
         };
     },
