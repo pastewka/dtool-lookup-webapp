@@ -337,7 +337,7 @@ export default {
     },
 
     safeMongoPlugin() {
-      return this.getinfo.versions.dserver_retrieve_plugin_mongo || "N/A";
+      return this.getinfo.versions.dserver_direct_mongo_plugin || "N/A";
     },
   },
   methods: {
