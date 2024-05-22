@@ -67,8 +67,10 @@
         Use tags to organise your datasets!
       </div>
 
-      <BDropdown right size="sm" class="pt-1">
-        <template #button-content> Tag </template>
+      <BDropdown right size="sm" class="pt-1" no-caret auto-close="outside">
+        <template #button-content>
+          Tag <span class="dropdown-toggle"></span>
+        </template>
 
         <template #default>
           <div class="container centered-content">
