@@ -1,9 +1,9 @@
 
 {
-  "DTOOL_LOOKUP_SERVER_TOKEN_GENERATOR_URL": "https://demo.dtool.dev/token",
-  "DTOOL_LOOKUP_SERVER_URL": "https://demo.dtool.dev/lookup",
-  "DTOOL_LOOKUP_SERVER_USERNAME": "testuser",
-  "DTOOL_LOOKUP_SERVER_VERIFY_SSL": "true",
+  "DSERVER_TOKEN_GENERATOR_URL": "https://demo.dtool.dev/token",
+  "DSERVER_URL": "https://demo.dtool.dev/lookup",
+  "DSERVER_USERNAME": "testuser",
+  "DSERVER_VERIFY_SSL": "true",
   "DTOOL_README_TEMPLATE_FPATH": "/path/to/.dtool_readme.yml",
   "DTOOL_S3_ACCESS_KEY_ID_test-bucket": "testuser_access_key",
   "DTOOL_S3_DATASET_PREFIX": "u/testuser/",
