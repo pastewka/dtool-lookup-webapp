@@ -2,37 +2,30 @@
   <div class="card">
     <div class="card-body p-0">
       <div class="list-group">
-        <li
-          href=""
+        <a
+          @click.prevent="clearFilters()"
           class="list-group-item list-group-item-action"
-          @click="clearFilters()"
         >
-          <div class="d-flex  justify-content-between">
+          <div class="d-flex justify-content-between">
+            <small> All </small>
             <small>
-              All
-            </small>
-
-            <small>
-              <span class="badge badge-pill badge-primary">{{
-                summary_info["number_of_datasets"]
+              <span class="badge badge-pill badge-primary dataset-count">{{
+                summary_info.number_of_datasets
               }}</span>
             </small>
           </div>
-        </li>
+        </a>
 
-        <li href="" class="list-group-item">
-          <div class="d-flex  justify-content-between">
+        <a class="list-group-item">
+          <div class="d-flex justify-content-between">
+            <small> Filtered </small>
             <small>
-              Filtered
-            </small>
-
-            <small>
-              <span class="badge badge-pill badge-secondary">{{
+              <span class="badge badge-pill badge-secondary dataset-count">{{
                 this.$store.state.num_filtered
               }}</span>
             </small>
           </div>
-        </li>
+        </a>
       </div>
     </div>
   </div>
@@ -41,21 +34,24 @@
 <script>
 export default {
   name: "NumDatasets",
+  components: {},
   props: {
-    summary_info: Object
+    summary_info: Object,
   },
-  data: function() {
-    return {
-      selectedTags: []
-    };
+  data() {
+    return {};
   },
   methods: {
-    clearFilters: function() {
+    clearFilters() {
       this.$store.commit("clear_all");
       this.$emit("start-search");
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style></style>
+<style scoped>
+.dataset-count {
+  color: #000; /* Change text color to black */
+}
+</style>
