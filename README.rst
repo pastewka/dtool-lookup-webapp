@@ -1,106 +1,138 @@
 dtool lookup webapp
 ===================
 
-- GitHub: https://github.com/jic-dtool/dtool-lookup-webapp
-- Free software: MIT License
+.. image:: https://github.com/livMatS/dtool-lookup-webapp/actions/workflows/build-and-test.yml/badge.svg
+    :target: https://github.com/livMatS/dtool-lookup-webapp/actions/workflows/build-and-test.yml
+    :alt: dtool-lookup-webapp build and test
 
-Web application to query and display information about datasets stored in one
-or more base URIs.
+.. image:: https://img.shields.io/badge/License-MIT-yellow.svg
+    :target: https://opensource.org/licenses/MIT
+    :alt: License: MIT
+
+- GitHub repository: https://github.com/jic-dtool/dtool-lookup-webapp
+- License: MIT License (https://opensource.org/licenses/MIT)
+
+This web application allows querying and displaying information about datasets stored in one or more base URIs.
 
 Dependencies
 ------------
 
-This web application depends on having two other web services to talk to:
+The web application requires two other web services:
 
-1. `dtool-lookup-server <https://github.com/jic-dtool/dtool-lookup-server>`_
-2. `token-generator-ldap <https://github.com/jic-dtool/token-generator-ldap>`_
+1. dtool-lookup-server: https://github.com/jic-dtool/dtool-lookup-server - Provides a means to search and display dataset metadata.
+2. token-generator-ldap: https://github.com/jic-dtool/token-generator-ldap - Facilitates user authentication.
 
-The first provides a means to search and display dataset metadata.
-The latter provides a means to authenticate users.
+Setup
+-----
 
-Preamble
--------
+Navigate to the `dtool-lookup-webapp` directory:
 
-::
+.. code-block:: bash
 
     cd dtool-lookup-webapp
 
+Create a `.env` file in the `dtool-lookup-webapp` directory with the following contents:
 
-Create a file `.env` in the `dtool-lookup-webapp` directory with the following contents:
-
-::
+.. code-block:: bash
 
     VUE_APP_DTOOL_LOOKUP_SERVER_URL="http://localhost:5000"
     VUE_APP_DTOOL_LOOKUP_SERVER_TOKEN_GENERATOR_URL="http://localhost:5001/token"
 
-
 For deployment, replace these URLs with the actual endpoints of the lookup server and the token generator.
 
+Customization options for the landing page are available through the following environment variables in the `.env` file:
 
-Start a development server
---------------------------
+.. code-block:: text
 
-::
+   VUE_APP_FIRST_CONTAINER_TITLE=Log in
+   VUE_APP_SECOND_CONTAINER_TITLE=dserver
+   VUE_APP_SECOND_CONTAINER_MESSAGE=Welcome to <b>dserver</b>'s webapp.
+   VUE_APP_THIRD_CONTAINER_HEADING=Access
+   VUE_APP_THIRD_CONTAINER_MESSAGE=Some notes on how to gain access.
+   VUE_APP_FOURTH_CONTAINER_HEADING=Docs
+   VUE_APP_FOURTH_CONTAINER_INTRO=Some notes on how to find help. The following list may contain an arbitrary number of links.
+   VUE_APP_FOURTH_CONTAINER_RESOURCES=[{"text": "dtool-lookup-webapp repository", "url": "https://github.com/jic-dtool/dtool-lookup-webapp"}]
+   VUE_APP_LANDING_PAGE_ICON_PATH=/icons/128x128/dtool_logo.png
+
+Customization options for the upper right corner drop-down menu in the app are available through the following environment variables in the `.env` file:
+
+.. code-block:: text
+
+   VUE_APP_OFFER_DTOOL_README_YAML_DOWNLOAD=true
+   VUE_APP_OFFER_DTOOL_JSON_DOWNLOAD=true
+   VUE_APP_SHOW_INFO_MENU_ENTRY=true
+   VUE_APP_DTOOL_JSON_PATH=/data/templates/dtool.json
+   VUE_APP_DTOOL_README_YAML_PATH=/data/templates/dtool_readme.yml
+   VUE_APP_INFO_CONTENT="<tt>dtool.json</tt> is you local <i>dtool</i> client's configuration file. Place it at <tt>~/.config/dtool/dtool.json</tt>, where <tt>~</tt> is your home directoy, and create the directories if they do not exist.<br /><br /><tt>dtool_readme.yml</tt> is the metadata template used for documenting your datasets. Place it anywhere, but make sure that the entry <tt>DTOOL_README_TEMPLATE_FPATH</tt> within above's dtool.json points to the correct absolute path of your <tt>dtool_readme.yml</tt>. See <a href="https://dtool.readthedocs.io/en/latest/configuring_a_custom_readme_template.html" target="_blank" rel="noopener noreferrer">Configuring a custom README template</a> of <a href="https://dtool.readthedocs.io" target="_blank" rel="noopener noreferrer"></i>dtool</i>'s documentation</a>."
+
+All paths provided in these environment variables must be relative to this
+repository's `dtool-lookup-webapp/public` as root. 
+Setting any of the `VUE_APP_OFFER_DTOOL_README_YAML_DOWNLOAD`,
+`VUE_APP_OFFER_DTOOL_JSON_DOWNLOAD`, `VUE_APP_SHOW_INFO_MENU_ENTRY` to `true`
+will show a download button for a `dtool_readme.yml` template, for a
+`dtool.json` configuration file, and a button for displaying arbitrary
+textual information configured with `VUE_APP_INFO_CONTENT`.
+Per default, all these buttons are hidden.
+
+To apply changes to the `.env` file, execute:
+
+.. code-block:: bash
+
+    npm install
+
+Development Server
+------------------
+
+To start a development server:
+
+.. code-block:: bash
 
     cd dtool-lookup-webapp
     npm run serve
 
+Building for Production
+-----------------------
 
-Compile into a static single page website
------------------------------------------
+To compile the application into a static single-page website:
 
-::
+.. code-block:: bash
 
     cd dtool-lookup-webapp
     npm run build
 
+Fixing Broken Installations
+---------------------------
 
-Fixing dependencies in broken install
--------------------------------------
+To address issues with dependencies in a broken installation:
 
-Remove all npm environment-related, e.g.
+.. code-block:: bash
 
-::
-
-    rm -rf remove dist/ node_modules/
+    rm -rf dist/ node_modules/
     rm package-lock.json
 
-reinstall
+Then, reinstall the Vue CLI service and rebuild:
 
-::
+.. code-block:: bash
 
     npm install @vue/cli-service
-
-and rebuild
-
-::
     npm run build
-
 
 Testing
 -------
 
-For testing, the config file 
+Testing requires the `jest.config.js` configuration file, which can be auto-generated by:
 
-::
-
-    jest.config.js
-
-is needed. This file has been auto-generated with
-
-::
+.. code-block:: bash
 
     vue add unit-jest
 
-after installing the vue cli globally with
+This step follows the global installation of the Vue CLI:
 
-::
+.. code-block:: bash
 
     npm install -g @vue/cli
 
+Additional Information
+----------------------
 
-More information
-----------------
-
-See dtool-lookup-webapp/README.md for more information about how to develop and build.
-See provision/README.rst for instructions on how to deploy using Ansibl.e
+For more details on development and build processes, refer to the `README.md` file within the `dtool-lookup-webapp` directory. For deployment instructions using Ansible, consult the `provision/README.rst`.
